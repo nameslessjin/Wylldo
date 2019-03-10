@@ -6,4 +6,5 @@ export function registerScreens(){
     Navigation.registerComponent('SignIn', () => require('./screens/Signin').default)
     Navigation.registerComponent('SignUp', () => require('./screens/Signup').default)
     Navigation.registerComponent('Screen2', () => require('./screens/Screen2').default) 
+    Navigation.registerComponent('Settings', () => require('./screens/Settings').default)
 }

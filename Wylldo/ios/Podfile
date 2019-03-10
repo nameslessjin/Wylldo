@@ -23,6 +23,8 @@ target 'Wylldo' do
     'RCTWebSocket',
   ]
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   # React Native third party dependencies podspecs
   pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
