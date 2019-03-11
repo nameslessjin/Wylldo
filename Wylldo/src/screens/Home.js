@@ -1,14 +1,13 @@
 //Home page
 
 import React from 'react'
-import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button} from 'react-native'
+import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button, Platform} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import {USER_KEY} from '../config'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import {PermissionsAndroid} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
 
 export default class Home extends React.Component{
     static get options(){
@@ -88,13 +87,8 @@ export default class Home extends React.Component{
     }
 
     mapViewPressedHandler = () => {
-        console.log("MarkPressed", this.state.markPressed, "MapPressed", this.state.mapPressed  )
-        if (this.state.markPressed){
-            this.setState({markPressed: false, mapPressed: true})
-        } 
-        else {
-            this.setState({mapPressed: false})
-        }
+        this.setState({markPressed: false, mapPressed: true})
+
     }
     markPressedHandler = () => {
         console.log("MarkPressed", this.state.markPressed, "MapPressed", this.state.mapPressed  )
@@ -115,7 +109,7 @@ export default class Home extends React.Component{
             <Marker
                 coordinate={marker.coordinate}
                 key = {marker.key}
-                onPress={this.markPressedHandler}
+                
             >
                 <CustomMarker 
                     icon = {marker.icon}/>
@@ -142,7 +136,8 @@ export default class Home extends React.Component{
                     provider={PROVIDER_GOOGLE} 
                     customMapStyle={mapStyle}
                     onPress={this.mapViewPressedHandler}
-                    onMapReady={this.onMapReady} >
+                    onMarkerPress={this.markPressedHandler}
+                    onMapReady={(Platform.OS==='android') ? this.onMapReady : null} >
 
 
                     {Markers}

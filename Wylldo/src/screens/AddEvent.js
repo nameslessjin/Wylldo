@@ -1,7 +1,8 @@
 import React from 'react'
 import {View, Text, StyleSheet, TextInput, Platform} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
 import PickImage from '../Components/ImagePicker'
+import {Navigation} from 'react-native-navigation'
+import PickTag from '../Components/PickTag'
 
 export default class addEvent extends React.Component{
 
@@ -21,6 +22,21 @@ export default class addEvent extends React.Component{
                     }
                 ]
             }
+        }
+    }
+
+    constructor(props){
+        super(props);
+        Navigation.events().bindComponent(this);
+    }
+
+    navigationButtonPressed({buttonId}){
+        if (buttonId == "addMap"){
+            Navigation.push(this.props.componentId, {
+                component:{
+                    name: 'AddMap'
+                }
+            })
         }
     }
 
@@ -45,9 +61,7 @@ export default class addEvent extends React.Component{
                     />
                 </View>
                 <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
-                    <Icon name='md-beer' size={28}/>
-                    <Icon name='md-american-football' size={30}/>
-                    <Icon name='md-book' size={30}/>
+                    <PickTag />
                 </View>
             </View>
 
@@ -81,8 +95,6 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "6%",
         backgroundColor: "white",
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
         marginTop: 0.5,
         padding: 3
     },
@@ -90,8 +102,6 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "6%",
         backgroundColor: "white",
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
         marginTop: 0.5,
         paddingTop: 6
     }
