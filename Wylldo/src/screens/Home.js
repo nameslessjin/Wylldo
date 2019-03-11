@@ -1,3 +1,5 @@
+//Home page
+
 import React from 'react'
 import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button} from 'react-native'
 import {Navigation} from 'react-native-navigation'
@@ -27,7 +29,10 @@ export default class Home extends React.Component{
             latitudeDelta: 0.0122,
             longitudeDelta: 0.0122
         },
-        paddingTop: 1
+        paddingTop: 1,
+        Markers:{
+            
+        }
     }
 
     pickLocationHandler = event => {
@@ -55,7 +60,6 @@ export default class Home extends React.Component{
                     }
                 }
                 this.pickLocationHandler(coordsEvent)
-                console.log(this.state.userLocation)
             },
             error => {
                 console.log(error)
@@ -82,8 +86,6 @@ export default class Home extends React.Component{
                     style={styles.container} 
                     provider={PROVIDER_GOOGLE} 
                     customMapStyle={mapStyle}
-                    onPress={this.pickLocationHandler}
-                    region={this.state.userLocation}
                     onMapReady={this.onMapReady} >
                     
 
@@ -97,10 +99,5 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
 
-    },
-    navigationBtn:{
-        flex: 1,
-        justifyContent: 'flex-end',
-        backgroundColor: "red"
     }
 })

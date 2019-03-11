@@ -1,3 +1,5 @@
+// Screen register page
+
 import {Navigation} from 'react-native-navigation'
 
 export function registerScreens(){

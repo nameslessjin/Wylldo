@@ -1,3 +1,5 @@
+// custom marker component
+
 import React from 'react'
 import {View, StyleSheet} from "react-native"
 import Icon from "react-native-vector-icons"
@@ -9,6 +11,7 @@ export default class CustomMarker extends React.Component{
         return(
             <View style={styles.container}>
                 <Text>Image</Text>
+                <Text>Tag</Text>
             </View>
         )
     }
@@ -16,6 +19,8 @@ export default class CustomMarker extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1
+        borderRadius: 50,
+        backgroundColor: 'red',
+        flexDirection: "row"
     }
 })

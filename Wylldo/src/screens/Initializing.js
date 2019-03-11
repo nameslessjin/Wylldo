@@ -1,3 +1,5 @@
+// initialize page when app just start
+
 import React from 'react'
 import { View, Text, StyleSheet, AsyncStorage} from 'react-native'
 
@@ -17,7 +19,7 @@ export default class Initializing extends React.Component{
         return(
             <View style={styles.container}>
                 <Text style={styles.loading}>Loading</Text>
-                <Icon name="md-home" size={30} color="black" />
+                <Icon name="ios-home" size={30} color="black" />
             </View>
         )
     }
