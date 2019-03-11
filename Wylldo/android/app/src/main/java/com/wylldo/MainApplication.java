@@ -8,6 +8,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import com.oblador.vectoricons.VectorIconsPackage;
 
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
@@ -41,7 +42,9 @@ public class MainApplication extends NavigationApplication {
           return Arrays.<ReactPackage>asList(
               // eg. new VectorIconsPackage()
               new MainReactPackage(),
-              new MapsPackage()
+              new MapsPackage(),
+              new VectorIconsPackage()
+
           );
       }
     
