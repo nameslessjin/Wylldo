@@ -7,8 +7,6 @@ import {USER_KEY} from '../config'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
-import CustomButton from '../Components/CustomButton'
-import Icon from 'react-native-vector-icons/Ionicons'
 import {PermissionsAndroid} from 'react-native'
 
 export default class Home extends React.Component{
@@ -30,9 +28,24 @@ export default class Home extends React.Component{
             longitudeDelta: 0.0122
         },
         paddingTop: 1,
-        Markers:{
-            
-        }
+        markers:[
+            {
+                coordinate:{
+                    latitude: 40.798699,
+                    longitude: -77.859954
+                },
+                key: 1,
+                icon: "md-american-football"
+            },
+            {
+                coordinate:{
+                    latitude: 40.794000,
+                    longitude: -77.859954
+                },
+                key: 2,
+                icon: "md-beer"    
+            }
+        ]
     }
 
     pickLocationHandler = event => {
@@ -77,6 +90,16 @@ export default class Home extends React.Component{
 
 
     render(){
+
+        let Markers = this.state.markers.map(marker => (
+            <Marker
+                coordinate={marker.coordinate}
+                key = {marker.key}
+            >
+                <CustomMarker icon = {marker.icon} />
+            </Marker>
+        ))
+
         return(
             <View style={{width: "100%", height: "100%", paddingTop: this.state.paddingTop}}>
                 <MapView
@@ -88,6 +111,7 @@ export default class Home extends React.Component{
                     customMapStyle={mapStyle}
                     onMapReady={this.onMapReady} >
                     
+                    {Markers}
 
                 </MapView>
             </View>
