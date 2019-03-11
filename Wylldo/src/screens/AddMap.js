@@ -19,8 +19,8 @@ export default class AddMap extends React.Component{
                 },
                 rightButtons:[
                     {
-                        id: 'Done',
-                        text: 'Done',
+                        id: 'Post',
+                        text: 'Post',
                         color: '#0481fe'
                     }
                 ]
@@ -47,7 +47,7 @@ export default class AddMap extends React.Component{
     }
 
     navigationButtonPressed({buttonId}){
-        if(buttonId == "Done"){
+        if(buttonId == "Post"){
             Navigation.popToRoot(this.props.componentId)
         }
     }

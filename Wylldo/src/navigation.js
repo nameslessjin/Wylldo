@@ -43,7 +43,7 @@ export const goHome = () =>  {
                                             options:{
                                                 bottomTab:{
                                                     fontSize:12,
-                                                    text: 'Events',
+                                                    text: 'Event',
                                                     icon: sources[2],
                                                     selectedIconColor: "#FE4C4C"
                                                 }
@@ -63,7 +63,7 @@ export const goHome = () =>  {
                                             options:{
                                                 bottomTab:{
                                                     fontSize:12,
-                                                    text: 'Settings',
+                                                    text: 'Setting',
                                                     icon: sources[1],
                                                     selectedIconColor: "#FE4C4C"
                                                 }
