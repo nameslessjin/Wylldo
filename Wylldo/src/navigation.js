@@ -4,7 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 export const goHome = () =>  {
     Promise.all([
         Icon.getImageSource("md-home", 25),
-        Icon.getImageSource("md-settings", 25)
+        Icon.getImageSource("md-settings", 25),
+        Icon.getImageSource("md-list", 25)
     ]).then(sources => {
         Navigation.setRoot({
             root: {
@@ -29,6 +30,25 @@ export const goHome = () =>  {
                                 ],
                             }
         
+                        },
+                        {
+                            stack:{
+                                children:[
+                                    {
+                                        component:{
+                                            name: 'EventsList',
+                                            options:{
+                                                bottomTab:{
+                                                    fontSize:12,
+                                                    text: 'Events',
+                                                    icon: sources[2]
+                                                }
+                                            }
+                                        }
+        
+                                    }
+                                ]
+                            }
                         },
                         {
                             stack:{
