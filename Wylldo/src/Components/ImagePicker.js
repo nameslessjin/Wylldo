@@ -1,10 +1,11 @@
 import React from 'react'
-import {View, Image, TouchableOpacity, StyleSheet} from "react-native"
+import {View, Image, TouchableOpacity, StyleSheet, Text} from "react-native"
 import ImagePicker from "react-native-image-picker";
 
 export default class PickImage extends React.Component{
     state = {
-        pickedImage: null
+        pickedImage: null,
+        Clicked: false
     }
 
     reset = () => {
@@ -22,16 +23,21 @@ export default class PickImage extends React.Component{
             } else {
                 console.log(res)
                 this.setState({
-                    pickedImage: {uri: res.uri}
+                    pickedImage: {uri: res.uri},
+                    Clicked: true
                 })
             }
         })
     }
 
     render(){
+
+        const displayMessage = <Text>Click to add image</Text>
+        const displayImage = <Image source={this.state.pickedImage} style={styles.image}/>
+
         return(
             <TouchableOpacity style={styles.container} onPress={this.pickImageHandler}>
-                    <Image source={this.state.pickedImage} style={styles.image}/>
+                    {this.state.Clicked ? displayImage : displayMessage}
             </TouchableOpacity>
         )
     }
