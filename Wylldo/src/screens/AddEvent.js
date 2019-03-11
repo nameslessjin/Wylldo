@@ -4,6 +4,7 @@ import PickImage from '../Components/ImagePicker'
 import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
 
+
 export default class addEvent extends React.Component{
 
     static get options(){
@@ -41,12 +42,14 @@ export default class addEvent extends React.Component{
     }
 
     state ={
-        description: " ",
+        description: "",
         image: null,
-        android: false
+        android: false,
+        tag: null
     }
 
     render(){
+        
         return(
             <View style={styles.container}>
                 <View style={styles.ImgView}> 
@@ -57,7 +60,7 @@ export default class addEvent extends React.Component{
                     <TextInput
                         placeholder="I wylldo..."
                         multiline={true}
-                        onChangeText={(text) => this.setState({text})}
+                        onChangeText={(text) => this.setState({description:text})}
                     />
                 </View>
                 <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
