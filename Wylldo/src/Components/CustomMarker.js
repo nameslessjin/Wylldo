@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     ImgView:{
-        borderRadius: 20
+        borderRadius: 20,
+        backgroundColor: "white"
     }
 
 })

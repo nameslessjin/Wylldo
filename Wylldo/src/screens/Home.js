@@ -16,7 +16,9 @@ export default class Home extends React.Component{
             topBar:{
                 title:{
                     text: 'Home'
-                }
+                },
+                visible: false,
+                height: 0
             }
         }
     }
@@ -32,8 +34,8 @@ export default class Home extends React.Component{
         markers:[
             {
                 coordinate:{
-                    latitude: 40.798699,
-                    longitude: -77.859954
+                    latitude: 40.798599,
+                    longitude: -77.856654
                 },
                 key: 1,
                 icon: "md-american-football"
@@ -49,7 +51,7 @@ export default class Home extends React.Component{
         ],
         markPressed: false,
         mapPressed: false,
-        modalShown: false,
+        currentPositionBtn: true,
     }
 
     pickLocationHandler = event => {
@@ -134,7 +136,7 @@ export default class Home extends React.Component{
             <View style={{width: "100%", height: "100%", paddingTop: this.state.paddingTop}}>
                 <MapView
                     showsUserLocation={true}
-                    showsMyLocationButton={this.state.modalAppearance ? false : true}
+                    showsMyLocationButton={this.state.markPressed ? false : true}
                     initialRegion={this.state.userLocation} 
                     style={styles.container} 
                     provider={PROVIDER_GOOGLE} 
@@ -159,12 +161,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modal:{
-        width: "80%",
-        height: "30%",
-        backgroundColor: "red",
+        width: "90%",
+        height: "35%",
+        backgroundColor: "white",
         borderRadius: 20,
         position: 'absolute',
-        top: "68%",
-        left: "10%"
+        top: "64%",
+        left: "5%"
     }
 })

@@ -2,15 +2,43 @@
 
 import React from 'react'
 import {View, Text, StyleSheet} from 'react-native'
+import  {Navigation} from 'react-native-navigation'
+
 
 export default class EventTable extends React.Component{
+
     static get options(){
         return{
             topBar:{
                 title:{
-                    text: 'Events'
-                }
+                    text: 'What\'s Happening'
+                },
+                rightButtons:[
+                    {
+                        id: 'addEvent',
+                        text: 'Wylldo',
+
+                    }
+                ]
             }
+        }
+    }
+
+
+    constructor(props){
+        super(props);
+        Navigation.events().bindComponent(this);
+        
+
+    }
+
+    navigationButtonPressed({buttonId}){
+        if (buttonId == "addEvent"){
+            Navigation.push(this.props.componentId, {
+                component: {
+                    name: 'AddEvent'
+                }
+            })
         }
     }
 

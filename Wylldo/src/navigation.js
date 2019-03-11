@@ -24,8 +24,9 @@ export const goHome = () =>  {
                                                 bottomTab:{
                                                     fontSize: 12,
                                                     text: 'Home',
-                                                    icon: sources[0]
-                                                }
+                                                    icon: sources[0],      
+                                                    selectedIconColor: "#FE4C4C"
+                                                },
                                             }
                                         }
                                     }
@@ -43,7 +44,8 @@ export const goHome = () =>  {
                                                 bottomTab:{
                                                     fontSize:12,
                                                     text: 'Events',
-                                                    icon: sources[2]
+                                                    icon: sources[2],
+                                                    selectedIconColor: "#FE4C4C"
                                                 }
                                             }
                                         }
@@ -62,7 +64,8 @@ export const goHome = () =>  {
                                                 bottomTab:{
                                                     fontSize:12,
                                                     text: 'Settings',
-                                                    icon: sources[1]
+                                                    icon: sources[1],
+                                                    selectedIconColor: "#FE4C4C"
                                                 }
                                             }
                                         }
@@ -77,6 +80,7 @@ export const goHome = () =>  {
         })
     })
 }
+
 
 
 
