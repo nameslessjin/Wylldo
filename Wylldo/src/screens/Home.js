@@ -7,6 +7,7 @@ import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import CustomButton from '../Components/CustomButton'
 import Icon from 'react-native-vector-icons/Ionicons'
+import {PermissionsAndroid} from 'react-native'
 
 export default class Home extends React.Component{
     static get options(){
@@ -25,7 +26,8 @@ export default class Home extends React.Component{
             longitude: -77.859954 ,
             latitudeDelta: 0.0122,
             longitudeDelta: 0.0122
-        }
+        },
+        paddingTop: 1
     }
 
     pickLocationHandler = event => {
@@ -62,21 +64,31 @@ export default class Home extends React.Component{
         )
     }
 
+    onMapReady = () =>{
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+            .then(granted => {
+                this.setState({paddingTop: 0})
+            })
+    }
+
 
     render(){
         return(
-            <MapView
-                showsUserLocation={true}
-                showsMyLocationButton={true}
-                initialRegion={this.state.userLocation} 
-                style={styles.container} 
-                provider={PROVIDER_GOOGLE} 
-                customMapStyle={mapStyle}
-                onPress={this.pickLocationHandler}
-                region={this.state.userLocation} >
-                
+            <View style={{width: "100%", height: "100%", paddingTop: this.state.paddingTop}}>
+                <MapView
+                    showsUserLocation={true}
+                    showsMyLocationButton={true}
+                    initialRegion={this.state.userLocation} 
+                    style={styles.container} 
+                    provider={PROVIDER_GOOGLE} 
+                    customMapStyle={mapStyle}
+                    onPress={this.pickLocationHandler}
+                    region={this.state.userLocation}
+                    onMapReady={this.onMapReady} >
+                    
 
-            </MapView>
+                </MapView>
+            </View>
         )
     }
 }
@@ -84,8 +96,7 @@ export default class Home extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
+
     },
     navigationBtn:{
         flex: 1,
