@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 23,
         borderRadius: 45,
-        backgroundColor: 'grey',
+        backgroundColor: '#FAFE79',
         flexDirection: "row"
     },
     ImgView:{

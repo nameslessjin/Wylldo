@@ -11,12 +11,14 @@ export default class EventTable extends React.Component{
         return{
             topBar:{
                 title:{
-                    text: 'What\'s Happening'
+                    text: 'What\'s Happening',
+                    alignment: 'center'
                 },
                 rightButtons:[
                     {
                         id: 'addEvent',
                         text: 'Wylldo',
+                        color: '#0481fe'
 
                     }
                 ]
