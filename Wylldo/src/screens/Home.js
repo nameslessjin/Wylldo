@@ -8,8 +8,9 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import {PermissionsAndroid} from 'react-native'
+import {connect} from 'react-redux'
 
-export default class Home extends React.Component{
+class Home extends React.Component{
     static get options(){
         return{
             topBar:{
@@ -88,6 +89,7 @@ export default class Home extends React.Component{
 
     mapViewPressedHandler = () => {
         this.setState({markPressed: false, mapPressed: true})
+        console.log(this.props.events[0].coords)
 
     }
     markPressedHandler = () => {
@@ -105,16 +107,28 @@ export default class Home extends React.Component{
 
     render(){
 
-        const Markers = this.state.markers.map(marker => (
-            <Marker
-                coordinate={marker.coordinate}
-                key = {marker.key}
+        // const Markers = this.state.markers.map(marker => (
+        //     <Marker
+        //         coordinate={marker.coordinate}
+        //         key = {marker.key}
                 
+        //     >
+        //         <CustomMarker 
+        //             icon = {marker.icon}/>
+        //     </Marker>
+        // ))
+
+        const Markers = this.props.events.map(event => (
+            <Marker
+                coordinate={event.coords}
+                key={event.key}
             >
-                <CustomMarker 
-                    icon = {marker.icon}/>
+            
+                <CustomMarker icon={event.tag} />
+            
             </Marker>
         ))
+        
 
         let modal = null
         
@@ -165,3 +179,13 @@ const styles = StyleSheet.create({
         left: "5%"
     }
 })
+
+
+function mapStateToProps(state){
+    return{
+        events: state.events.Events
+    }
+}
+
+
+export default connect(mapStateToProps)(Home)

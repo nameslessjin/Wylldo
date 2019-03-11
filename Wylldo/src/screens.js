@@ -1,9 +1,10 @@
 // Screen register page
-
 import {Navigation} from 'react-native-navigation'
+import {Provider} from 'react-redux'
+import {store} from './store/configureStore'
 
 export function registerScreens(){
-    Navigation.registerComponent('Home', () => require('./screens/Home').default)
+    Navigation.registerComponentWithRedux('Home', () => require('./screens/Home').default, Provider, store)
     Navigation.registerComponent('Initializing', (sc) => require('./screens/Initializing').default)
     Navigation.registerComponent('SignIn', () => require('./screens/Signin').default)
     Navigation.registerComponent('SignUp', () => require('./screens/Signup').default)
