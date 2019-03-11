@@ -10,6 +10,8 @@ import com.facebook.soloader.SoLoader;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 
+import com.imagepicker.ImagePickerPackage;
+
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
@@ -43,7 +45,8 @@ public class MainApplication extends NavigationApplication {
               // eg. new VectorIconsPackage()
               new MainReactPackage(),
               new MapsPackage(),
-              new VectorIconsPackage()
+              new VectorIconsPackage(),
+              new ImagePickerPackage()
 
           );
       }
