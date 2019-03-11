@@ -1,6 +1,7 @@
 import React from 'react'
 import {View, Text, StyleSheet, TextInput, Platform} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import PickImage from '../Components/ImagePicker'
 
 export default class addEvent extends React.Component{
 
@@ -33,9 +34,7 @@ export default class addEvent extends React.Component{
         return(
             <View style={styles.container}>
                 <View style={styles.ImgView}> 
-                    <Text>
-                        Image Picker then display Img
-                    </Text>        
+                    <PickImage/>         
                 </View>
                 <View style={styles.DescriptionView}> 
                     <Text style={styles.emptySpace} ></Text>
@@ -60,6 +59,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor: "#eee",
+        alignItems: "center"
     },
     ImgView:{
         height: "39%",
