@@ -1,7 +1,7 @@
 // custom marker component
 
 import React from 'react'
-import {View, StyleSheet,Text} from "react-native"
+import {View, StyleSheet,Text, TouchableOpacity} from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 
 export default class CustomMarker extends React.Component{
@@ -9,18 +9,27 @@ export default class CustomMarker extends React.Component{
 
     render(){
         return(
-            <View style={styles.container}>
-                <Text>Image</Text>
-                <Icon name={this.props.icon} size={13} />
-            </View>
+                <View style={styles.container}>
+                    <View style={styles.ImgView}>
+                        <Icon name="md-person" size={20}/>
+                    </View>
+                    <Icon name={this.props.icon} size={11} />
+                </View>
+
         )
     }
 }
 
 const styles = StyleSheet.create({
     container:{
-        borderRadius: 50,
-        backgroundColor: 'white',
+        width: 30,
+        height: 23,
+        borderRadius: 45,
+        backgroundColor: 'grey',
         flexDirection: "row"
+    },
+    ImgView:{
+        borderRadius: 20
     }
+
 })

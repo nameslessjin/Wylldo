@@ -8,6 +8,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import {PermissionsAndroid} from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export default class Home extends React.Component{
     static get options(){
@@ -45,7 +46,10 @@ export default class Home extends React.Component{
                 key: 2,
                 icon: "md-beer"    
             }
-        ]
+        ],
+        markPressed: false,
+        mapPressed: false,
+        modalShown: false,
     }
 
     pickLocationHandler = event => {
@@ -81,6 +85,20 @@ export default class Home extends React.Component{
         )
     }
 
+    mapViewPressedHandler = () => {
+        console.log("MarkPressed", this.state.markPressed, "MapPressed", this.state.mapPressed  )
+        if (this.state.markPressed){
+            this.setState({markPressed: false, mapPressed: true})
+        } 
+        else {
+            this.setState({mapPressed: false})
+        }
+    }
+    markPressedHandler = () => {
+        console.log("MarkPressed", this.state.markPressed, "MapPressed", this.state.mapPressed  )
+        this.setState({markPressed: true, mapPressed: false})
+    }
+
     onMapReady = () =>{
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
             .then(granted => {
@@ -91,29 +109,44 @@ export default class Home extends React.Component{
 
     render(){
 
-        let Markers = this.state.markers.map(marker => (
+        const Markers = this.state.markers.map(marker => (
             <Marker
                 coordinate={marker.coordinate}
                 key = {marker.key}
+                onPress={this.markPressedHandler}
             >
-                <CustomMarker icon = {marker.icon} />
+                <CustomMarker 
+                    icon = {marker.icon}/>
             </Marker>
         ))
+
+        let modal = null
+        
+        if (this.state.markPressed && !this.state.mapPressed){
+            console.log("Show")
+            modal = <View style = {styles.modal} ></View>
+        } else {
+            console.log("Hide")
+            modal = <View></View>
+        }
 
         return(
             <View style={{width: "100%", height: "100%", paddingTop: this.state.paddingTop}}>
                 <MapView
                     showsUserLocation={true}
-                    showsMyLocationButton={true}
+                    showsMyLocationButton={this.state.modalAppearance ? false : true}
                     initialRegion={this.state.userLocation} 
                     style={styles.container} 
                     provider={PROVIDER_GOOGLE} 
                     customMapStyle={mapStyle}
+                    onPress={this.mapViewPressedHandler}
                     onMapReady={this.onMapReady} >
-                    
+
+
                     {Markers}
 
                 </MapView>
+                {modal}
             </View>
         )
     }
@@ -122,6 +155,16 @@ export default class Home extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    modal:{
+        width: "80%",
+        height: "30%",
+        backgroundColor: "red",
+        borderRadius: 20,
+        position: 'absolute',
+        top: "68%",
+        left: "10%"
     }
 })
