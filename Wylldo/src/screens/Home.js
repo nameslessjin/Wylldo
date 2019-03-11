@@ -1,9 +1,12 @@
 import React from 'react'
-import {View, Text, StyleSheet, AsyncStorage} from 'react-native'
+import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import {USER_KEY} from '../config'
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps'
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
+import CustomMarker from '../Components/CustomMarker'
+import CustomButton from '../Components/CustomButton'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export default class Home extends React.Component{
     static get options(){
@@ -16,15 +19,62 @@ export default class Home extends React.Component{
         }
     }
 
+    state = {
+        userLocation:{
+            latitude: 40.798699,
+            longitude: -77.859954 ,
+            latitudeDelta: 0.0122,
+            longitudeDelta: 0.0122
+        }
+    }
+
+    pickLocationHandler = event => {
+        const coords = event.nativeEvent.coordinate;
+        this.setState(prevState => {
+            return {
+                userLocation: {
+                    ...prevState.userLocation,
+                    latitude: coords.latitude,
+                    longitude: coords.longitude
+                  }
+            }
+        })
+    }
+
+    getUserLocationHandler = () => {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const coordsEvent = {
+                    nativeEvent:{
+                        coordinate: {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        }
+                    }
+                }
+                this.pickLocationHandler(coordsEvent)
+                console.log(this.state.userLocation)
+            },
+            error => {
+                console.log(error)
+                alert("error")
+            }
+        )
+    }
+
 
     render(){
-
- 
         return(
-            <MapView 
+            <MapView
+                showsUserLocation={true}
+                showsMyLocationButton={true}
+                initialRegion={this.state.userLocation} 
                 style={styles.container} 
                 provider={PROVIDER_GOOGLE} 
-                customMapStyle={mapStyle} >
+                customMapStyle={mapStyle}
+                onPress={this.pickLocationHandler}
+                region={this.state.userLocation} >
+                
 
             </MapView>
         )
@@ -34,8 +84,12 @@ export default class Home extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+    },
+    navigationBtn:{
+        flex: 1,
+        justifyContent: 'flex-end',
+        backgroundColor: "red"
     }
 })
