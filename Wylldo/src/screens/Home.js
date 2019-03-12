@@ -23,6 +23,17 @@ class Home extends React.Component{
         }
     }
 
+    constructor(props){
+        super(props);
+        Navigation.events().bindComponent(this);
+    }
+
+    navigationButtonPressed({buttonId}){
+        if (buttonId == 'eventTab'){
+            console.log(this.state.eventKey)
+        }
+    }
+
     state = {
         userLocation:{
             latitude: 40.798699,
@@ -31,28 +42,12 @@ class Home extends React.Component{
             longitudeDelta: 0.0122
         },
         paddingTop: 1,
-        markers:[
-            {
-                coordinate:{
-                    latitude: 40.798599,
-                    longitude: -77.856654
-                },
-                key: 1,
-                icon: "md-american-football"
-            },
-            {
-                coordinate:{
-                    latitude: 40.794000,
-                    longitude: -77.859954
-                },
-                key: 2,
-                icon: "md-beer"    
-            }
-        ],
         markPressed: false,
         mapPressed: false,
-        currentPositionBtn: true,
+        eventKey: null
     }
+
+    
 
     pickLocationHandler = event => {
         const coords = event.nativeEvent.coordinate;
@@ -92,9 +87,8 @@ class Home extends React.Component{
    
 
     }
-    markPressedHandler = (event,markerEventKey) => {
+    markPressedHandler = () => {
         this.setState({markPressed: true, mapPressed: false})
-        console.log(event)
 
     }
 
@@ -116,7 +110,7 @@ class Home extends React.Component{
                     <Marker
                     coordinate={event.coords}
                     key={event.key}
-                    onPress={(e)=>this.markPressedHandler(e,event.key) }
+                    onPress={() => this.setState({eventKey : event.key}) }
                     >
                 
                     <CustomMarker icon={event.tag} />
@@ -132,8 +126,15 @@ class Home extends React.Component{
         
         if (this.state.markPressed && !this.state.mapPressed){
             
-            modal = <View style = {styles.modal} >
+            const markerEvent = this.props.events.filter(event=> {
+                return event.key === this.state.eventKey
+            })
 
+            const eventDescription = markerEvent[0].description
+
+            modal = <View style = {styles.modal} >
+ 
+                        <Text>{eventDescription}</Text>
                     </View>
         } else {
            
