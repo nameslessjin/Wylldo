@@ -5,6 +5,7 @@ import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
 
 
+
 export default class addEvent extends React.Component{
 
     static get options(){
@@ -35,7 +36,12 @@ export default class addEvent extends React.Component{
         if (buttonId == "addMap"){
             Navigation.push(this.props.componentId, {
                 component:{
-                    name: 'AddMap'
+                    name: 'AddMap',
+                    passProps:{
+                        description: this.state.description,
+                        image: this.state.image,
+                        tag: this.state.tag
+                    }
                 }
             })
         }
@@ -45,15 +51,16 @@ export default class addEvent extends React.Component{
         description: "",
         image: null,
         android: false,
-        tag: null
+        tag: 'md-beer'
     }
+
 
     render(){
         
         return(
             <View style={styles.container}>
                 <View style={styles.ImgView}> 
-                    <PickImage/>         
+                    <PickImage updateImage= {(updatedImg) => this.setState({image: updatedImg})} />         
                 </View>
                 <View style={styles.DescriptionView}> 
                     <Text style={styles.emptySpace} ></Text>
@@ -64,13 +71,16 @@ export default class addEvent extends React.Component{
                     />
                 </View>
                 <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
-                    <PickTag />
+                    <PickTag defaultTag={this.state.tag} updateTag={(updatedTagName) => this.setState({tag: updatedTagName})} />
                 </View>
             </View>
 
         )
     }
 }
+
+
+
 
 const styles = StyleSheet.create({
     container:{

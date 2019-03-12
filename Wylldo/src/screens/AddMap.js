@@ -3,11 +3,13 @@ import {View, Text, StyleSheet} from 'react-native'
 import mapStyle from '../UI/MapStyle'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import {Navigation} from 'react-native-navigation'
+import {connect} from 'react-redux'
+import {addEvent} from '../store/actions/action.index'
 
 
-export default class AddMap extends React.Component{
+class AddMap extends React.Component{
 
-    static get options(){
+    static options(){
         return{
             bottomTabs: {
                 visible: false
@@ -48,6 +50,14 @@ export default class AddMap extends React.Component{
 
     navigationButtonPressed({buttonId}){
         if(buttonId == "Post"){
+            const eventState={
+                description : this.props.description,
+                tag : this.props.tag,
+                image : this.props.image,
+                coords : this.state.eventLocation,
+                key: this.props.tag + this.state.eventLocation.latitude + this.props.image.uri + this.state.eventLocation.longitude + this.props.description
+            }
+            this.props.onAddEvent(eventState)
             Navigation.popToRoot(this.props.componentId)
         }
     }
@@ -63,6 +73,7 @@ export default class AddMap extends React.Component{
                 }
             }
         })
+        console.log(this.props)
         
     }
 
@@ -92,6 +103,14 @@ export default class AddMap extends React.Component{
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return{
+        onAddEvent: (eventState) => dispatch(addEvent(eventState))
+    }
+}
+
+export default connect(null,mapDispatchToProps)(AddMap)
 
 const styles = StyleSheet.create({
     container: {

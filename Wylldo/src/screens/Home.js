@@ -107,16 +107,6 @@ class Home extends React.Component{
 
     render(){
 
-        // const Markers = this.state.markers.map(marker => (
-        //     <Marker
-        //         coordinate={marker.coordinate}
-        //         key = {marker.key}
-                
-        //     >
-        //         <CustomMarker 
-        //             icon = {marker.icon}/>
-        //     </Marker>
-        // ))
 
         const Markers = this.props.events.map(event => (
             <Marker
@@ -181,7 +171,7 @@ const styles = StyleSheet.create({
 })
 
 
-function mapStateToProps(state){
+const mapStateToProps = state => {
     return{
         events: state.events.Events
     }

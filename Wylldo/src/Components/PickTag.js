@@ -6,7 +6,7 @@ export default class PickTag extends React.Component{
 
     state={
         icons:[
-            {name: 'md-beer', tagged: false},
+            {name: 'md-beer', tagged: true},
             {name: 'md-american-football', tagged: false},
             {name: 'md-book', tagged: false},
         ]
@@ -18,6 +18,11 @@ export default class PickTag extends React.Component{
         })
         newIcons.map((newIcon, newIndex)=>( newIcon.tagged = (newIndex == index) ? true : false ))
         this.setState({icons: newIcons})
+
+        updatedIcon = this.state.icons.filter((icon) => {
+            return icon.tagged === true
+        })
+        this.props.updateTag(updatedIcon[0].name)
     }
 
     render(){

@@ -26,6 +26,7 @@ export default class PickImage extends React.Component{
                     pickedImage: {uri: res.uri},
                     Clicked: true
                 })
+                this.props.updateImage(this.state.pickedImage)
             }
         })
     }
