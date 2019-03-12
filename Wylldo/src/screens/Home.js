@@ -89,12 +89,13 @@ class Home extends React.Component{
 
     mapViewPressedHandler = () => {
         this.setState({markPressed: false, mapPressed: true})
-        console.log(this.props.events[0].coords)
+   
 
     }
-    markPressedHandler = () => {
-        console.log("MarkPressed", this.state.markPressed, "MapPressed", this.state.mapPressed  )
+    markPressedHandler = (event,markerEventKey) => {
         this.setState({markPressed: true, mapPressed: false})
+        console.log(event)
+
     }
 
     onMapReady = () =>{
@@ -108,25 +109,34 @@ class Home extends React.Component{
     render(){
 
 
-        const Markers = this.props.events.map(event => (
-            <Marker
-                coordinate={event.coords}
-                key={event.key}
-            >
-            
-                <CustomMarker icon={event.tag} />
-            
-            </Marker>
-        ))
+        const Markers = this.props.events.map(event => {
+
+            if (event.coords.latitude !== null){
+                return(
+                    <Marker
+                    coordinate={event.coords}
+                    key={event.key}
+                    onPress={(e)=>this.markPressedHandler(e,event.key) }
+                    >
+                
+                    <CustomMarker icon={event.tag} />
+                
+                    </Marker>
+                )
+
+            }
+        })
         
 
         let modal = null
         
         if (this.state.markPressed && !this.state.mapPressed){
-            console.log("Show")
-            modal = <View style = {styles.modal} ></View>
+            
+            modal = <View style = {styles.modal} >
+
+                    </View>
         } else {
-            console.log("Hide")
+           
             modal = <View></View>
         }
 

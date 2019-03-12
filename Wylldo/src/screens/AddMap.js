@@ -55,7 +55,7 @@ class AddMap extends React.Component{
                 tag : this.props.tag,
                 image : this.props.image,
                 coords : this.state.eventLocation,
-                key: this.props.tag + this.state.eventLocation.latitude + this.props.image.uri + this.state.eventLocation.longitude + this.props.description
+                key: this.props.tag + Math.random() * 100 + this.props.description
             }
             this.props.onAddEvent(eventState)
             Navigation.popToRoot(this.props.componentId)
