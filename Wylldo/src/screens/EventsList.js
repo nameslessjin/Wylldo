@@ -33,7 +33,11 @@ class EventTable extends React.Component{
         super(props);
         Navigation.events().bindComponent(this);
         
+    }
 
+    componentDidAppear(){
+        let content = <ListEvents events={this.props.events}/>
+        
     }
 
     navigationButtonPressed({buttonId}){
@@ -48,11 +52,9 @@ class EventTable extends React.Component{
 
     render(){
 
-        let content = <ListEvents events={this.props.events}/>
-
         return(
             <View style={styles.container}>
-                {content}
+                
             </View>
 
         )

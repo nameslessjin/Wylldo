@@ -1,26 +1,21 @@
 import React from 'react'
 import {StyleSheet, FlatList,View} from 'react-native'
 import EventDisplay from '../Components/EventDisplay'
+import {Navigation} from 'react-native-navigation'
 
-export default ListEvents = props => {
+export default class ListEvents extends React.Component{
     
-    console.log("props.events")
+    componentDidAppear(){
+        console.log(this.props.events)
+    }
 
-    return(
-        // <FlatList
-        //     style={styles.container}
-        //     data={props.events}
-        //     renderItem={(info) => {
-        //         console.log(info)
-        //     }}
-        
-        
-        // />
-        <View>
-        </View>
+    render(){
+        return(
+            <View>
 
-
-    )
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
