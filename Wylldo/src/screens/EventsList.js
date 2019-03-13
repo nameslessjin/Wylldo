@@ -1,11 +1,13 @@
 //Page represent events
 
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, FlatList} from 'react-native'
 import  {Navigation} from 'react-native-navigation'
+import {connect} from 'react-redux'
+import ListEvents from '../Components/ListEvents'
 
 
-export default class EventTable extends React.Component{
+class EventTable extends React.Component{
 
     static get options(){
         return{
@@ -45,19 +47,32 @@ export default class EventTable extends React.Component{
     }
 
     render(){
+
+        let content = <ListEvents events={this.props.events}/>
+
         return(
             <View style={styles.container}>
-                <Text></Text>
+                {content}
             </View>
+
         )
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        events: state.events.Events
+    }
+}
+
+
+export default connect(mapStateToProps)(EventTable)
+
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#eee'
     }
 })
