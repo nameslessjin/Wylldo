@@ -35,8 +35,15 @@ class EventTable extends React.Component{
         
     }
 
+
+    state = {
+        Events: []
+    }
+
+
+
     componentDidAppear(){
-        let content = <ListEvents events={this.props.events}/>
+        this.setState({Events: this.props.events})
         
     }
 
@@ -53,10 +60,7 @@ class EventTable extends React.Component{
     render(){
 
         return(
-            <View style={styles.container}>
-                
-            </View>
-
+            <ListEvents events={this.state.Events}/>
         )
     }
 }

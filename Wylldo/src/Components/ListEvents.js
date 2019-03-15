@@ -5,15 +5,24 @@ import {Navigation} from 'react-native-navigation'
 
 export default class ListEvents extends React.Component{
     
-    componentDidAppear(){
-        console.log(this.props.events)
-    }
+    _keyExtractor = (item, index) => (item.key + index).toString()
 
     render(){
+        {console.log(this.props.events)}
         return(
-            <View>
-
-            </View>
+            <FlatList
+                data={this.props.events}
+                keyExtractor={this._keyExtractor}
+                renderItem={(info) => (
+                    console.log(info),
+                    <EventDisplay
+                        description={info.item.description}
+                        key={info.item.key}
+                        image={info.item.image}
+                    />
+                )}
+            
+            />
         )
     }
 }
