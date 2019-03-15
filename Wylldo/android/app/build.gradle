@@ -110,6 +110,7 @@ android {
         versionCode 1
         versionName "1.0"
         missingDimensionStrategy "RNN.reactNativeVersion", "reactNative57"
+        multiDexEnabled true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -153,6 +154,7 @@ configurations.all {
 }
 
 dependencies {
+    implementation project(':react-native-firebase')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -162,10 +164,15 @@ dependencies {
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-maps'
     }
-    implementation 'com.google.android.gms:play-services-base:10.0.1'
-    implementation 'com.google.android.gms:play-services-maps:10.0.1'
+
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-image-picker')
+
+
+    implementation "com.google.android.gms:play-services-base:16.0.1"
+    implementation "com.google.firebase:firebase-core:16.0.6"
+    implementation "com.google.firebase:firebase-firestore:17.1.5"
 }
 
 // Run this once to be able to run the application with BUCK
@@ -174,3 +181,9 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+
+
+
+
+apply plugin: 'com.google.gms.google-services'

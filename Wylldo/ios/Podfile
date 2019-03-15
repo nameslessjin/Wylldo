@@ -23,6 +23,10 @@ target 'Wylldo' do
     'RCTWebSocket',
   ]
 
+  #firebase
+  pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
+
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   # React Native third party dependencies podspecs

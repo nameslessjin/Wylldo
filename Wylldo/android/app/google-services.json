@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "340999346078",
+    "firebase_url": "https://wylldo-2c98c.firebaseio.com",
+    "project_id": "wylldo-2c98c",
+    "storage_bucket": "wylldo-2c98c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340999346078:android:f3d495ec6fcf6998",
+        "android_client_info": {
+          "package_name": "com.wylldo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340999346078-4qhgkb8ts3hge521mf6rce3p8i4m96qs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCib7Hn5-li27LhEwiv5tqOGG_6UyQEVc0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
