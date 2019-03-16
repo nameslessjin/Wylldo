@@ -53,11 +53,11 @@ class AddMap extends React.Component{
             const eventState={
                 description : this.props.description,
                 tag : this.props.tag,
-                image : this.props.image,
                 coords : this.state.eventLocation,
                 key: this.props.tag + Math.random() * 100 + this.props.description
             }
-            this.props.onAddEvent(eventState)
+            const image = this.props.image
+            this.props.onAddEvent(eventState, image)
             Navigation.popToRoot(this.props.componentId)
         }
     }
@@ -104,7 +104,7 @@ class AddMap extends React.Component{
 
 const mapDispatchToProps = dispatch => {
     return{
-        onAddEvent: (eventState) => dispatch(addEvent(eventState))
+        onAddEvent: (eventState, image) => dispatch(addEvent(eventState, image))
     }
 }
 

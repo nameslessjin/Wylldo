@@ -22,7 +22,11 @@ export default class PickImage extends React.Component{
                 console.log("Error", error)
             } else {
                 this.setState({
-                    pickedImage: {uri: res.uri},
+                    pickedImage: {
+                        uri: res.uri,
+                        height: res.height,
+                        width: res.width
+                    },
                     Clicked: true
                 })
                 this.props.updateImage(this.state.pickedImage)

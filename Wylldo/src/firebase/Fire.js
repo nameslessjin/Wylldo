@@ -1,5 +1,8 @@
 import firebase from 'react-native-firebase'
+import uuid from 'uuid'
+import uploadPhoto from '../firebase/uploadPhoto'
 
+const collectionName = 'Users'
 
 class Fire {
 
@@ -10,16 +13,22 @@ class Fire {
 
 
     // Upload Data
-    addEvent = async(EventInfo) => {
-        console.log(EventInfo)
-        this.collection.add(EventInfo)
-        .catch({message})(
-            console.log(message)
+    addEvent = async(EventInfo,image) => {
+        console.log(image)
+        // const remoteUri = await this.uploadPhotoAsync(image.uri.toString())
+        const uploadEventInfo = {
+            ...EventInfo,
+            image: image
+        }
+        this.collection.add(uploadEventInfo)
+        .catch({err})(
+            console.log(err)
         )
     }
 
-    uploadPhoto = async uri => {
-
+    uploadPhotoAsync = async uri => {
+        const path = '${collectionName}/${this.uid}/${uuid.v4()}.jpg'
+        return uploadPhoto(uri, path)
     }
 
     
@@ -27,7 +36,7 @@ class Fire {
 
     //Helpers
     get collection(){
-        return firebase.firestore().collection('Users')
+        return firebase.firestore().collection(collectionName)
     }
 
     get timestamp(){
