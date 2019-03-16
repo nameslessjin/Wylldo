@@ -1,13 +1,12 @@
 //Home page
 
 import React from 'react'
-import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button, Platform} from 'react-native'
+import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button, Platform, PermissionsAndroid} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import {USER_KEY} from '../config'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
-import {PermissionsAndroid} from 'react-native'
 import {connect} from 'react-redux'
 
 class Home extends React.Component{

@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet,Platform,PermissionsAndroid} from 'react-native'
 import mapStyle from '../UI/MapStyle'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import {Navigation} from 'react-native-navigation'
@@ -75,6 +75,8 @@ class AddMap extends React.Component{
         }) 
     }
 
+
+
     render(){
         let marker = null
         if(this.state.eventLocation.latitude){
@@ -83,7 +85,7 @@ class AddMap extends React.Component{
 
 
         return(
-            <View style={styles.container}>
+            <View style={{width: "100%", height: "100%", paddingTop: 0}}>
                 <MapView
                     showsUserLocation={true}
                     showsMyLocationButton={true}
