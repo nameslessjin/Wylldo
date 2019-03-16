@@ -26,6 +26,7 @@ target 'Wylldo' do
   #firebase
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
+  pod 'Firebase/Storage'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 

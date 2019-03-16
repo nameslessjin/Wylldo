@@ -72,9 +72,7 @@ class AddMap extends React.Component{
                     longitude: coords.longitude
                 }
             }
-        })
-        console.log(this.props)
-        
+        }) 
     }
 
     render(){

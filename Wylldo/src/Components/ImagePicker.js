@@ -15,13 +15,12 @@ export default class PickImage extends React.Component{
     }
 
     pickImageHandler = () => {
-        ImagePicker.showImagePicker({title:"Pick a photo", maxWidth: 800, maxHeight: 600}, res => {
+        ImagePicker.showImagePicker({title:"Pick a photo", maxWidth: 800, maxHeight: 800}, res => {
             if (res.didCancel){
                 console.log("Image cancelled")
             } else if (res.error){
                 console.log("Error", error)
             } else {
-                console.log(res)
                 this.setState({
                     pickedImage: {uri: res.uri},
                     Clicked: true
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     },
     image:{
         flex: 1,
-        resizeMode: 'contain',
+        resizeMode: 'cover',
         width: "100%",
         height: "100%"
     }

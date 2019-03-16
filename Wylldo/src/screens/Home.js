@@ -23,20 +23,13 @@ class Home extends React.Component{
         }
     }
 
-    constructor(props){
-        super(props);
-        Navigation.events().bindComponent(this);
-    }
+
 
     componentDidDisappear(){
         this.setState({eventKey: null, markPressed: false, mapPressed: false})
     }
 
-    navigationButtonPressed({buttonId}){
-        if (buttonId == 'eventTab'){
-            console.log(this.state.eventKey)
-        }
-    }
+
 
     state = {
         userLocation:{

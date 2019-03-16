@@ -1,8 +1,9 @@
 import {ADD_EVENT, GET_EVENT} from "./actionTypes"
+import Firestore from '../../firebase/Fire'
 
 
 export const addEvent = (EventInfo) => {
-    console.log(EventInfo)
+    Firestore.addEvent(EventInfo)
     return{
         type: ADD_EVENT,
         EventInfo: EventInfo

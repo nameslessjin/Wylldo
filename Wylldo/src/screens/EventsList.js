@@ -60,7 +60,9 @@ class EventTable extends React.Component{
     render(){
 
         return(
-            <ListEvents events={this.state.Events}/>
+            <View style={styles.container}>
+                <ListEvents events={this.state.Events}/>
+            </View>
         )
     }
 }

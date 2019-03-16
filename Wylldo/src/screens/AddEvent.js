@@ -38,7 +38,7 @@ export default class addEvent extends React.Component{
                 component:{
                     name: 'AddMap',
                     passProps:{
-                        description: this.state.description,
+                        description: this.state.description.trim(),
                         image: this.state.image,
                         tag: this.state.tag
                     }
