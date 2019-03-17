@@ -54,7 +54,8 @@ class AddMap extends React.Component{
                 description : this.props.description,
                 tag : this.props.tag,
                 coords : this.state.eventLocation,
-                key: this.props.tag + Math.random() * 100 + this.props.description
+                key: this.props.tag + Math.random() * 100 + this.props.description,
+                likes: 0
             }
             const image = this.props.image
             this.props.onAddEvent(eventState, image)

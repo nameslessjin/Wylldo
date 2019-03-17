@@ -14,18 +14,18 @@ class Fire {
 
     // Upload Data
     addEvent = async(EventInfo,image) => {
-
-        const imgStorageUri = await this.uploadPhotoAsync(image.uri)
-        const uploadedImag = {
+   
+        const imgStorageUri = !(image === null) ? await this.uploadPhotoAsync(image.uri) : null
+        const uploadedImag =  !(image === null) ? {
             ...image,
             uri: imgStorageUri
-        }
+        } : null
         const uploadEventInfo = {
             ...EventInfo,
             image: uploadedImag
         }
         console.log(uploadEventInfo)
-        this.collection.add(uploadEventInfo)
+        this.collection.add(uploadEventInfo).catch( () => {console.log('rejected')})
 
 
     }
