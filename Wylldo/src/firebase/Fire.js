@@ -27,8 +27,15 @@ class Fire {
     }
 
     uploadPhotoAsync = async uri => {
-        const path = '${collectionName}/${this.uid}/${uuid.v4()}.jpg'
+        const path = `${collectionName}/${this.uid}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path)
+    }
+
+    addPhoto = async(image) => {
+
+        console.log(image)
+        this.uploadPhotoAsync(image.uri)
+        
     }
 
     

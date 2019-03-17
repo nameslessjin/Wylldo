@@ -2,11 +2,9 @@ import firebase from 'react-native-firebase';
 
 export default uploadPhoto = (uri, uploadUri) => {
     return new Promise (async (res, rej) => {
-        const response = await fetch(uri);
-        const blob = await response.blob()
 
         const ref = firebase.storage().ref(uploadUri);
-        const unsubscribe = ref.putFile(blob).on(
+        const unsubscribe = ref.putFile(uri).on(
             'state_changed',
             state =>  {},
             err => {
@@ -16,6 +14,7 @@ export default uploadPhoto = (uri, uploadUri) => {
             async () => {
                 unsubscribe();
                 const url = await ref.getDownloadURL();
+                console.log(url)
                 res(url)
             }
         )
