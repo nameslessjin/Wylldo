@@ -41,7 +41,7 @@ class EventTable extends React.Component{
     }
 
 
-
+    //Need to make this in initialized
     componentDidAppear(){
         this.setState({Events: this.props.events})
         

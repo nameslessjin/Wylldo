@@ -22,7 +22,7 @@ class Home extends React.Component{
         }
     }
 
-
+//In initial AppLaunch, retrieve all locations and all events and put to state reducer
 
     componentDidDisappear(){
         this.setState({eventKey: null, markPressed: false, mapPressed: false})
@@ -152,6 +152,7 @@ class Home extends React.Component{
 
 
                     {Markers}
+                    
 
                 </MapView>
                 {modal}

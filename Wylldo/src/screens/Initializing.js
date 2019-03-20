@@ -7,6 +7,9 @@ import {goToAuth, goHome} from '../navigation'
 import {USER_KEY} from '../config'
 import Icon from 'react-native-vector-icons/Ionicons'
 
+
+//AppLaunch here and load some events add load screen and connect his part to reducer
+
 export default class Initializing extends React.Component{
 
     async componentDidMount(){

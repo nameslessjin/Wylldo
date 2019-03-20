@@ -55,7 +55,8 @@ class AddMap extends React.Component{
                 tag : this.props.tag,
                 coords : this.state.eventLocation,
                 key: this.props.tag + Math.random() * 100 + this.props.description,
-                likes: 0
+                likes: 0,
+                createdTime: Date.now()
             }
             const image = this.props.image
             this.props.onAddEvent(eventState, image)
@@ -85,6 +86,7 @@ class AddMap extends React.Component{
         }
 
 
+
         return(
             <View style={{width: "100%", height: "100%", paddingTop: 0}}>
                 <MapView
@@ -98,7 +100,6 @@ class AddMap extends React.Component{
                     >
 
                     {marker}
-                    
                 </MapView>
             </View>
         )

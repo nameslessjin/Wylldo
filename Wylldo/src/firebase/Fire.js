@@ -8,7 +8,7 @@ class Fire {
 
 
     //Download Data
-    // getPosts = async ({size, start})
+    // get data here
 
 
 
@@ -35,24 +35,15 @@ class Fire {
         return uploadPhoto(uri, path)
     }
 
-    addPhoto = async(image) => {
-
-        console.log(image)
-        this.uploadPhotoAsync(image.uri)
-        
-    }
-
-    
-
 
     //Helpers
     get collection(){
         return firebase.firestore().collection(collectionName)
     }
 
-    get timestamp(){
-        return Data.now()
-    }
+    // get timestamp(){
+    //     return Data.now()
+    // }
 
     get uid(){
         return (firebase.auth().currentUser || {}).uid

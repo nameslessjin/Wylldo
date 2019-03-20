@@ -1,6 +1,6 @@
 import {ADD_EVENT} from "../actions/actionTypes"
 import defaultImg from "../../assets/Savannah.jpeg"
-
+//Somewhere have state load events, load from firebase
 const initialState = {
     Events: [{
         description: "best party in town",
