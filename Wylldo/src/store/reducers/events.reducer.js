@@ -1,4 +1,4 @@
-import {ADD_EVENT} from "../actions/actionTypes"
+import {ADD_EVENT, GET_POSTS} from "../actions/actionTypes"
 import defaultImg from "../../assets/Savannah.jpeg"
 //Somewhere have state load events, load from firebase
 const initialState = {
@@ -31,6 +31,11 @@ export default reducer = (state = initialState, action) => {
             return{
                 ...state,
                 Events: state.Events.concat(action.EventInfo)
+            }
+        case GET_POSTS:
+            return{
+                ...state,
+                Events: state.Events.concat(action.Posts)
             }
         default:
             return state

@@ -8,6 +8,8 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import {connect} from 'react-redux'
+import Firestore from '../firebase/Fire'
+import {getPosts} from '../store/actions/action.index'
 
 class Home extends React.Component{
     static get options(){
@@ -24,12 +26,6 @@ class Home extends React.Component{
 
 //In initial AppLaunch, retrieve all locations and all events and put to state reducer
 
-    componentDidDisappear(){
-        this.setState({eventKey: null, markPressed: false, mapPressed: false})
-    }
-
-
-
     state = {
         userLocation:{
             latitude: 40.798699,
@@ -40,10 +36,32 @@ class Home extends React.Component{
         paddingTop: 1,
         markPressed: false,
         mapPressed: false,
-        eventKey: null
+        eventKey: null,
+        posts:[]
     }
 
-    
+    componentDidMount(){
+        this.getEventData().then( posts =>{
+                this.props.onGetPosts(posts)
+            }
+        )
+
+    }
+
+
+    getEventData = async () => {
+        const data = await Firestore.getData(5)
+        this.addPosts(data)
+        return this.state.posts
+    }
+
+    addPosts = posts => {
+        this.setState(prevState => {
+            return{
+                posts: posts
+            }
+        })
+    }
 
     pickLocationHandler = event => {
         const coords = event.nativeEvent.coordinate;
@@ -185,5 +203,11 @@ const mapStateToProps = state => {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return{
+        onGetPosts: (posts) => dispatch(getPosts(posts))
+    }
+}
 
-export default connect(mapStateToProps)(Home)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

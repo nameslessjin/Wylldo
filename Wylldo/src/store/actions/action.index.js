@@ -1,1 +1,1 @@
-export {initializeEvent, addEvent} from './events.action'
+export {getPosts, addEvent} from './events.action'

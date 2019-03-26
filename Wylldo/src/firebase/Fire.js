@@ -9,7 +9,37 @@ class Fire {
 
     //Download Data
     // get data here
+    getData = async (size) => {
+        let ref = this.collection.orderBy('createdTime', 'desc').limit(size);
+        // try{
+        //     if(start){
+        //         ref = ref.startAfter(start)
+        //     }
+        // }
+            const querySnapshot = await ref.get();
+            const eventData = []
+            querySnapshot.forEach(doc => {
+                if (doc.exists){
+                    eventData.push(doc._data)
+                }
+            })
+            // console.log(eventData)
+            
+            return eventData
+            // querySnapshot.forEach(doc => {
+            //     if (doc.exists){
+            //         console.log(doc)
 
+            //         // const post = doc.data() || {};
+
+            //         // const user = post.user || {}
+            //         // const reduced = {
+            //         //     key: doc.key
+            //         // }
+
+            //     }
+            // })
+    }
 
 
     // Upload Data
