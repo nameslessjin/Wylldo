@@ -1,4 +1,4 @@
-import {ADD_EVENT, GET_POSTS} from "./actionTypes"
+import {ADD_EVENT, GET_EVENTS} from "./actionTypes"
 import Firestore from '../../firebase/Fire'
 
 
@@ -12,11 +12,10 @@ export const addEvent = (EventInfo, image) => {
 }
 
 //add picture tab description
-export const getPosts = (posts) => {
-    console.log(posts)
+export const getEvents = (events) => {
 
     return{
-        type: GET_POSTS,
-        Posts: posts
+        type: GET_EVENTS,
+        Events: events
     }
 }

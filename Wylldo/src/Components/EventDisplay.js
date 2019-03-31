@@ -1,18 +1,25 @@
 import React from 'react'
 import {View, Text, Image, StyleSheet} from 'react-native'
-import defaultImg from '../assets/Savannah.jpeg'
+
 
 
 export default class EventDispaly extends React.Component{
+ 
+
 
     render(){
 
-        const displayImage = <Image source={defaultImg} style={styles.image} />
+
+        const imgW = this.props.image ? this.props.image.width : null
+        const imgH = this.props.image ? this.props.image.height : null
+        const aspect = this.props.image ? imgH / imgW : null
+        console.log(aspect)
         
         return(
+            
             <View>
 
-                {displayImage}
+                <Image source={this.props.image} style={[styles.image]} />
                 <Text>{this.props.description}</Text>
                 
                 
@@ -25,22 +32,10 @@ export default class EventDispaly extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        justifyContent: 'flex-start',
-        backgroundColor: "#fff",
-        padding: 10,
-        width: "100%",
-        marginBottom: 3,
-
-    },
-    imageView:{
-        width: "100%",
-        height: "40%",
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'yellow',
     },
     image:{
         resizeMode: 'contain',
-        aspectRatio: 0.5
+        backgroundColor: '#D8D8D8',
+        width: '100%'
     }
 })

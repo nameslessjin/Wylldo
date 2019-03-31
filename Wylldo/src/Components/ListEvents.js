@@ -6,19 +6,15 @@ import {Navigation} from 'react-native-navigation'
 export default class ListEvents extends React.Component{
     
     _keyExtractor = (item, index) => (item.key + index).toString()
+    renderItem = ({item}) => <EventDisplay {...item} />;
 
     render(){
         return(
             <FlatList
+                showsVerticalScrollIndicator={false}
                 data={this.props.events}
                 keyExtractor={this._keyExtractor}
-                renderItem={(info) => (
-                    <EventDisplay
-                        description={info.item.description}
-                        key={info.item.key}
-                        image={info.item.image}
-                    />
-                )}
+                renderItem={this.renderItem}
             
             />
         )
@@ -28,6 +24,5 @@ export default class ListEvents extends React.Component{
 const styles = StyleSheet.create({
     container:{
         width: "100%"
-        
     }
 })

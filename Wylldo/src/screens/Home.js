@@ -9,7 +9,7 @@ import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import {connect} from 'react-redux'
 import Firestore from '../firebase/Fire'
-import {getPosts} from '../store/actions/action.index'
+import {getEvents} from '../store/actions/action.index'
 
 class Home extends React.Component{
     static get options(){
@@ -37,12 +37,12 @@ class Home extends React.Component{
         markPressed: false,
         mapPressed: false,
         eventKey: null,
-        posts:[]
+        events:[]
     }
 
     componentDidMount(){
-        this.getEventData().then( posts =>{
-                this.props.onGetPosts(posts)
+        this.getEventData().then( events =>{
+                this.props.onGetEvents(events)
             }
         )
 
@@ -50,15 +50,15 @@ class Home extends React.Component{
 
 
     getEventData = async () => {
-        const data = await Firestore.getData(5)
-        this.addPosts(data)
-        return this.state.posts
+        const eventData = await Firestore.getEvents(10)
+        this.setEvents(eventData)
+        return this.state.events
     }
 
-    addPosts = posts => {
+    setEvents = events => {
         this.setState(prevState => {
             return{
-                posts: posts
+                events: events
             }
         })
     }
@@ -205,7 +205,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return{
-        onGetPosts: (posts) => dispatch(getPosts(posts))
+        onGetEvents: (events) => dispatch(getEvents(events))
     }
 }
 

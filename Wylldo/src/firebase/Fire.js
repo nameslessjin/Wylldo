@@ -9,7 +9,7 @@ class Fire {
 
     //Download Data
     // get data here
-    getData = async (size) => {
+    getEvents = async (size) => {
         let ref = this.collection.orderBy('createdTime', 'desc').limit(size);
         // try{
         //     if(start){
