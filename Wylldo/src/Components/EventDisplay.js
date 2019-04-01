@@ -1,5 +1,6 @@
 import React from 'react'
 import {View, Text, Image, StyleSheet} from 'react-native'
+import Header from './Header'
 
 
 
@@ -9,17 +10,21 @@ export default class EventDispaly extends React.Component{
 
     render(){
 
-
-        const imgW = this.props.image ? this.props.image.width : null
-        const imgH = this.props.image ? this.props.image.height : null
-        const aspect = this.props.image ? imgH / imgW : null
-        console.log(aspect)
+        let aspect = null
+        let imgW = null
+        let imgH = null
+        if (this.props.image){
+            imgW = this.props.image.width
+            imgH = this.props.image.height
+            aspect = imgW / imgH
+        }
+        // console.log(aspect)
         
         return(
             
             <View>
-
-                <Image source={this.props.image} style={[styles.image]} />
+                <Header name={this.props.name} />
+                <Image source={this.props.image} style={[styles.image,{height:imgH}]} />
                 <Text>{this.props.description}</Text>
                 
                 
@@ -35,7 +40,7 @@ const styles = StyleSheet.create({
     },
     image:{
         resizeMode: 'contain',
+        width: '100%',
         backgroundColor: '#D8D8D8',
-        width: '100%'
     }
 })

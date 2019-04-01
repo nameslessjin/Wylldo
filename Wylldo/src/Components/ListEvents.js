@@ -20,9 +20,3 @@ export default class ListEvents extends React.Component{
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container:{
-        width: "100%"
-    }
-})

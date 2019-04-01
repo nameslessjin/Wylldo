@@ -37,14 +37,13 @@ class EventTable extends React.Component{
 
 
     state = {
-        Events: []
+        Events: this.props.events
     }
 
 
     //Need to make this in initialized
     componentDidAppear(){
         this.setState({Events: this.props.events})
-        
     }
 
     navigationButtonPressed({buttonId}){
