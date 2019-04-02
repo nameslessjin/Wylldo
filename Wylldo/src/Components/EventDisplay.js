@@ -22,13 +22,21 @@ export default class EventDispaly extends React.Component{
         
         return(
             
-            <View>
+            <View style={styles.container}>
                 <Header name={this.props.name} />
-                <Image source={this.props.image} style={[styles.image,{height:imgH}]} />
-                <Text>{this.props.description}</Text>
-                
-                
-                
+
+                <View style={[styles.imageContainer, {aspectRatio: aspect}]}>
+                    {/* <Image
+                        resizeMode= 'contain'
+                        style={{width: '100%', height:'100%'}}
+                        source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+                        /> */}
+                    <Image source={this.props.image} resizeMode='contain' style={styles.image} />
+                </View>
+                <View>
+                    <Text>Footer</Text>
+                    <Text>{this.props.description}</Text>
+                </View>
             </View>
         )
     }
@@ -37,10 +45,19 @@ export default class EventDispaly extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
+        flex:1
+    },
+    imageContainer:{
+        backgroundColor:'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        width: '100%'
     },
     image:{
+        width: "100%",
         resizeMode: 'contain',
-        width: '100%',
+        height:'100%',
         backgroundColor: '#D8D8D8',
     }
 })
