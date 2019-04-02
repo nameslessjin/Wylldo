@@ -1,7 +1,7 @@
 //Home page
 
 import React from 'react'
-import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button, Platform, PermissionsAndroid} from 'react-native'
+import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button, Platform, PermissionsAndroid, YellowBox} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import {USER_KEY} from '../config'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
@@ -10,6 +10,11 @@ import CustomMarker from '../Components/CustomMarker'
 import {connect} from 'react-redux'
 import Firestore from '../firebase/Fire'
 import {getEvents} from '../store/actions/action.index'
+
+YellowBox.ignoreWarnings([
+                    'Require cycle:', 
+                    'Accessing view manager configs directly off UIManager via UIManager[\'AIRGoogleMap\']'
+                ])
 
 class Home extends React.Component{
     static get options(){
