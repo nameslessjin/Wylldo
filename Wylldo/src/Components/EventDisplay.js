@@ -18,24 +18,24 @@ export default class EventDispaly extends React.Component{
             imgH = this.props.image.height
             aspect = imgW / imgH
         }
-        // console.log(aspect)
+
+        const displayImage= (
+            <View style={[styles.imageContainer, {aspectRatio: aspect}]}>
+                <Image source={this.props.image} resizeMode='contain' style={styles.image} />
+            </View>
+        )
         
         return(
             
             <View style={styles.container}>
-                <Header name={this.props.name} />
+                <Header name={this.props.name} {...this.props} />
 
-                <View style={[styles.imageContainer, {aspectRatio: aspect}]}>
-                    {/* <Image
-                        resizeMode= 'contain'
-                        style={{width: '100%', height:'100%'}}
-                        source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-                        /> */}
-                    <Image source={this.props.image} resizeMode='contain' style={styles.image} />
-                </View>
-                <View>
+                {displayImage}
+
+                <View style={{backgroundColor: 'white'}}>
                     <Text>Footer</Text>
                     <Text>{this.props.description}</Text>
+                    <Text style={{color: 'grey', fontSize: 10}} >{this.props.createdTime}</Text>
                 </View>
             </View>
         )
@@ -45,7 +45,8 @@ export default class EventDispaly extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        marginBottom: 30
     },
     imageContainer:{
         backgroundColor:'white',

@@ -78,6 +78,6 @@ export default connect(mapStateToProps)(EventTable)
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor: '#eee'
+        backgroundColor: 'white'
     }
 })
