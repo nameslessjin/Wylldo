@@ -32,7 +32,7 @@ export default class EventDispaly extends React.Component{
 
                 {displayImage}
 
-                <View style={{backgroundColor: 'white'}}>
+                <View style={{backgroundColor: 'white', marginLeft: 5}}>
                     <Text>Footer</Text>
                     <Text>{this.props.description}</Text>
                     <Text style={{color: 'grey', fontSize: 10}} >{this.props.createdTime}</Text>
