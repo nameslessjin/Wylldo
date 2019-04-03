@@ -8,7 +8,7 @@ export default class Footer extends React.Component{
 
 
         return(
-            <View style={{backgroundColor: 'white', margin: 7}}>
+            <View style={{backgroundColor: 'white', margin: 10}}>
                 <View style={styles.timeLocationContainer}>
                     <Text style={{fontSize: 15, fontWeight: 'bold'}}>Thur Apr 2 13:00</Text>
                     <Text style={{fontSize: 15, fontWeight: 'bold', color: '#3498db'}}>Location</Text>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: -10
+        marginTop: -13
     }
 
 })
