@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, Text, Image, StyleSheet} from 'react-native'
 import Header from './Header'
-
+import Footer from './Footer'
 
 
 export default class EventDispaly extends React.Component{
@@ -32,10 +32,7 @@ export default class EventDispaly extends React.Component{
 
                 {displayImage}
 
-                <View style={{backgroundColor: 'white', marginLeft: 5}}>
-                    <Text>Footer</Text>
-                    <Text>{this.props.description}</Text>
-                </View>
+                <Footer {...this.props} />
             </View>
         )
     }
