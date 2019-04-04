@@ -8,9 +8,9 @@ export function registerScreens(){
     Navigation.registerComponent('Initializing', (sc) => require('./screens/Initializing').default)
     Navigation.registerComponent('SignIn', () => require('./screens/Signin').default)
     Navigation.registerComponent('SignUp', () => require('./screens/Signup').default)
-    Navigation.registerComponent('Screen2', () => require('./screens/Screen2').default) 
     Navigation.registerComponent('Settings', () => require('./screens/Settings').default)
-    Navigation.registerComponentWithRedux('EventsList', () => require('./screens/EventsList').default, Provider, store)
+    Navigation.registerComponentWithRedux('WylldoList', () => require('./screens/WylldoList').default, Provider, store)
     Navigation.registerComponent('AddEvent', () => require('./screens/AddEvent').default)
+    Navigation.registerComponent('ShowMap', () => require('./screens/ShowMap').default)
     Navigation.registerComponentWithRedux('AddMap', () => require('./screens/AddMap').default, Provider, store)
 }

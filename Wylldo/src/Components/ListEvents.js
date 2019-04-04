@@ -6,7 +6,7 @@ import {Navigation} from 'react-native-navigation'
 export default class ListEvents extends React.Component{
     
     _keyExtractor = (item, index) => (item.key + index).toString()
-    renderItem = ({item}) => <EventDisplay {...item} />;
+    renderItem = ({item}) => <EventDisplay {...item} componentId={this.props.componentId} />;
 
     render(){
         return(

@@ -39,11 +39,11 @@ export const goHome = () =>  {
                                 children:[
                                     {
                                         component:{
-                                            name: 'EventsList',
+                                            name: 'WylldoList',
                                             options:{
                                                 bottomTab:{
                                                     fontSize:12,
-                                                    text: 'Event',
+                                                    text: 'Wylldo',
                                                     icon: sources[2],
                                                     selectedIconColor: "#FE4C4C"
                                                 }

@@ -6,10 +6,7 @@ import Footer from './Footer'
 
 export default class EventDispaly extends React.Component{
  
-
-
     render(){
-
         let aspect = null
         let imgW = null
         let imgH = null
@@ -29,10 +26,8 @@ export default class EventDispaly extends React.Component{
             
             <View style={styles.container}>
                 <Header name={this.props.name} {...this.props} />
-
                 {displayImage}
-
-                <Footer {...this.props} />
+                <Footer {...this.props} componentId={this.props.componentId}/>
             </View>
         )
     }

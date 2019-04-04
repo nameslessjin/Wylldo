@@ -19,7 +19,7 @@ class EventTable extends React.Component{
                 rightButtons:[
                     {
                         id: 'addEvent',
-                        text: 'Wylldo',
+                        text: 'Post',
                         color: '#0481fe'
 
                     }
@@ -60,7 +60,7 @@ class EventTable extends React.Component{
 
         return(
             <View style={styles.container}>
-                <ListEvents events={this.state.Events}/>
+                <ListEvents events={this.state.Events} componentId={this.props.componentId} />
             </View>
         )
     }
