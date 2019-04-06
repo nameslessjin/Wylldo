@@ -15,7 +15,7 @@ export default class PickImage extends React.Component{
     }
 
     pickImageHandler = () => {
-        ImagePicker.showImagePicker({title:"Pick a photo", maxWidth: 800, maxHeight: 800}, res => {
+        ImagePicker.showImagePicker({title:"Pick a photo", maxWidth: 600, maxHeight: 600}, res => {
             if (res.didCancel){
                 console.log("Image cancelled")
             } else if (res.error){

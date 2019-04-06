@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 export const goHome = () =>  {
     Promise.all([
         Icon.getImageSource("md-home", 25),
-        Icon.getImageSource("md-settings", 25),
+        Icon.getImageSource("md-contact", 25),
         Icon.getImageSource("md-list", 25)
     ]).then(sources => {
         Navigation.setRoot({
@@ -22,8 +22,6 @@ export const goHome = () =>  {
                                             name:'Home',
                                             options:{
                                                 bottomTab:{
-                                                    fontSize: 12,
-                                                    text: 'Home',
                                                     icon: sources[0],      
                                                     selectedIconColor: "#FE4C4C"
                                                 },
@@ -42,8 +40,6 @@ export const goHome = () =>  {
                                             name: 'WylldoList',
                                             options:{
                                                 bottomTab:{
-                                                    fontSize:12,
-                                                    text: 'Wylldo',
                                                     icon: sources[2],
                                                     selectedIconColor: "#FE4C4C"
                                                 }
@@ -62,8 +58,6 @@ export const goHome = () =>  {
                                             name: 'Settings',
                                             options:{
                                                 bottomTab:{
-                                                    fontSize:12,
-                                                    text: 'Setting',
                                                     icon: sources[1],
                                                     selectedIconColor: "#FE4C4C"
                                                 }

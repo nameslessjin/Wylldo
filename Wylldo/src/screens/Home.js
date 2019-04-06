@@ -57,7 +57,7 @@ class Home extends React.Component{
 
 
     getEventData = async () => {
-        const eventData = await Firestore.getEvents(10)
+        const eventData = await Firestore.getEvents(20)
         this.setEvents(eventData)
         return this.state.events
     }

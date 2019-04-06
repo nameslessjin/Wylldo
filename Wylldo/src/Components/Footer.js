@@ -77,6 +77,8 @@ export default class Footer extends React.Component{
                     <Text style={styles.comment}>{this.props.description}</Text>
                     <Text style={styles.name}>Shawn</Text>
                     <Text style={styles.comment}>Jinsen is the best</Text>
+                    <Text style={styles.name}>Wei</Text>
+                    <Text style={styles.comment}>Zack is bad dog</Text>
                     <Text style={{color: 'grey', fontSize: 12}} >See 5000 more comments</Text>
                 </View>
             </View>
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
         marginTop: -10
     },
     joinBtn:{
-        backgroundColor: '#e17055',
+        backgroundColor: '#ff5e57',
         borderRadius: 5,
         width: '22%',
         height: '100%',
