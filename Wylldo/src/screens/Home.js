@@ -109,7 +109,7 @@ class Home extends React.Component{
             const markerEvent = this.props.events.filter(event=> {
                 return event.key === this.state.eventKey
             })
-            popUp = <PopUpWnd {...markerEvent[0]} />
+            popUp = <PopUpWnd {...markerEvent[0]}  componentId={this.props.componentId}/>
         } else {
             popUp = <View></View>
         }

@@ -13,4 +13,5 @@ export function registerScreens(){
     Navigation.registerComponent('AddEvent', () => require('./screens/AddEvent').default)
     Navigation.registerComponent('ShowMap', () => require('./screens/ShowMap').default)
     Navigation.registerComponentWithRedux('AddMap', () => require('./screens/AddMap').default, Provider, store)
+    Navigation.registerComponent('SingleEvent', () => require('./screens/SingleEvent').default)
 }

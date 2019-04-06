@@ -22,6 +22,8 @@ export default class EventDispaly extends React.Component{
             </View>
         )
         
+        console.log(this.props)
+
         return(
             
             <View style={styles.container}>

@@ -42,16 +42,12 @@ export default class Footer extends React.Component{
         }
 
 
-        let heartBtn = null
-        if (!this.state.heartPressed){
-            heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
-            <Icon name={'md-heart-empty'} size={30}/>
-            </TouchableOpacity>
-        } else{
-            heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
-            <Icon name={'md-heart'} size={30} color={'#E91E63'}/>
-            </TouchableOpacity>
-        }
+        const heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
+                            <Icon 
+                                name={(this.state.heartPressed) ? 'md-heart' : 'md-heart-empty'} 
+                                size={30}
+                                color={(this.state.heartPressed) ? '#E91E63' : null}/>
+                        </TouchableOpacity>
 
 
         return(
