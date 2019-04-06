@@ -1,7 +1,7 @@
 import React from 'react'
 import mapStyle from '../UI/MapStyle'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
-import {View, StyleSheet,Text} from 'react-native'
+import {View} from 'react-native'
 import CustomMarker from '../Components/CustomMarker'
 
 

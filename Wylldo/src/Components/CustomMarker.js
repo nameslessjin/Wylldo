@@ -11,9 +11,9 @@ export default class CustomMarker extends React.Component{
         return(
                 <View style={styles.container}>
                     <View style={styles.ImgView}>
-                        <Icon name="md-person" size={20}/>
+                        <Icon name="md-person" size={25}/>
                     </View>
-                    <Icon name={this.props.icon} size={11} />
+                    <Icon name={this.props.icon} size={15} />
                 </View>
 
         )
@@ -22,15 +22,20 @@ export default class CustomMarker extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        width: 30,
-        height: 23,
+        width: 42,
+        height: 30,
         borderRadius: 45,
-        backgroundColor: '#FAFE79',
-        flexDirection: "row"
+        backgroundColor: 'red',
+        flexDirection: "row",
+        alignItems: 'center'
     },
     ImgView:{
-        borderRadius: 20,
-        backgroundColor: "white"
+        borderRadius: 50,
+        height: '90%',
+        aspectRatio: 1,
+        backgroundColor: "white",
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 
 })

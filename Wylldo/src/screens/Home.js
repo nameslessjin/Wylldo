@@ -7,9 +7,11 @@ import {USER_KEY} from '../config'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
+import PopUpWnd from '../Components/PopUpWnd'
 import {connect} from 'react-redux'
 import Firestore from '../firebase/Fire'
 import {getEvents} from '../store/actions/action.index'
+
 
 YellowBox.ignoreWarnings([
                     'Require cycle:', 
@@ -68,39 +70,6 @@ class Home extends React.Component{
         })
     }
 
-    pickLocationHandler = event => {
-        const coords = event.nativeEvent.coordinate;
-        this.setState(prevState => {
-            return {
-                userLocation: {
-                    ...prevState.userLocation,
-                    latitude: coords.latitude,
-                    longitude: coords.longitude
-                  }
-            }
-        })
-    }
-
-    getUserLocationHandler = () => {
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                const coordsEvent = {
-                    nativeEvent:{
-                        coordinate: {
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude
-                        }
-                    }
-                }
-                this.pickLocationHandler(coordsEvent)
-            },
-            error => {
-                console.log(error)
-                alert("error")
-            }
-        )
-    }
-
     mapViewPressedHandler = () => {
         this.setState({markPressed: false, mapPressed: true})
    
@@ -120,44 +89,29 @@ class Home extends React.Component{
 
 
     render(){
-
-
         const Markers = this.props.events.map(event => {
-
             if (event.coords.latitude !== null){
                 return(
                     <Marker
                     coordinate={event.coords}
                     key={event.key}
                     onPress={() => this.setState({eventKey : event.key}) }
-                    >
-                
+                    >        
                     <CustomMarker icon={event.tag} />
-                
                     </Marker>
                 )
-
             }
         })
         
 
-        let modal = null
-        
-        if (this.state.markPressed && !this.state.mapPressed){
-            
+        let popUp = null 
+        if (this.state.markPressed && !this.state.mapPressed){         
             const markerEvent = this.props.events.filter(event=> {
                 return event.key === this.state.eventKey
             })
-
-            const eventDescription = markerEvent[0].description
-
-            modal = <View style = {styles.modal} >
- 
-                        <Text>{eventDescription}</Text>
-                    </View>
+            popUp = <PopUpWnd {...markerEvent[0]} />
         } else {
-           
-            modal = <View></View>
+            popUp = <View></View>
         }
 
         return(
@@ -172,13 +126,9 @@ class Home extends React.Component{
                     onPress={this.mapViewPressedHandler}
                     onMarkerPress={this.markPressedHandler}
                     onMapReady={(Platform.OS==='android') ? this.onMapReady : null} >
-
-
                     {Markers}
-                    
-
                 </MapView>
-                {modal}
+                {popUp}
             </View>
         )
     }
@@ -190,15 +140,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    modal:{
-        width: "90%",
-        height: "35%",
-        backgroundColor: "white",
-        borderRadius: 20,
-        position: 'absolute',
-        top: "64%",
-        left: "5%"
-    }
 })
 
 
@@ -213,6 +154,5 @@ const mapDispatchToProps = dispatch => {
         onGetEvents: (events) => dispatch(getEvents(events))
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)
