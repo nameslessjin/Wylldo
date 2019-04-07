@@ -2,7 +2,7 @@ import firebase from 'react-native-firebase'
 import uuid from 'uuid'
 import uploadPhoto from '../firebase/uploadPhoto'
 
-const collectionName = 'Users'
+const collectionName = 'Events'
 
 class Fire {
 
@@ -54,10 +54,9 @@ class Fire {
             ...EventInfo,
             image: uploadedImag
         }
-        console.log(uploadEventInfo)
         this.collection.add(uploadEventInfo).catch( () => {console.log('rejected')})
 
-
+        return uploadEventInfo
     }
 
     uploadPhotoAsync = async uri => {

@@ -4,14 +4,17 @@ import Firestore from '../../firebase/Fire'
 
 export const addEvent = (EventInfo, image) => {
     Firestore.addEvent(EventInfo, image)
-    // Firestore.addPhoto(image)
+    const updateEventInfo = [{
+        ...EventInfo,
+        image: image
+    }]
     return{
         type: ADD_EVENT,
-        EventInfo: EventInfo
+        EventInfo: updateEventInfo,
     }
 }
 
-//add picture tab description
+
 export const getEvents = (events) => {
 
     return{

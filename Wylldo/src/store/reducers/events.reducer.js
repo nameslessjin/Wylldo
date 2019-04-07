@@ -8,9 +8,10 @@ const initialState = {
 export default reducer = (state = initialState, action) => {
     switch (action.type){
         case ADD_EVENT:
+            const updateEvents = action.EventInfo.concat(state.Events)
             return{
                 ...state,
-                Events: state.Events.concat(action.EventInfo)
+                Events: updateEvents
             }
         case GET_EVENTS:
             return{

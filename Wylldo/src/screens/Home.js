@@ -47,6 +47,8 @@ class Home extends React.Component{
         events:[]
     }
 
+    
+
     componentDidMount(){
         this.getEventData().then( events =>{
                 this.props.onGetEvents(events)
@@ -69,6 +71,8 @@ class Home extends React.Component{
             }
         })
     }
+
+
 
     mapViewPressedHandler = () => {
         this.setState({markPressed: false, mapPressed: true})

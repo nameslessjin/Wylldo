@@ -21,8 +21,6 @@ export default class EventDispaly extends React.Component{
                 <Image source={this.props.image} resizeMode='contain' style={styles.image} />
             </View>
         )
-        
-        console.log(this.props)
 
         return(
             

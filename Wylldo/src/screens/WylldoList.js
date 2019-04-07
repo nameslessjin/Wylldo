@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import ListEvents from '../Components/ListEvents'
 
 
+
 class EventTable extends React.Component{
 
     static get options(){
@@ -37,7 +38,7 @@ class EventTable extends React.Component{
 
 
     state = {
-        Events: this.props.events
+        
     }
 
 
