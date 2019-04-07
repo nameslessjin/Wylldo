@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 export const goHome = () =>  {
     Promise.all([
-        Icon.getImageSource("md-home", 25),
-        Icon.getImageSource("md-contact", 25),
-        Icon.getImageSource("md-list", 25)
+        Icon.getImageSource("md-home", 30),
+        Icon.getImageSource("md-contact", 30),
+        Icon.getImageSource("md-list", 30)
     ]).then(sources => {
         Navigation.setRoot({
             root: {
