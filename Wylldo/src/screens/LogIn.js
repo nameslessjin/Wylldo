@@ -5,10 +5,10 @@ import {Text, View, StyleSheet} from 'react-native'
 export default class SignIn extends React.Component{
 
     render(){
-        console.log('SignUp')
+        console.log('LogIn')
         return(
             <View style={styles.container}>
-                <Text>Sign Up</Text>
+                <Text>Log In</Text>
             </View>
         )
     }

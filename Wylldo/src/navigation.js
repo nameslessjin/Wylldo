@@ -87,11 +87,6 @@ export const goToAuth = () => Navigation.setRoot({
                     component:{
                         name: 'SignIn'
                     }
-                },
-                {
-                    component:{
-                        name: 'SignUp'
-                    }
                 }
             ]
         }
