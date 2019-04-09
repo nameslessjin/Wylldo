@@ -18,14 +18,14 @@ export default class Settings extends React.Component{
     }
 
     onLogOutPressed = () => {
-        firebase.auth().signOut()
+        firebase.auth().signOut().then(() => goToAuth())
     }
 
 
 
     render(){
         return(
-            <TouchableOpacity style={styles.container} onPress={() => onLogOutPressed()} >
+            <TouchableOpacity style={styles.container} onPress={() => this.onLogOutPressed()} >
                 <Text style={[styles.options, {color: "red"}]}>Log Out</Text>
             </TouchableOpacity>
         )

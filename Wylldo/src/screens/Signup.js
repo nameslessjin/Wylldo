@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, StyleSheet,TextInput, TouchableOpacity} from 'react-native'
+import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard} from 'react-native'
 import firebase from 'react-native-firebase'
 import { goHome } from '../navigation';
 
@@ -15,6 +15,7 @@ export default class SignIn extends React.Component{
             }
         }
     }
+
 
     state={
         email: '',

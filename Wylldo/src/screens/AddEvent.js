@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TextInput, Platform} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Platform, Keyboard} from 'react-native'
 import PickImage from '../Components/ImagePicker'
 import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
@@ -31,6 +31,7 @@ export default class addEvent extends React.Component{
         super(props);
         Navigation.events().bindComponent(this);
     }
+
 
     navigationButtonPressed({buttonId}){
         if (buttonId == "addMap"){

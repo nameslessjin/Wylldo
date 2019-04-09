@@ -8,7 +8,6 @@ class Fire {
 
     constructor(){
         firebase.auth().onAuthStateChanged(user => {
-            
         })
     }
 
