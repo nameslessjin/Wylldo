@@ -6,14 +6,8 @@ registerScreens();
 Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setRoot({
         root: {
-            stack:{
-                children:[
-                    {
-                        component: {
-                            name: 'Initializing'
-                        }
-                    }
-                ]
+            component: {
+                name: 'Initializing'
             }
         }
     })

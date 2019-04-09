@@ -1,66 +1,60 @@
 // initialize page when app just start.  Authentication page
 
 import React from 'react'
-import { View, Text, StyleSheet, AsyncStorage, TouchableOpacity} from 'react-native'
-
+import { View, Text, StyleSheet, AsyncStorage, TouchableOpacity, YellowBox} from 'react-native'
 import {goToAuth, goHome} from '../navigation'
-import {USER_KEY} from '../config'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { Navigation } from 'react-native-navigation';
+import Fire from '../firebase/Fire'
 
-
+YellowBox.ignoreWarnings([
+    'Require cycle:', 
+    'Accessing view manager configs directly off UIManager via UIManager[\'AIRGoogleMap\']'
+])
 //AppLaunch here and load some events add load screen and connect his part to reducer
 
 export default class Initializing extends React.Component{
     static get options(){
         return{
             topBar:{
-                title:{
-                    text: 'Back'
-                },
                 visible: false,
                 height: 0
             }
         }
     }
 
-    async componentDidMount(){
-        // goHome()
-    }
+    // constructor() {
+    //     super()
+    //     this.unsubscriber = null
+    //     this.state ={
+    //         user:null
+    //     }
+    // }
 
-    onSignUpPressed = () => {
-        Navigation.push(this.props.componentId, {
-            component:{
-                name:'SignUp'
-            }
-        })
+    // componentDidMount(){
 
-    }
+    //     //Check if user is logged in.  If not go to Auth page else Home page
+    //     this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
+    //         this.setState({user})
+    //     })
+    // }
 
-    onLoginPressed = () => {
-        Navigation.push(this.props.componentId, {
-            component:{
-                name:'LogIn'
-            }
-        })
-    }
+    // componentWillUnmount(){
+    //     if(this.unsubscriber){
+    //         this.unsubscriber()
+    //     }
+    // }
 
 
     render(){
-        console.log(this.props.componentId)
+
+        if (Fire.uid){
+            goHome()
+        } else{
+            goToAuth()
+        }
 
         return(
             <View style={styles.container}>
-                <View style={styles.displayLabelContainer}>
-                    <Text style={[styles.labelStyle, {fontSize: 25, color:'white'}]}>Welcome To</Text>
-                    <Text style={[styles.labelStyle, {fontSize: 70, color: '#ffbe76'}]}>Wylldo</Text>
-                </View>
-                <TouchableOpacity style={styles.signUpdisplay} onPress={() => this.onSignUpPressed()}>
-                    <Text style={styles.displayText}>SIGN UP</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.logIndisplay} onPress={() => this.onLoginPressed()}>
-                    <Text style={styles.displayText}>LOG IN</Text>
-                </TouchableOpacity>
+                <Text style={styles.displayText}>Loading...</Text>
             </View>
         )
     }
@@ -71,42 +65,14 @@ export default class Initializing extends React.Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        backgroundColor: '#ffeaa7'
-    },
-    displayLabelContainer:{
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 1,
-        height: '80%',
-        width: '100%',
-    },
-    labelStyle:{
-        fontFamily: 'ArialRoundedMTBold'
+        backgroundColor: '#f3a683'
     },
     displayText:{
         fontSize: 30,
         color: 'white',
-        fontWeight: 'bold'
+        fontFamily: 'ArialRoundedMTBold'
     },
-    signUpdisplay:{
-        backgroundColor: '#e74c3c',
-        width: '90%',
-        height: '10%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
-    },
-    logIndisplay:{
-        backgroundColor: '#fdcb6e',
-        width: '90%',
-        height: '10%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginBottom: 30,
-        marginTop: 5
-    }
 
 })

@@ -12,7 +12,6 @@ export const goHome = () =>  {
         Navigation.setRoot({
             root: {
                 bottomTabs:{
-                    id: 'BottomTabsId',
                     children:[
                         {
                             stack:{
@@ -55,7 +54,7 @@ export const goHome = () =>  {
                                 children:[
                                     {
                                         component:{
-                                            name: 'Settings',
+                                            name: 'Profile',
                                             options:{
                                                 bottomTab:{
                                                     icon: sources[1],
@@ -79,17 +78,15 @@ export const goHome = () =>  {
 
 
 export const goToAuth = () => Navigation.setRoot({
-    root:{
+    root: {
         stack:{
-            id: 'Auth',
             children:[
                 {
-                    component:{
-                        name: 'SignIn'
+                    component: {
+                        name: 'Auth'
                     }
                 }
             ]
         }
-
     }
 })

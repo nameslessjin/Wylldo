@@ -1,24 +1,33 @@
 // Page shows user settings
 
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import {goToAuth} from '../navigation'
+import firebase from 'react-native-firebase'
 
 export default class Settings extends React.Component{
     static get options(){
         return{
             topBar:{
                 title:{
-                    text:'Settings'
+                    text:'Profile',
+                    alignment: 'center'
                 }
             }
         }
     }
 
+    onLogOutPressed = () => {
+        firebase.auth().signOut()
+    }
+
+
+
     render(){
         return(
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={() => onLogOutPressed()} >
                 <Text style={[styles.options, {color: "red"}]}>Log Out</Text>
-            </View>
+            </TouchableOpacity>
         )
     }
 }

@@ -10,8 +10,9 @@ export function registerScreens(){
     Navigation.registerComponent('Initializing', (sc) => require('./screens/Initializing').default)
     Navigation.registerComponent('LogIn', () => require('./screens/LogIn').default)
     Navigation.registerComponent('SignUp', () => require('./screens/SignUp').default)
-    Navigation.registerComponent('Settings', () => require('./screens/Settings').default)
+    Navigation.registerComponent('Profile', () => require('./screens/Profile').default)
     Navigation.registerComponent('AddEvent', () => require('./screens/AddEvent').default)
     Navigation.registerComponent('ShowMap', () => require('./screens/ShowMap').default)
     Navigation.registerComponent('SingleEvent', () => require('./screens/SingleEvent').default)
+    Navigation.registerComponent('Auth', () => require('./screens/Auth').default)
 }

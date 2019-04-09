@@ -9,14 +9,10 @@ import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import PopUpWnd from '../Components/PopUpWnd'
 import {connect} from 'react-redux'
-import Firestore from '../firebase/Fire'
+import Fire from '../firebase/Fire'
 import {getEvents} from '../store/actions/action.index'
-
-
-YellowBox.ignoreWarnings([
-                    'Require cycle:', 
-                    'Accessing view manager configs directly off UIManager via UIManager[\'AIRGoogleMap\']'
-                ])
+import firebase from 'react-native-firebase';
+import {goToAuth, goHome} from '../navigation'
 
 class Home extends React.Component{
     static get options(){
@@ -47,19 +43,30 @@ class Home extends React.Component{
         events:[]
     }
 
-    
+
 
     componentDidMount(){
-        this.getEventData().then( events =>{
+        if (Fire.uid){
+            this.getEventData().then( events =>{
                 this.props.onGetEvents(events)
             }
-        )
+            )
+        } else {
+            goToAuth()
+        }
 
+
+
+
+    }
+
+    componentWillUnmount(){
+        
     }
 
 
     getEventData = async () => {
-        const eventData = await Firestore.getEvents(20)
+        const eventData = await Fire.getEvents(20)
         this.setEvents(eventData)
         return this.state.events
     }

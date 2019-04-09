@@ -6,6 +6,12 @@ const collectionName = 'Events'
 
 class Fire {
 
+    constructor(){
+        firebase.auth().onAuthStateChanged(user => {
+            
+        })
+    }
+
 
     //Download Data
     // get data here
@@ -24,7 +30,7 @@ class Fire {
                 }
             })
             // console.log(eventData)
-            
+            console.log(querySnapshot)
             return eventData
             // querySnapshot.forEach(doc => {
             //     if (doc.exists){
