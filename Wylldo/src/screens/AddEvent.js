@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TextInput, Platform, Keyboard} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Platform, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import PickImage from '../Components/ImagePicker'
 import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
@@ -69,6 +69,7 @@ export default class addEvent extends React.Component{
                         placeholder="I wylldo..."
                         multiline={true}
                         onChangeText={(text) => this.setState({description:text})}
+                        onSubmitEditing={Keyboard.dismiss}
                     />
                 </View>
                 <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>

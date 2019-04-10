@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard} from 'react-native'
+import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {goHome} from '../navigation'
 import firebase from 'react-native-firebase'
 
@@ -38,7 +38,7 @@ export default class SignIn extends React.Component{
             errorMessageDisplay = <Text style={{color:'red'}}>{this.state.errorMessage}</Text>
         }
         return(
-            <View style={styles.container}>
+            <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
                 <View style={styles.inputContainer}>
                     <Text style={styles.wylldoTextStyle}>Wylldo</Text>
                     {errorMessageDisplay}
@@ -59,7 +59,7 @@ export default class SignIn extends React.Component{
                         <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
