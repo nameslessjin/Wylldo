@@ -42,40 +42,43 @@ export default class SignIn extends React.Component{
         }
         
         return(
-            <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.wylldoTextStyle}>Wylldo</Text>
-                    {errorMessageDisplay}
-                    <TextInput 
-                        style={styles.inputStyle} 
-                        textContentType="name"
-                        placeholder='Full name'
-                        autoCapitalize='none'
-                        autoCorrect={false}
-                        onChangeText={name => this.setState({name})}
-                         >
-                    </TextInput>
-                    <TextInput 
-                        style={styles.inputStyle} 
-                        textContentType="emailAddress"
-                        placeholder='Email'
-                        autoCapitalize='none'
-                        onChangeText={email => this.setState({email})}
-                        >
-                    </TextInput>
-                    <TextInput 
-                        style={styles.inputStyle} 
-                        textContentType="password"
-                        placeholder='Password'
-                        autoCapitalize='none'
-                        onChangeText={password => this.setState({password})}
-                        >
-                    </TextInput>
-                    <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onSignUpPressed()}>
-                        <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
-                    </TouchableOpacity>
-                </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.wylldoTextStyle}>Wylldo</Text>
+                        {errorMessageDisplay}
+                        <TextInput 
+                            style={styles.inputStyle} 
+                            textContentType="name"
+                            placeholder='Full name'
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            onChangeText={name => this.setState({name})}
+                            >
+                        </TextInput>
+                        <TextInput 
+                            style={styles.inputStyle} 
+                            textContentType="emailAddress"
+                            placeholder='Email'
+                            autoCapitalize='none'
+                            onChangeText={email => this.setState({email})}
+                            >
+                        </TextInput>
+                        <TextInput 
+                            style={styles.inputStyle} 
+                            textContentType="password"
+                            placeholder='Password'
+                            autoCapitalize='none'
+                            onChangeText={password => this.setState({password})}
+                            >
+                        </TextInput>
+                        <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onSignUpPressed()}>
+                            <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>            
             </TouchableWithoutFeedback>
+
         )
     }
 }
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     inputContainer:{
-        height: '50%',
+        height: '80%',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'flex-start'

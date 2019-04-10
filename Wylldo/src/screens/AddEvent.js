@@ -59,23 +59,26 @@ export default class addEvent extends React.Component{
     render(){
         
         return(
-            <View style={styles.container}>
-                <View style={styles.ImgView}> 
-                    <PickImage updateImage= {(updatedImg) => this.setState({image: updatedImg})} />         
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <View style={styles.ImgView}> 
+                        <PickImage updateImage= {(updatedImg) => this.setState({image: updatedImg})} />         
+                    </View>
+                    <View style={styles.DescriptionView}> 
+                        <Text style={styles.emptySpace} ></Text>
+                        <TextInput
+                            placeholder="I wylldo..."
+                            multiline={true}
+                            onChangeText={(text) => this.setState({description:text})}
+                            onSubmitEditing={Keyboard.dismiss}
+                        />
+                    </View>
+                    <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
+                        <PickTag defaultTag={this.state.tag} updateTag={(updatedTagName) => this.setState({tag: updatedTagName})} />
+                    </View>
                 </View>
-                <View style={styles.DescriptionView}> 
-                    <Text style={styles.emptySpace} ></Text>
-                    <TextInput
-                        placeholder="I wylldo..."
-                        multiline={true}
-                        onChangeText={(text) => this.setState({description:text})}
-                        onSubmitEditing={Keyboard.dismiss}
-                    />
-                </View>
-                <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
-                    <PickTag defaultTag={this.state.tag} updateTag={(updatedTagName) => this.setState({tag: updatedTagName})} />
-                </View>
-            </View>
+            </TouchableWithoutFeedback>
+
 
         )
     }

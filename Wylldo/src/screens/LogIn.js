@@ -38,26 +38,28 @@ export default class SignIn extends React.Component{
             errorMessageDisplay = <Text style={{color:'red'}}>{this.state.errorMessage}</Text>
         }
         return(
-            <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.wylldoTextStyle}>Wylldo</Text>
-                    {errorMessageDisplay}
-                    <TextInput 
-                        style={styles.inputStyle} 
-                        textContentType={"emailAddress"} 
-                        placeholder={'Emaill'} 
-                        autoCapitalize='none'
-                        onChangeText={email => this.setState({email})}></TextInput>
-                    <TextInput 
-                        style={styles.inputStyle} 
-                        textContentType={"password"} 
-                        placeholder={'Password'}
-                        autoCapitalize='none'
-                        secureTextEntry={true}
-                        onChangeText={password => this.setState({password})}></TextInput>
-                    <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onLogInPressed()}>
-                        <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
-                    </TouchableOpacity>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container} onPress={Keyboard.dismiss}>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.wylldoTextStyle}>Wylldo</Text>
+                        {errorMessageDisplay}
+                        <TextInput 
+                            style={styles.inputStyle} 
+                            textContentType={"emailAddress"} 
+                            placeholder={'Emaill'} 
+                            autoCapitalize='none'
+                            onChangeText={email => this.setState({email})}></TextInput>
+                        <TextInput 
+                            style={styles.inputStyle} 
+                            textContentType={"password"} 
+                            placeholder={'Password'}
+                            autoCapitalize='none'
+                            secureTextEntry={true}
+                            onChangeText={password => this.setState({password})}></TextInput>
+                        <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onLogInPressed()}>
+                            <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </TouchableWithoutFeedback>
         )
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     inputContainer:{
-        height: '50%',
+        height: '80%',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'flex-start'
