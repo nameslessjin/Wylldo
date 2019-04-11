@@ -1,21 +1,22 @@
 import firebase from 'react-native-firebase'
 import uuid from 'uuid'
 import uploadPhoto from '../firebase/uploadPhoto'
+import {AsyncStorage} from 'react-native'
 
-const collectionName = 'Events'
 
 class Fire {
 
     constructor(){
         firebase.auth().onAuthStateChanged(user => {
         })
+
     }
 
 
     //Download Data
     // get data here
     getEvents = async (size) => {
-        let ref = this.collection.orderBy('createdTime', 'desc').limit(size);
+        let ref = this.eventsCollection.orderBy('createdTime', 'desc').limit(size);
         // try{
         //     if(start){
         //         ref = ref.startAfter(start)
@@ -25,7 +26,12 @@ class Fire {
             const eventData = []
             querySnapshot.forEach(doc => {
                 if (doc.exists){
-                    eventData.push(doc._data)
+                    const event = doc.data() || {}
+                    const eventWithKey = {
+                        key: doc.id,
+                        ...event
+                    }
+                eventData.push(eventWithKey)
                 }
             })
             // console.log(eventData)
@@ -46,7 +52,6 @@ class Fire {
             // })
     }
 
-
     // Upload Data
     addEvent = async(EventInfo,image) => {
    
@@ -55,29 +60,67 @@ class Fire {
             ...image,
             uri: imgStorageUri
         } : null
-        const uploadEventInfo = {
+        let uploadEventInfo = {
             ...EventInfo,
             image: uploadedImag
         }
-        this.collection.add(uploadEventInfo).catch( () => {console.log('rejected')})
 
-        return uploadEventInfo
+        const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch( () => {console.log('rejected')})
+        
+        const updateEventInfo = [{
+            ...uploadEventInfo,
+            key: createdEvent.id
+        }]
+
+        return updateEventInfo
+
+
     }
 
     uploadPhotoAsync = async uri => {
-        const path = `${collectionName}/${this.uid}/${uuid.v4()}.jpg`
+        const path = `${'Events'}/${this.uid}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path)
+    }
+
+    signUpUser = async(email, password) => {
+
+        const firebaseAuth = (
+            firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
+                .catch(error => error.message)
+        )
+        return firebaseAuth
+        
+    }
+
+    createUserInFireStore = async (name, email) => {
+        const signUpUserInfo ={
+            name: name,
+            email: email,
+            createdTime: Date.now()
+        }
+
+        this.usersCollection.doc(this.uid).set(signUpUserInfo)
+        .catch((error) => {console.log(error.message)})
+    }
+
+    getUserData = async() => {
+        let ref = this.usersCollection.doc(this.uid)
+        const currentUserData = await ref.get()
+        return currentUserData
     }
 
 
     //Helpers
-    get collection(){
-        return firebase.firestore().collection(collectionName)
+    get eventsCollection(){
+        return firebase.firestore().collection('Events')
     }
 
-    // get timestamp(){
-    //     return Data.now()
-    // }
+    get usersCollection(){
+        return firebase.firestore().collection('Users')
+    }
+
 
     get uid(){
         return (firebase.auth().currentUser || {}).uid

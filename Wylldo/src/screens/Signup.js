@@ -2,6 +2,7 @@ import React from 'react'
 import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import firebase from 'react-native-firebase'
 import { goHome } from '../navigation';
+import Fire from '../firebase/Fire'
 
 export default class SignIn extends React.Component{
 
@@ -24,12 +25,15 @@ export default class SignIn extends React.Component{
         errorMessage: null
     }
 
-    onSignUpPressed = () => {
-        firebase
-            .auth()
-            .createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() =>  goHome())
-            .catch(error => this.setState({errorMessage: error.message}))
+    onSignUpPressed = async (email, password, name) => {
+
+        const signUptResult = await Fire.signUpUser(email, password)
+        if(Fire.uid){
+            await Fire.createUserInFireStore(name, email)
+            goHome()
+        } else{
+            this.setState({errorMessage: signUptResult})
+        }
         
     }
 
@@ -72,7 +76,7 @@ export default class SignIn extends React.Component{
                             onChangeText={password => this.setState({password})}
                             >
                         </TextInput>
-                        <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onSignUpPressed()}>
+                        <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onSignUpPressed(this.state.email, this.state.password, this.state.name)}>
                             <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>

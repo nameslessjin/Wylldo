@@ -21,29 +21,6 @@ export default class Initializing extends React.Component{
         }
     }
 
-    // constructor() {
-    //     super()
-    //     this.unsubscriber = null
-    //     this.state ={
-    //         user:null
-    //     }
-    // }
-
-    // componentDidMount(){
-
-    //     //Check if user is logged in.  If not go to Auth page else Home page
-    //     this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
-    //         this.setState({user})
-    //     })
-    // }
-
-    // componentWillUnmount(){
-    //     if(this.unsubscriber){
-    //         this.unsubscriber()
-    //     }
-    // }
-
-
     render(){
 
         if (Fire.uid){

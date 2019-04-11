@@ -72,7 +72,7 @@ export default class Header extends React.Component{
                         style={styles.userProfilePic}
                         source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
                     />
-                    <Text style={styles.usernameStyle}>{this.props.name}</Text>
+                    <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
                     <Icon name={this.props.tag} size={20} style={{marginLeft: 5}}/>
                 </View>
                 <View style={styles.row}>

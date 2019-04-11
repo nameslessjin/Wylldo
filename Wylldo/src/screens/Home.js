@@ -10,9 +10,8 @@ import CustomMarker from '../Components/CustomMarker'
 import PopUpWnd from '../Components/PopUpWnd'
 import {connect} from 'react-redux'
 import Fire from '../firebase/Fire'
-import {getEvents} from '../store/actions/action.index'
-import firebase from 'react-native-firebase';
-import {goToAuth, goHome} from '../navigation'
+import {getEvents, getCurrentUser} from '../store/actions/action.index'
+import {goToAuth} from '../navigation'
 
 class Home extends React.Component{
     static get options(){
@@ -40,30 +39,33 @@ class Home extends React.Component{
         markPressed: false,
         mapPressed: false,
         eventKey: null,
-        events:[]
+        events:[],
+        currentUser: null
     }
-
-
 
     componentDidMount(){
         if (Fire.uid){
-            this.getEventData().then( events =>{
-                this.props.onGetEvents(events)
-            }
-            )
+            this.getCurrentUserData().then( currentUserData => {
+                this.props.onGetCurrentUser(currentUserData);
+                this.getEventData().then( events =>{
+                    this.props.onGetEvents(events)
+                })
+            })
         } else {
             goToAuth()
         }
 
-
-
-
     }
 
-    componentWillUnmount(){
-        
+    getCurrentUserData = async () => {
+        const currentUserData = await Fire.getUserData()
+        this.setState(prevState => {
+            return{
+                currentUser: currentUserData
+            }
+        })
+        return this.state.currentUser
     }
-
 
     getEventData = async () => {
         const eventData = await Fire.getEvents(20)
@@ -162,7 +164,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return{
-        onGetEvents: (events) => dispatch(getEvents(events))
+        onGetEvents: (events) => dispatch(getEvents(events)),
+        onGetCurrentUser: (currentUserData) => dispatch(getCurrentUser(currentUserData))
     }
 }
 

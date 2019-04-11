@@ -69,7 +69,7 @@ export default class Footer extends React.Component{
                 </View>
 
                 <View>
-                    <Text style={styles.name}>{this.props.name}</Text>
+                    <Text style={styles.name}>{this.props.hostUsername}</Text>
                     <Text style={styles.comment}>{this.props.description}</Text>
                     <Text style={styles.name}>Shawn</Text>
                     <Text style={styles.comment}>Jinsen is the best</Text>

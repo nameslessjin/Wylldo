@@ -29,7 +29,6 @@ class EventTable extends React.Component{
         }
     }
 
-
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);

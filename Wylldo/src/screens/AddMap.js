@@ -5,7 +5,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import {Navigation} from 'react-native-navigation'
 import {connect} from 'react-redux'
 import {addEvent} from '../store/actions/action.index'
-
+import Fire from '../firebase/Fire'
 
 class AddMap extends React.Component{
 
@@ -54,14 +54,31 @@ class AddMap extends React.Component{
                 description : this.props.description,
                 tag : this.props.tag,
                 coords : this.state.eventLocation,
-                key: this.props.tag + Math.random() * 100 + this.props.description,
                 likes: 0,
-                createdTime: Date.now()
+                createdTime: Date.now(),
+                hostUsername: this.props.currentUserData._data.name,
+                hostUserid: Fire.uid
             }
             const image = this.props.image
-            this.props.onAddEvent(eventState, image)
+
+            this.createEvent(eventState, image).then(newEvent => {
+                console.log(newEvent)
+                this.props.onAddEvent(newEvent)
+            })
+            .catch((error) => (console.log(error.message)))
+
             Navigation.popToRoot(this.props.componentId)
         }
+    }
+
+    createEvent = async (eventInfo, image) => {
+        const eventData = await Fire.addEvent(eventInfo, image)
+        this.setState(prevState => {
+            return {
+                newEvent: eventData
+            }
+        })
+        return this.state.newEvent
     }
 
     mapViewPressedHandler = event => {
@@ -85,8 +102,6 @@ class AddMap extends React.Component{
             marker= <Marker coordinate={this.state.eventLocation} ></Marker>
         }
 
-
-
         return(
             <View style={{width: "100%", height: "100%", paddingTop: 0}}>
                 <MapView
@@ -108,11 +123,16 @@ class AddMap extends React.Component{
 
 const mapDispatchToProps = dispatch => {
     return{
-        onAddEvent: (eventState, image) => dispatch(addEvent(eventState, image))
+        onAddEvent: (eventInfo) => dispatch(addEvent(eventInfo))
+    }
+}
+const mapStateToProps = state => {
+    return {
+        currentUserData: state.events.currentUser
     }
 }
 
-export default connect(null,mapDispatchToProps)(AddMap)
+export default connect(mapStateToProps, mapDispatchToProps)(AddMap)
 
 const styles = StyleSheet.create({
     container: {

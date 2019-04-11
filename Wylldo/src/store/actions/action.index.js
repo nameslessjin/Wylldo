@@ -1,1 +1,1 @@
-export {getEvents, addEvent} from './events.action'
+export {getEvents, addEvent, getCurrentUser} from './events.action'

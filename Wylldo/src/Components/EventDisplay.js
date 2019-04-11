@@ -25,7 +25,7 @@ export default class EventDispaly extends React.Component{
         return(
             
             <View style={styles.container}>
-                <Header name={this.props.name} {...this.props} />
+                <Header {...this.props} />
                 {displayImage}
                 <Footer {...this.props} componentId={this.props.componentId}/>
             </View>
