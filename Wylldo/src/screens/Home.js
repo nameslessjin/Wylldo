@@ -39,8 +39,6 @@ class Home extends React.Component{
         markPressed: false,
         mapPressed: false,
         eventKey: null,
-        events:[],
-        currentUser: null
     }
 
     componentDidMount(){
@@ -59,29 +57,13 @@ class Home extends React.Component{
 
     getCurrentUserData = async () => {
         const currentUserData = await Fire.getUserData()
-        this.setState(prevState => {
-            return{
-                currentUser: currentUserData
-            }
-        })
-        return this.state.currentUser
+        return currentUserData
     }
 
     getEventData = async () => {
         const eventData = await Fire.getEvents(20)
-        this.setEvents(eventData)
-        return this.state.events
+        return eventData
     }
-
-    setEvents = events => {
-        this.setState(prevState => {
-            return{
-                events: events
-            }
-        })
-    }
-
-
 
     mapViewPressedHandler = () => {
         this.setState({markPressed: false, mapPressed: true})
@@ -100,7 +82,6 @@ class Home extends React.Component{
             })
     }
 
-
     render(){
         const Markers = this.props.events.map(event => {
             if (event.coords.latitude !== null){
@@ -114,8 +95,7 @@ class Home extends React.Component{
                     </Marker>
                 )
             }
-        })
-        
+        }) 
 
         let popUp = null 
         if (this.state.markPressed && !this.state.mapPressed){         
@@ -155,7 +135,6 @@ const styles = StyleSheet.create({
     },
 })
 
-
 const mapStateToProps = state => {
     return{
         events: state.events.Events
@@ -166,6 +145,7 @@ const mapDispatchToProps = dispatch => {
     return{
         onGetEvents: (events) => dispatch(getEvents(events)),
         onGetCurrentUser: (currentUserData) => dispatch(getCurrentUser(currentUserData))
+
     }
 }
 

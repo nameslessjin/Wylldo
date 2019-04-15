@@ -36,16 +36,6 @@ class EventTable extends React.Component{
     }
 
 
-    state = {
-        
-    }
-
-
-    //Need to make this in initialized
-    componentDidAppear(){
-        this.setState({Events: this.props.events})
-    }
-
     navigationButtonPressed({buttonId}){
         if (buttonId == "addEvent"){
             Navigation.push(this.props.componentId, {
@@ -60,7 +50,7 @@ class EventTable extends React.Component{
 
         return(
             <View style={styles.container}>
-                <ListEvents events={this.state.Events} componentId={this.props.componentId} />
+                <ListEvents events={this.props.events} componentId={this.props.componentId} />
             </View>
         )
     }

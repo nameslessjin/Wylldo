@@ -62,7 +62,6 @@ class AddMap extends React.Component{
             const image = this.props.image
 
             this.createEvent(eventState, image).then(newEvent => {
-                console.log(newEvent)
                 this.props.onAddEvent(newEvent)
             })
             .catch((error) => (console.log(error.message)))
@@ -73,12 +72,8 @@ class AddMap extends React.Component{
 
     createEvent = async (eventInfo, image) => {
         const eventData = await Fire.addEvent(eventInfo, image)
-        this.setState(prevState => {
-            return {
-                newEvent: eventData
-            }
-        })
-        return this.state.newEvent
+        
+        return eventData
     }
 
     mapViewPressedHandler = event => {

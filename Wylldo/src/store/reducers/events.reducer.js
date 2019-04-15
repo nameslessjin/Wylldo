@@ -1,4 +1,4 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER} from "../actions/actionTypes"
+import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT} from "../actions/actionTypes"
 //Somewhere have state load events, load from firebase
 const initialState = {
     Events: [],
@@ -22,6 +22,11 @@ export default reducer = (state = initialState, action) => {
             return{
                 ...state,
                 currentUser: action.currentUserData
+            }
+        case SIGN_OUT:
+            return{
+                Events: [],
+                currentUser: null
             }
         default:
             return state
