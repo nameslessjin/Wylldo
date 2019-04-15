@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         color: '#CAD3C8'
     },
     optionContainer:{
-        width: '90%',
+        width: '95%',
         height: '10%',
         backgroundColor: 'green',
         borderRadius: 10,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     historyDisplay:{
-        width: '90%',
+        width: '95%',
         height: '85%',
         alignItems: 'center',
         backgroundColor: 'white'
