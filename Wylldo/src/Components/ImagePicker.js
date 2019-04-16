@@ -35,7 +35,6 @@ export default class PickImage extends React.Component{
     }
 
     render(){
-
         const displayMessage = <Text>Click to add image</Text>
         const displayImage = <Image source={this.state.pickedImage} style={styles.image}/>
 

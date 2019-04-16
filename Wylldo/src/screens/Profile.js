@@ -1,11 +1,12 @@
-// Page shows user settings
-
 import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native'
 import firebase from 'react-native-firebase'
 import  {Navigation} from 'react-native-navigation'
+import Icon from 'react-native-vector-icons/Ionicons'
+import PickAvatar from '../Components/PickAvatar';
+import {connect} from 'react-redux'
 
-export default class Settings extends React.Component{
+class Profile extends React.Component{
     static get options(){
         return{
             topBar:{
@@ -29,6 +30,9 @@ export default class Settings extends React.Component{
         Navigation.events().bindComponent(this)
     }
 
+    state={}
+
+
     navigationButtonPressed({buttonId}){
         if(buttonId == "settingBtn"){
             Navigation.push(this.props.componentId, {
@@ -44,14 +48,15 @@ export default class Settings extends React.Component{
         return(
             <View style={styles.container}>
                 <View style={styles.userContainer}>
-                    <TouchableOpacity style={styles.avatar}>
-                    </TouchableOpacity>
+                    <PickAvatar updateAvatar={(updateAvat) => this.setState({avatar: updateAvat})} />
                     <View style={styles.followContainer}>
                     <TouchableOpacity style={styles.followTouchBtn}>
-                        <Text>follower</Text>
+                        <Text style={styles.followNum}>1000</Text>
+                        <Text style={styles.followText}>followers</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.followTouchBtn}>
-                        <Text>following</Text>
+                        <Text style={styles.followNum}>0</Text>
+                        <Text style={styles.followText}>following</Text>
                     </TouchableOpacity>
                     </View>
                 </View>
@@ -76,6 +81,14 @@ export default class Settings extends React.Component{
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        currentUserData: state.events.currentUser
+    }
+}
+
+export default connect(mapStateToProps)(Profile)
+
 const styles = StyleSheet.create({
     container:{
         flex:1,
@@ -86,9 +99,9 @@ const styles = StyleSheet.create({
     userContainer:{
         width: '100%',
         height: '30%',
-        backgroundColor: 'red',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: 'white'
     },
     historyContainer:{
         width: '100%',
@@ -96,17 +109,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'yellow',
         alignItems: 'center'
     },
-    avatar:{
-        height: '45%',
-        width: '23%',
-        borderRadius: 50,
-        backgroundColor: 'orange',
-        marginBottom: 10
-    },
     followContainer:{
         width: '60%',
         height: '35%',
-        backgroundColor: 'grey',
         borderRadius: 10,
         flexDirection: 'row'
     },
@@ -117,8 +122,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     followText:{
-        color: '#CAD3C8'
+        color: '#bdc3c7',
+        fontSize: 15
     },
+    followNum:{
+        fontSize: 20,
+    },  
     optionContainer:{
         width: '95%',
         height: '10%',
