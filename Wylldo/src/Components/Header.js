@@ -5,11 +5,11 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 export default class Header extends React.Component{
 
-    differenceOnTime = (createdTime) => {
+    differenceOnTime = (timestamp) => {
         const nowTime = Date.now()
-        const differenceInSec = Math.round((nowTime - createdTime) / 1000)
+        const differenceInSec = Math.round((nowTime - timestamp) / 1000)
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        const initDate = new Date(createdTime)
+        const initDate = new Date(timestamp)
         const createdDate = initDate.getDate()
         const createdMonth = months[initDate.getMonth()]
         const createdYear = initDate.getFullYear()
@@ -70,13 +70,13 @@ export default class Header extends React.Component{
                 <View style={styles.row}>
                     <Image
                         style={styles.userProfilePic}
-                        source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+                        source={this.props.hostAvatar}
                     />
                     <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
                     <Icon name={this.props.tag} size={20} style={{marginLeft: 5}}/>
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.dateText}>{this.differenceOnTime(this.props.createdTime)}</Text>
+                    <Text style={styles.dateText}>{this.differenceOnTime(this.props.timestamp)}</Text>
                     <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
                 </View>
             </View>
@@ -99,9 +99,10 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     userProfilePic:{
-        width: 35,
-        height: 35,
-        borderRadius: 15,
+        width: 42,
+        height: 42,
+        aspectRatio: 1,
+        borderRadius: 20,
         marginHorizontal: 7
     },
     row:{

@@ -55,9 +55,11 @@ class AddMap extends React.Component{
                 tag : this.props.tag,
                 coords : this.state.eventLocation,
                 likes: 0,
-                createdTime: Date.now(),
-                hostUsername: this.props.currentUserData._data.name,
-                hostUserid: Fire.uid
+                commentNum: 0,
+                timestamp: Date.now(),
+                hostUserid: Fire.uid,
+                hostUsername: this.props.currentUserData.name,
+                hostAvatar: this.props.currentUserData.avatarUri
             }
             const image = this.props.image
 

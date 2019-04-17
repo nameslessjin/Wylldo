@@ -44,7 +44,7 @@ class Home extends React.Component{
     componentDidMount(){
         if (Fire.uid){
             this.getCurrentUserData().then( currentUserData => {
-                this.props.onGetCurrentUser(currentUserData);
+                this.props.onGetCurrentUser(currentUserData._data);
                 this.getEventData().then( events =>{
                     this.props.onGetEvents(events)
                 })
@@ -90,8 +90,9 @@ class Home extends React.Component{
                     coordinate={event.coords}
                     key={event.key}
                     onPress={() => this.setState({eventKey : event.key}) }
-                    >        
-                    <CustomMarker icon={event.tag} />
+                    >       
+                     
+                    <CustomMarker icon={event.tag} hostAvatar={event.hostAvatar} />
                     </Marker>
                 )
             }

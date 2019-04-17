@@ -3,6 +3,7 @@ import {View, Image, TouchableOpacity, StyleSheet, Text} from "react-native"
 import ImagePicker from "react-native-image-picker";
 
 
+
 export default class PickAvatar extends React.Component{
     state = {
         pickedAvatar: null,
@@ -25,15 +26,22 @@ export default class PickAvatar extends React.Component{
         })
     } 
 
+
     render(){
-        console.log(this.state)
-        const displayImage = <Image source={this.state.pickedAvatar} style={styles.image} />
+
+        let displayImage = null
+        if (this.props.currentUser){
+            if (!this.state.Clicked){
+                displayImage = <Image source={this.props.currentUser.avatarUri} style={styles.image} />
+            } else {
+                displayImage = <Image source={this.state.pickedAvatar} style={styles.image} />
+            }
+        }
 
         return(
             <TouchableOpacity style={styles.avatar} onPress={this.pickImageHandler}>
-                {this.state.Clicked ? displayImage : null}
+                {displayImage}
             </TouchableOpacity>
-
         )
     }
 }

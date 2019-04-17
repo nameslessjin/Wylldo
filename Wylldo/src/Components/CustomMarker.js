@@ -1,7 +1,6 @@
 // custom marker component
-
 import React from 'react'
-import {View, StyleSheet,Text, TouchableOpacity} from "react-native"
+import {View, StyleSheet,Text, TouchableOpacity, ImageBackground} from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 
 export default class CustomMarker extends React.Component{
@@ -11,7 +10,12 @@ export default class CustomMarker extends React.Component{
         return(
                 <View style={styles.container}>
                     <View style={styles.ImgView}>
-                        <Icon name="md-person" size={25}/>
+                        <ImageBackground 
+                            source={this.props.hostAvatar} 
+                            style={styles.imgStyle} imageStyle={{borderRadius: 15, resizeMode: 'cover'}} 
+                            onLoad={() => this.forceUpdate()}>
+                            <Text style={{width: 0, height: 0}}>{Math.random()}</Text> 
+                        </ImageBackground>
                     </View>
                     <Icon name={this.props.icon} size={15} />
                 </View>
@@ -22,20 +26,26 @@ export default class CustomMarker extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        width: 42,
-        height: 30,
+        width: 43,
+        height: 32,
         borderRadius: 45,
-        backgroundColor: '#e55039',
+        backgroundColor: '#ced6e0',
         flexDirection: "row",
         alignItems: 'center'
     },
     ImgView:{
         borderRadius: 50,
-        height: '90%',
+        height: '100%',
         aspectRatio: 1,
-        backgroundColor: "white",
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flex: 1
+    },
+    imgStyle:{
+        height: '100%',
+        resizeMode: 'cover',
+        aspectRatio: 1,
+        borderRadius: 60
     }
 
 })

@@ -16,7 +16,7 @@ class Fire {
     //Download Data
     // get data here
     getEvents = async (size) => {
-        let ref = this.eventsCollection.orderBy('createdTime', 'desc').limit(size);
+        let ref = this.eventsCollection.orderBy('timestamp', 'desc').limit(size);
         // try{
         //     if(start){
         //         ref = ref.startAfter(start)
@@ -35,7 +35,6 @@ class Fire {
                 }
             })
             // console.log(eventData)
-            console.log(querySnapshot)
             return eventData
             // querySnapshot.forEach(doc => {
             //     if (doc.exists){
@@ -60,9 +59,11 @@ class Fire {
             ...image,
             uri: imgStorageUri
         } : null
-        let uploadEventInfo = {
+        const uploadEventInfo = {
             ...EventInfo,
-            image: uploadedImag
+            image: uploadedImag,
+            createdTime: firebase.firestore.FieldValue.serverTimestamp()
+            
         }
 
         const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch( () => {console.log('rejected')})
@@ -73,8 +74,28 @@ class Fire {
         }]
 
         return updateEventInfo
+    }
 
+    updateUserInformation = async(currentData, avatar) => {
+        const avatStorageUri = !(avatar === null) ? await this.uploadAvatarAsync(avatar.uri) : null
+        const uploadedAvatar = !(avatar === null) ? {
+            uri: avatStorageUri
+        } : null
+        const updateUserdata ={
+            ...currentData,
+            avatarUri: uploadedAvatar
+        }
 
+        await this.usersCollection.doc(this.uid).update(updateUserdata)
+        .catch(() => {console.log('rejected')})
+        
+        return updateUserdata
+        
+    }
+
+    uploadAvatarAsync = async uri => {
+        const path = `${'Users'}/${this.uid}/${uuid.v4()}.jpg`
+        return uploadPhoto(uri, path)
     }
 
     uploadPhotoAsync = async uri => {
@@ -98,7 +119,8 @@ class Fire {
         const signUpUserInfo ={
             name: name,
             email: email,
-            createdTime: Date.now()
+            createdTime: firebase.firestore.FieldValue.serverTimestamp(),
+            timestamp: Date.now()
         }
 
         this.usersCollection.doc(this.uid).set(signUpUserInfo)

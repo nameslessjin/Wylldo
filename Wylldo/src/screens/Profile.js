@@ -1,10 +1,11 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native'
-import firebase from 'react-native-firebase'
+import Fire from '../firebase/Fire'
 import  {Navigation} from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PickAvatar from '../Components/PickAvatar';
 import {connect} from 'react-redux'
+import {updateUserdata} from '../store/actions/action.index'
 
 class Profile extends React.Component{
     static get options(){
@@ -32,7 +33,6 @@ class Profile extends React.Component{
 
     state={}
 
-
     navigationButtonPressed({buttonId}){
         if(buttonId == "settingBtn"){
             Navigation.push(this.props.componentId, {
@@ -43,12 +43,26 @@ class Profile extends React.Component{
         }
     }
 
+    updateAvatar = async(avatar) =>{
+        const updateUserData = await Fire.updateUserInformation(this.props.currentUserData, avatar)
+        return updateUserData
+    }
+
 
     render(){
+
+        let displayName = null
+        if(this.props.currentUserData){
+            displayName = <Text style={{fontSize: 15}}>{this.props.currentUserData.name}</Text>
+        }
+
         return(
             <View style={styles.container}>
                 <View style={styles.userContainer}>
-                    <PickAvatar updateAvatar={(updateAvat) => this.setState({avatar: updateAvat})} />
+                    <PickAvatar currentUser={this.props.currentUserData} updateAvatar={(updateAvat) => {
+                        this.updateAvatar(updateAvat)
+                        .then(updatedUserData => this.props.onUpdatedUserData(updatedUserData))}} />
+                    {displayName}
                     <View style={styles.followContainer}>
                     <TouchableOpacity style={styles.followTouchBtn}>
                         <Text style={styles.followNum}>1000</Text>
@@ -60,6 +74,7 @@ class Profile extends React.Component{
                     </TouchableOpacity>
                     </View>
                 </View>
+                
                 <View style={styles.historyContainer}>
                     <View style={styles.optionContainer}>
                         <TouchableOpacity style={styles.optionBtn}>
@@ -87,7 +102,13 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Profile)
+const mapDispatchToProps = dispatch => {
+    return{
+        onUpdatedUserData: (updatedUserData) => dispatch(updateUserdata(updatedUserData))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
 
 const styles = StyleSheet.create({
     container:{
