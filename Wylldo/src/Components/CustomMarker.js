@@ -8,7 +8,7 @@ export default class CustomMarker extends React.Component{
 
     render(){
         return(
-                <View style={styles.container}>
+                <View style={[styles.container, this.props.likes >= 10 ? {backgroundColor: '#e74c3c'} : null]}>
                     <View style={styles.ImgView}>
                         <ImageBackground 
                             source={this.props.hostAvatar} 

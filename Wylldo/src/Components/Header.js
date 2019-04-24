@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, View, Text, Image} from "react-native"
+import {StyleSheet, View, Text, Image, TouchableOpacity} from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 
 
@@ -65,6 +65,8 @@ export default class Header extends React.Component{
 
     render(){
 
+
+
         return(
             <View style={styles.container}>
                 <View style={styles.row}>
@@ -77,7 +79,9 @@ export default class Header extends React.Component{
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.dateText}>{this.differenceOnTime(this.props.timestamp)}</Text>
-                    <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
+                    <TouchableOpacity style={styles.optionsTouchBar}>
+                        <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -93,6 +97,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
+    },
+    optionsTouchBar:{
+        height: '85%',
+        width: 25,
+        alignItems: 'center',
     },
     usernameStyle:{
         fontWeight: 'bold',

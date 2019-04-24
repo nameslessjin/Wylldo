@@ -58,7 +58,8 @@ class EventTable extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-        events: state.events.Events
+        events: state.events.Events,
+        currentUser: state.events.currentUser
     }
 }
 

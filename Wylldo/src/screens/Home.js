@@ -92,7 +92,7 @@ class Home extends React.Component{
                     onPress={() => this.setState({eventKey : event.key}) }
                     >       
                      
-                    <CustomMarker icon={event.tag} hostAvatar={event.hostAvatar} />
+                    <CustomMarker icon={event.tag} hostAvatar={event.hostAvatar} likes={event.likes} />
                     </Marker>
                 )
             }

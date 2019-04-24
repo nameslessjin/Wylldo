@@ -23,7 +23,7 @@ export default class EventDispaly extends React.Component{
         )
 
         return(
-            
+            //Try to remove componentId in footer since everything is passed already
             <View style={styles.container}>
                 <Header {...this.props} />
                 {displayImage}
