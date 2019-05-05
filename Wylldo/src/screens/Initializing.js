@@ -7,7 +7,9 @@ import Fire from '../firebase/Fire'
 
 YellowBox.ignoreWarnings([
     'Require cycle:', 
-    'Accessing view manager configs directly off UIManager via UIManager[\'AIRGoogleMap\']'
+    'Accessing view manager configs directly off UIManager via UIManager[\'AIRGoogleMap\']',
+    'Accessing view manager configs directly off UIManager via UIManager[\'AIRMapLite\']',
+    'Accessing view manager configs directly off UIManager via UIManager[\'AIRMap\']'
 ])
 //AppLaunch here and load some events add load screen and connect his part to reducer
 

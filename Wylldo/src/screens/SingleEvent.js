@@ -5,7 +5,7 @@ export default class SingleEvent extends React.Component{
     render(){
 
         return(
-                <ScrollView >
+                <ScrollView style={{backgroundColor: 'white'}}>
                     <EventDisplay {...this.props} />
                 </ScrollView>
 

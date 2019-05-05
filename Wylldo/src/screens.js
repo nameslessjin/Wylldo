@@ -3,6 +3,8 @@ import {Navigation} from 'react-native-navigation'
 import {Provider} from 'react-redux'
 import {store} from './store/configureStore'
 
+
+// "Home, WylldoList, AddMap, Settings and Profile page are connected with redux to help manage and store data locally through store from configureStore"
 export function registerScreens(){
     Navigation.registerComponentWithRedux('Home', () => require('./screens/Home').default, Provider, store)
     Navigation.registerComponentWithRedux('WylldoList', () => require('./screens/WylldoList').default, Provider, store)

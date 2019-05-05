@@ -3,6 +3,8 @@
 import {Navigation} from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
+//Two functions
+//goHome functions indicate going to home page, occurs when login and signin.  Has three navigation button
 export const goHome = () =>  {
     Promise.all([
         Icon.getImageSource("md-home", 30),
@@ -76,7 +78,7 @@ export const goHome = () =>  {
 
 
 
-
+//goToAuth functions remove user screen to (Auth screen) authorization page when initialize or signout
 export const goToAuth = () => Navigation.setRoot({
     root: {
         stack:{

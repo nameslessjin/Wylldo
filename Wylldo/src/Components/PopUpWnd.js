@@ -57,8 +57,8 @@ export default class PopUpWnd extends React.Component{
                     <View style={(displayImage) ? styles.informationContainer : styles.informationContainerNoImg}>
                         <TouchableOpacity style={{height: '80%'}} onPress={() => this.onWindowPressed()}>
                             <Text style={{fontSize: 15, fontWeight: 'bold', marginEnd: 5}}>Thur Apr 2 13:00</Text>
-                            <Text style={styles.name}>{this.props.name}</Text>
-                            <Text ellipsizeMode={"tail"} numberOfLines={3}>{this.props.description}</Text>
+                            <Text style={styles.name}>{this.props.hostUsername}</Text>
+                            <Text ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
                             <Text style={styles.name}>Shawn</Text>
                             <Text style={styles.comment} ellipsizeMode={"tail"} numberOfLines={1} >Jinsen is the best person in the world, no in the whole universe.  He is a god.</Text>
                             <Text style={styles.name}>Wei</Text>
