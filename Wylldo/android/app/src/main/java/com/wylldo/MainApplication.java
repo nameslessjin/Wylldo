@@ -21,6 +21,7 @@ import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+import io.invertase.firebase.functions.RNFirebaseFunctionsPackage;
 
 
 import java.util.Arrays;
@@ -56,7 +57,8 @@ public class MainApplication extends NavigationApplication {
               new ImagePickerPackage(),
               new RNFirebaseFirestorePackage(),
               new RNFirebaseStoragePackage(),
-              new RNFirebaseAuthPackage() 
+              new RNFirebaseAuthPackage(),
+              new RNFirebaseFunctionsPackage()
 
           );
       }

@@ -1,7 +1,7 @@
-//Page represent events
+//This page is a convinent instagram like viewing page that lists all correct events
 
 import React from 'react'
-import {View, Text, StyleSheet, FlatList} from 'react-native'
+import {View, StyleSheet} from 'react-native'
 import  {Navigation} from 'react-native-navigation'
 import {connect} from 'react-redux'
 import ListEvents from '../Components/ListEvents'
@@ -35,7 +35,7 @@ class EventTable extends React.Component{
         
     }
 
-
+    //once the "post" button is clicked, move to addevent screen page. (stack up from WylldoList screen)
     navigationButtonPressed({buttonId}){
         if (buttonId == "addEvent"){
             Navigation.push(this.props.componentId, {
@@ -50,12 +50,15 @@ class EventTable extends React.Component{
 
         return(
             <View style={styles.container}>
+
+                {/* passing all the event data from redux to listevent screen to further process list */}
                 <ListEvents events={this.props.events} componentId={this.props.componentId} />
             </View>
         )
     }
 }
 
+//get eventdata and currentuser data from redux though currentuser data doesn't seem to be used
 const mapStateToProps = (state) => {
     return {
         events: state.events.Events,

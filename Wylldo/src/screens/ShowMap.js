@@ -19,7 +19,7 @@ export default class ShowMap extends React.Component{
     render(){
         const marker = (<Marker
                         coordinate={this.props.coords}>
-                        <CustomMarker icon={this.props.tag} hostAvatar={this.props.hostAvatar} />
+                        <CustomMarker icon={this.props.tag} hostAvatar={this.props.hostAvatar} likes={this.props.likes} />
                         </Marker>)
         return(
             <View style={{width: "100%", height: "100%", paddingTop: 0}}>

@@ -36,19 +36,7 @@ class Fire {
             })
             // console.log(eventData)
             return eventData
-            // querySnapshot.forEach(doc => {
-            //     if (doc.exists){
-            //         console.log(doc)
 
-            //         // const post = doc.data() || {};
-
-            //         // const user = post.user || {}
-            //         // const reduced = {
-            //         //     key: doc.key
-            //         // }
-
-            //     }
-            // })
     }
 
     // Upload Data
