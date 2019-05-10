@@ -31,8 +31,8 @@
 #import "Firestore/Source/API/FIRFirestore+Internal.h"
 #import "Firestore/Source/Model/FSTFieldValue.h"
 #import "Firestore/Source/Model/FSTMutation.h"
+#import "Firestore/Source/Util/FSTUsageValidation.h"
 
-#include "Firestore/core/src/firebase/firestore/api/input_validation.h"
 #include "Firestore/core/src/firebase/firestore/core/user_data.h"
 #include "Firestore/core/src/firebase/firestore/model/database_id.h"
 #include "Firestore/core/src/firebase/firestore/model/document_key.h"
@@ -47,7 +47,6 @@
 #include "absl/strings/match.h"
 
 namespace util = firebase::firestore::util;
-using firebase::firestore::api::ThrowInvalidArgument;
 using firebase::firestore::core::ParsedSetData;
 using firebase::firestore::core::ParsedUpdateData;
 using firebase::firestore::core::ParseAccumulator;
@@ -111,7 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
   // NOTE: The public API is typed as NSDictionary but we type 'input' as 'id' since we can't trust
   // Obj-C to verify the type for us.
   if (![input isKindOfClass:[NSDictionary class]]) {
-    ThrowInvalidArgument("Data to be written must be an NSDictionary.");
+    FSTThrowInvalidArgument(@"Data to be written must be an NSDictionary.");
   }
 
   ParseAccumulator accumulator{UserDataSource::Set};
@@ -124,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
   // NOTE: The public API is typed as NSDictionary but we type 'input' as 'id' since we can't trust
   // Obj-C to verify the type for us.
   if (![input isKindOfClass:[NSDictionary class]]) {
-    ThrowInvalidArgument("Data to be written must be an NSDictionary.");
+    FSTThrowInvalidArgument(@"Data to be written must be an NSDictionary.");
   }
 
   ParseAccumulator accumulator{UserDataSource::MergeSet};
@@ -142,14 +141,15 @@ NS_ASSUME_NONNULL_BEGIN
       } else if ([fieldPath isKindOfClass:[FIRFieldPath class]]) {
         path = ((FIRFieldPath *)fieldPath).internalValue;
       } else {
-        ThrowInvalidArgument("All elements in mergeFields: must be NSStrings or FIRFieldPaths.");
+        FSTThrowInvalidArgument(
+            @"All elements in mergeFields: must be NSStrings or FIRFieldPaths.");
       }
 
       // Verify that all elements specified in the field mask are part of the parsed context.
       if (!accumulator.Contains(path)) {
-        ThrowInvalidArgument(
-            "Field '%s' is specified in your field mask but missing from your input data.",
-            path.CanonicalString());
+        FSTThrowInvalidArgument(
+            @"Field '%s' is specified in your field mask but missing from your input data.",
+            path.CanonicalString().c_str());
       }
 
       validatedFieldPaths.insert(path);
@@ -166,7 +166,7 @@ NS_ASSUME_NONNULL_BEGIN
   // NOTE: The public API is typed as NSDictionary but we type 'input' as 'id' since we can't trust
   // Obj-C to verify the type for us.
   if (![input isKindOfClass:[NSDictionary class]]) {
-    ThrowInvalidArgument("Data to be written must be an NSDictionary.");
+    FSTThrowInvalidArgument(@"Data to be written must be an NSDictionary.");
   }
 
   NSDictionary *dict = input;
@@ -183,7 +183,8 @@ NS_ASSUME_NONNULL_BEGIN
     } else if ([key isKindOfClass:[FIRFieldPath class]]) {
       path = ((FIRFieldPath *)key).internalValue;
     } else {
-      ThrowInvalidArgument("Dictionary keys in updateData: must be NSStrings or FIRFieldPaths.");
+      FSTThrowInvalidArgument(
+          @"Dictionary keys in updateData: must be NSStrings or FIRFieldPaths.");
     }
 
     value = self.preConverter(value);
@@ -246,7 +247,7 @@ NS_ASSUME_NONNULL_BEGIN
     if ([input isKindOfClass:[NSArray class]]) {
       // TODO(b/34871131): Include the path containing the array in the error message.
       if (context.array_element()) {
-        ThrowInvalidArgument("Nested arrays are not supported");
+        FSTThrowInvalidArgument(@"Nested arrays are not supported");
       }
       return [self parseArray:(NSArray *)input context:std::move(context)];
     } else {
@@ -297,11 +298,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)parseSentinelFieldValue:(FIRFieldValue *)fieldValue context:(ParseContext &&)context {
   // Sentinels are only supported with writes, and not within arrays.
   if (!context.write()) {
-    ThrowInvalidArgument("%s can only be used with updateData() and setData()%s",
-                         fieldValue.methodName, context.FieldDescription());
+    FSTThrowInvalidArgument(@"%@ can only be used with updateData() and setData()%s",
+                            fieldValue.methodName, context.FieldDescription().c_str());
   }
   if (!context.path()) {
-    ThrowInvalidArgument("%s is not currently supported inside arrays", fieldValue.methodName);
+    FSTThrowInvalidArgument(@"%@ is not currently supported inside arrays", fieldValue.methodName);
   }
 
   if ([fieldValue isKindOfClass:[FSTDeleteFieldValue class]]) {
@@ -313,14 +314,15 @@ NS_ASSUME_NONNULL_BEGIN
     } else if (context.data_source() == UserDataSource::Update) {
       HARD_ASSERT(context.path()->size() > 0,
                   "FieldValue.delete() at the top level should have already been handled.");
-      ThrowInvalidArgument("FieldValue.delete() can only appear at the top level of your "
-                           "update data%s",
-                           context.FieldDescription());
+      FSTThrowInvalidArgument(@"FieldValue.delete() can only appear at the top level of your "
+                               "update data%s",
+                              context.FieldDescription().c_str());
     } else {
       // We shouldn't encounter delete sentinels for queries or non-merge setData calls.
-      ThrowInvalidArgument(
-          "FieldValue.delete() can only be used with updateData() and setData() with merge:true%s",
-          context.FieldDescription());
+      FSTThrowInvalidArgument(
+          @"FieldValue.delete() can only be used with updateData() and setData() with "
+          @"merge:true%s",
+          context.FieldDescription().c_str());
     }
 
   } else if ([fieldValue isKindOfClass:[FSTServerTimestampFieldValue class]]) {
@@ -398,8 +400,9 @@ NS_ASSUME_NONNULL_BEGIN
           unsigned long long extended = [input unsignedLongLongValue];
 
           if (extended > LLONG_MAX) {
-            ThrowInvalidArgument("NSNumber (%s) is too large%s", [input unsignedLongLongValue],
-                                 context.FieldDescription());
+            FSTThrowInvalidArgument(@"NSNumber (%llu) is too large%s",
+                                    [input unsignedLongLongValue],
+                                    context.FieldDescription().c_str());
 
           } else {
             return [FSTIntegerValue integerValue:(int64_t)extended];
@@ -426,7 +429,7 @@ NS_ASSUME_NONNULL_BEGIN
         // legitimate usage of signed chars is impossible, but this should be rare.
         //
         // Additionally, for consistency, map unsigned chars to bools in the same way.
-        return FieldValue::FromBoolean([input boolValue]).Wrap();
+        return [FSTBooleanValue booleanValue:[input boolValue]];
 
       default:
         // All documented codes should be handled above, so this shouldn't happen.
@@ -434,7 +437,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
   } else if ([input isKindOfClass:[NSString class]]) {
-    return FieldValue::FromString(util::MakeString(input)).Wrap();
+    return [FSTStringValue stringValue:input];
 
   } else if ([input isKindOfClass:[NSDate class]]) {
     return [FSTTimestampValue timestampValue:[FIRTimestamp timestampWithDate:input]];
@@ -456,17 +459,18 @@ NS_ASSUME_NONNULL_BEGIN
     FSTDocumentKeyReference *reference = input;
     if (*reference.databaseID != *self.databaseID) {
       const DatabaseId *other = reference.databaseID;
-      ThrowInvalidArgument(
-          "Document Reference is for database %s/%s but should be for database %s/%s%s",
-          other->project_id(), other->database_id(), self.databaseID->project_id(),
-          self.databaseID->database_id(), context.FieldDescription());
+      FSTThrowInvalidArgument(
+          @"Document Reference is for database %s/%s but should be for database %s/%s%s",
+          other->project_id().c_str(), other->database_id().c_str(),
+          self.databaseID->project_id().c_str(), self.databaseID->database_id().c_str(),
+          context.FieldDescription().c_str());
     }
     return [FSTReferenceValue referenceValue:[FSTDocumentKey keyWithDocumentKey:reference.key]
                                   databaseID:self.databaseID];
 
   } else {
-    ThrowInvalidArgument("Unsupported type: %s%s", NSStringFromClass([input class]),
-                         context.FieldDescription());
+    FSTThrowInvalidArgument(@"Unsupported type: %@%s", NSStringFromClass([input class]),
+                            context.FieldDescription().c_str());
   }
 }
 

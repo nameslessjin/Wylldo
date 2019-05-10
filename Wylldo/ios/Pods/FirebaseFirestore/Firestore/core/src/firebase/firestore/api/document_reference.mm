@@ -26,8 +26,8 @@
 #import "Firestore/Source/Core/FSTFirestoreClient.h"
 #import "Firestore/Source/Core/FSTQuery.h"
 #import "Firestore/Source/Model/FSTMutation.h"
+#import "Firestore/Source/Util/FSTUsageValidation.h"
 
-#include "Firestore/core/src/firebase/firestore/api/source.h"
 #include "Firestore/core/src/firebase/firestore/core/view_snapshot.h"
 #include "Firestore/core/src/firebase/firestore/model/document_key.h"
 #include "Firestore/core/src/firebase/firestore/model/document_set.h"
@@ -114,9 +114,9 @@ void DocumentReference::DeleteDocument(Completion completion) {
   [firestore_->client() writeMutations:{mutation} completion:completion];
 }
 
-void DocumentReference::GetDocument(Source source,
+void DocumentReference::GetDocument(FIRFirestoreSource source,
                                     DocumentSnapshot::Listener&& completion) {
-  if (source == Source::Cache) {
+  if (source == FIRFirestoreSourceCache) {
     [firestore_->client() getDocumentFromLocalCache:*this
                                          completion:std::move(completion)];
     return;
@@ -129,7 +129,8 @@ void DocumentReference::GetDocument(Source source,
 
   class ListenOnce : public EventListener<DocumentSnapshot> {
    public:
-    ListenOnce(Source source, DocumentSnapshot::Listener&& completion)
+    ListenOnce(FIRFirestoreSource source,
+               DocumentSnapshot::Listener&& completion)
         : source_(source), completion_(std::move(completion)) {
     }
 
@@ -160,13 +161,13 @@ void DocumentReference::GetDocument(Source source,
             Status{FirestoreErrorCode::Unavailable,
                    "Failed to get document because the client is offline."});
       } else if (snapshot.exists() && snapshot.metadata().from_cache() &&
-                 source_ == Source::Server) {
+                 source_ == FIRFirestoreSourceServer) {
         completion_->OnEvent(
             Status{FirestoreErrorCode::Unavailable,
                    "Failed to get document from server. (However, "
                    "this document does exist in the local cache. Run "
                    "again without setting source to "
-                   "FirestoreSourceServer to retrieve the cached "
+                   "FIRFirestoreSourceServer to retrieve the cached "
                    "document.)"});
       } else {
         completion_->OnEvent(std::move(snapshot));
@@ -178,7 +179,7 @@ void DocumentReference::GetDocument(Source source,
     }
 
    private:
-    Source source_;
+    FIRFirestoreSource source_;
     DocumentSnapshot::Listener completion_;
 
     std::promise<ListenerRegistration> registration_promise_;

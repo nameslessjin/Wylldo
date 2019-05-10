@@ -21,12 +21,12 @@
 
 #import "FIRDocumentReference.h"
 #import "FIRFirestoreErrors.h"
+#import "FIRFirestoreSource.h"
 #import "Firestore/Source/API/FIRDocumentReference+Internal.h"
 #import "Firestore/Source/API/FIRDocumentSnapshot+Internal.h"
 #import "Firestore/Source/API/FIRFieldPath+Internal.h"
 #import "Firestore/Source/API/FIRFieldValue+Internal.h"
 #import "Firestore/Source/API/FIRFirestore+Internal.h"
-#import "Firestore/Source/API/FIRFirestoreSource+Internal.h"
 #import "Firestore/Source/API/FIRListenerRegistration+Internal.h"
 #import "Firestore/Source/API/FIRQuery+Internal.h"
 #import "Firestore/Source/API/FIRQuerySnapshot+Internal.h"
@@ -38,11 +38,10 @@
 #import "Firestore/Source/Core/FSTQuery.h"
 #import "Firestore/Source/Model/FSTDocument.h"
 #import "Firestore/Source/Model/FSTFieldValue.h"
+#import "Firestore/Source/Util/FSTUsageValidation.h"
 
-#include "Firestore/core/src/firebase/firestore/api/input_validation.h"
 #include "Firestore/core/src/firebase/firestore/model/document_key.h"
 #include "Firestore/core/src/firebase/firestore/model/field_path.h"
-#include "Firestore/core/src/firebase/firestore/model/field_value.h"
 #include "Firestore/core/src/firebase/firestore/model/resource_path.h"
 #include "Firestore/core/src/firebase/firestore/util/error_apple.h"
 #include "Firestore/core/src/firebase/firestore/util/hard_assert.h"
@@ -50,15 +49,11 @@
 #include "Firestore/core/src/firebase/firestore/util/string_apple.h"
 
 namespace util = firebase::firestore::util;
-using firebase::firestore::api::MakeSource;
-using firebase::firestore::api::Source;
-using firebase::firestore::api::ThrowInvalidArgument;
 using firebase::firestore::core::AsyncEventListener;
 using firebase::firestore::core::EventListener;
 using firebase::firestore::core::ViewSnapshot;
 using firebase::firestore::model::DocumentKey;
 using firebase::firestore::model::FieldPath;
-using firebase::firestore::model::FieldValue;
 using firebase::firestore::model::ResourcePath;
 using firebase::firestore::util::MakeNSError;
 using firebase::firestore::util::StatusOr;
@@ -116,11 +111,10 @@ NS_ASSUME_NONNULL_BEGIN
   [self getDocumentsWithSource:FIRFirestoreSourceDefault completion:completion];
 }
 
-- (void)getDocumentsWithSource:(FIRFirestoreSource)publicSource
+- (void)getDocumentsWithSource:(FIRFirestoreSource)source
                     completion:(void (^)(FIRQuerySnapshot *_Nullable snapshot,
                                          NSError *_Nullable error))completion {
-  Source source = MakeSource(publicSource);
-  if (source == Source::Cache) {
+  if (source == FIRFirestoreSourceCache) {
     [self.firestore.client getDocumentsFromLocalCache:self completion:completion];
     return;
   }
@@ -143,16 +137,17 @@ NS_ASSUME_NONNULL_BEGIN
     dispatch_semaphore_wait(registered, DISPATCH_TIME_FOREVER);
     [listenerRegistration remove];
 
-    if (snapshot.metadata.fromCache && source == Source::Server) {
-      completion(nil, [NSError errorWithDomain:FIRFirestoreErrorDomain
-                                          code:FIRFirestoreErrorCodeUnavailable
-                                      userInfo:@{
-                                        NSLocalizedDescriptionKey :
-                                            @"Failed to get documents from server. (However, these "
-                                            @"documents may exist in the local cache. Run again "
-                                            @"without setting source to FirestoreSourceServer to "
-                                            @"retrieve the cached documents.)"
-                                      }]);
+    if (snapshot.metadata.fromCache && source == FIRFirestoreSourceServer) {
+      completion(nil,
+                 [NSError errorWithDomain:FIRFirestoreErrorDomain
+                                     code:FIRFirestoreErrorCodeUnavailable
+                                 userInfo:@{
+                                   NSLocalizedDescriptionKey :
+                                       @"Failed to get documents from server. (However, these "
+                                       @"documents may exist in the local cache. Run again "
+                                       @"without setting source to FIRFirestoreSourceServer to "
+                                       @"retrieve the cached documents.)"
+                                 }]);
     } else {
       completion(snapshot, nil);
     }
@@ -281,7 +276,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (FIRQuery *)queryFilteredUsingComparisonPredicate:(NSPredicate *)predicate {
   NSComparisonPredicate *comparison = (NSComparisonPredicate *)predicate;
   if (comparison.comparisonPredicateModifier != NSDirectPredicateModifier) {
-    ThrowInvalidArgument("Invalid query. Predicate cannot have an aggregate modifier.");
+    FSTThrowInvalidArgument(@"Invalid query. Predicate cannot have an aggregate modifier.");
   }
   NSString *path;
   id value = nil;
@@ -320,24 +315,24 @@ NS_ASSUME_NONNULL_BEGIN
       default:;  // Fallback below to throw assertion.
     }
   } else {
-    ThrowInvalidArgument(
-        "Invalid query. Predicate comparisons must include a key path and a constant.");
+    FSTThrowInvalidArgument(
+        @"Invalid query. Predicate comparisons must include a key path and a constant.");
   }
   // Fallback cases of unsupported comparison operator.
   switch (comparison.predicateOperatorType) {
     case NSCustomSelectorPredicateOperatorType:
-      ThrowInvalidArgument("Invalid query. Custom predicate filters are not supported.");
+      FSTThrowInvalidArgument(@"Invalid query. Custom predicate filters are not supported.");
       break;
     default:
-      ThrowInvalidArgument("Invalid query. Operator type %s is not supported.",
-                           comparison.predicateOperatorType);
+      FSTThrowInvalidArgument(@"Invalid query. Operator type %lu is not supported.",
+                              (unsigned long)comparison.predicateOperatorType);
   }
 }
 
 - (FIRQuery *)queryFilteredUsingCompoundPredicate:(NSPredicate *)predicate {
   NSCompoundPredicate *compound = (NSCompoundPredicate *)predicate;
   if (compound.compoundPredicateType != NSAndPredicateType || compound.subpredicates.count == 0) {
-    ThrowInvalidArgument("Invalid query. Only compound queries using AND are supported.");
+    FSTThrowInvalidArgument(@"Invalid query. Only compound queries using AND are supported.");
   }
   FIRQuery *query = self;
   for (NSPredicate *pred in compound.subpredicates) {
@@ -355,11 +350,13 @@ NS_ASSUME_NONNULL_BEGIN
                                           predicateWithBlock:^BOOL(id obj, NSDictionary *bindings) {
                                             return true;
                                           }] class]]) {
-    ThrowInvalidArgument("Invalid query. Block-based predicates are not supported. Please use "
-                         "predicateWithFormat to create predicates instead.");
+    FSTThrowInvalidArgument(@"Invalid query. Block-based predicates are not "
+                             "supported. Please use predicateWithFormat to "
+                             "create predicates instead.");
   } else {
-    ThrowInvalidArgument("Invalid query. Expect comparison or compound of comparison predicate. "
-                         "Please use predicateWithFormat to create predicates.");
+    FSTThrowInvalidArgument(@"Invalid query. Expect comparison or compound of "
+                             "comparison predicate. Please use "
+                             "predicateWithFormat to create predicates.");
   }
 }
 
@@ -380,12 +377,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (FIRQuery *)queryOrderedByFieldPath:(FIRFieldPath *)fieldPath descending:(BOOL)descending {
   [self validateNewOrderByPath:fieldPath.internalValue];
   if (self.query.startAt) {
-    ThrowInvalidArgument(
-        "Invalid query. You must not specify a starting point before specifying the order by.");
+    FSTThrowInvalidUsage(
+        @"InvalidQueryException",
+        @"Invalid query. You must not specify a starting point before specifying the order by.");
   }
   if (self.query.endAt) {
-    ThrowInvalidArgument(
-        "Invalid query. You must not specify an ending point before specifying the order by.");
+    FSTThrowInvalidUsage(
+        @"InvalidQueryException",
+        @"Invalid query. You must not specify an ending point before specifying the order by.");
   }
   FSTSortOrder *sortOrder = [FSTSortOrder sortOrderWithFieldPath:fieldPath.internalValue
                                                        ascending:!descending];
@@ -395,8 +394,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (FIRQuery *)queryLimitedTo:(NSInteger)limit {
   if (limit <= 0) {
-    ThrowInvalidArgument("Invalid Query. Query limit (%s) is invalid. Limit must be positive.",
-                         limit);
+    FSTThrowInvalidArgument(@"Invalid Query. Query limit (%ld) is invalid. Limit must be positive.",
+                            (long)limit);
   }
   return [FIRQuery referenceWithQuery:[self.query queryBySettingLimit:limit] firestore:_firestore];
 }
@@ -466,27 +465,30 @@ NS_ASSUME_NONNULL_BEGIN
   FSTFieldValue *fieldValue;
   if (fieldPath.IsKeyFieldPath()) {
     if (filterOperator == FSTRelationFilterOperatorArrayContains) {
-      ThrowInvalidArgument("Invalid query. You can't perform arrayContains queries on document ID "
-                           "since document IDs are not arrays.");
+      FSTThrowInvalidArgument(
+          @"Invalid query. You can't perform arrayContains queries on document ID since document "
+           "IDs are not arrays.");
     }
     if ([value isKindOfClass:[NSString class]]) {
       NSString *documentKey = (NSString *)value;
       if (documentKey.length == 0) {
-        ThrowInvalidArgument("Invalid query. When querying by document ID you must provide a valid "
-                             "document ID, but it was an empty string.");
+        FSTThrowInvalidArgument(@"Invalid query. When querying by document ID you must provide "
+                                 "a valid document ID, but it was an empty string.");
       }
       if (![self.query isCollectionGroupQuery] && [documentKey containsString:@"/"]) {
-        ThrowInvalidArgument("Invalid query. When querying a collection by document ID you must "
-                             "provide a plain document ID, but '%s' contains a '/' character.",
-                             documentKey);
+        FSTThrowInvalidArgument(
+            @"Invalid query. When querying a collection by document ID you must provide "
+             "a plain document ID, but '%@' contains a '/' character.",
+            documentKey);
       }
       ResourcePath path =
           self.query.path.Append(ResourcePath::FromString([documentKey UTF8String]));
       if (!DocumentKey::IsDocumentKey(path)) {
-        ThrowInvalidArgument("Invalid query. When querying a collection group by document ID, the "
-                             "value provided must result in a valid document path, but '%s' is not "
-                             "because it has an odd number of segments.",
-                             path.CanonicalString());
+        FSTThrowInvalidArgument(
+            @"Invalid query. When querying a collection group by document ID, "
+             "the value provided must result in a valid document path, but '%s' is not because it "
+             "has an odd number of segments.",
+            path.CanonicalString().c_str());
       }
       fieldValue =
           [FSTReferenceValue referenceValue:[FSTDocumentKey keyWithDocumentKey:DocumentKey{path}]
@@ -496,9 +498,9 @@ NS_ASSUME_NONNULL_BEGIN
       fieldValue = [FSTReferenceValue referenceValue:[FSTDocumentKey keyWithDocumentKey:ref.key]
                                           databaseID:self.firestore.databaseID];
     } else {
-      ThrowInvalidArgument("Invalid query. When querying by document ID you must provide a valid "
-                           "string or DocumentReference, but it was of type: %s",
-                           NSStringFromClass([value class]));
+      FSTThrowInvalidArgument(@"Invalid query. When querying by document ID you must provide a "
+                               "valid string or DocumentReference, but it was of type: %@",
+                              NSStringFromClass([value class]));
     }
   } else {
     fieldValue = [self.firestore.dataConverter parsedQueryValue:value];
@@ -520,11 +522,12 @@ NS_ASSUME_NONNULL_BEGIN
   if ([filter isInequality]) {
     const FieldPath *existingField = [self.query inequalityFilterField];
     if (existingField && *existingField != filter.field) {
-      ThrowInvalidArgument(
-          "Invalid Query. All where filters with an inequality "
-          "(lessThan, lessThanOrEqual, greaterThan, or greaterThanOrEqual) must be on the same "
-          "field. But you have inequality filters on '%s' and '%s'",
-          existingField->CanonicalString(), filter.field.CanonicalString());
+      FSTThrowInvalidUsage(
+          @"InvalidQueryException",
+          @"Invalid Query. All where filters with an inequality "
+           "(lessThan, lessThanOrEqual, greaterThan, or greaterThanOrEqual) must be on the same "
+           "field. But you have inequality filters on '%s' and '%s'",
+          existingField->CanonicalString().c_str(), filter.field.CanonicalString().c_str());
     }
 
     const FieldPath *firstOrderByField = [self.query firstSortOrderField];
@@ -533,7 +536,8 @@ NS_ASSUME_NONNULL_BEGIN
     }
   } else if (filter.filterOperator == FSTRelationFilterOperatorArrayContains) {
     if ([self.query hasArrayContainsFilter]) {
-      ThrowInvalidArgument("Invalid Query. Queries only support a single arrayContains filter.");
+      FSTThrowInvalidUsage(@"InvalidQueryException",
+                           @"Invalid Query. Queries only support a single arrayContains filter.");
     }
   }
 }
@@ -551,12 +555,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)validateOrderByField:(const FieldPath &)orderByField
       matchesInequalityField:(const FieldPath &)inequalityField {
   if (orderByField != inequalityField) {
-    ThrowInvalidArgument("Invalid query. You have a where filter with an inequality "
-                         "(lessThan, lessThanOrEqual, greaterThan, or greaterThanOrEqual) on field "
-                         "'%s' and so you must also use '%s' as your first queryOrderedBy field, "
-                         "but your first queryOrderedBy is currently on field '%s' instead.",
-                         inequalityField.CanonicalString(), inequalityField.CanonicalString(),
-                         orderByField.CanonicalString());
+    FSTThrowInvalidUsage(
+        @"InvalidQueryException",
+        @"Invalid query. You have a where filter with an "
+         "inequality (lessThan, lessThanOrEqual, greaterThan, or greaterThanOrEqual) on field '%s' "
+         "and so you must also use '%s' as your first queryOrderedBy field, but your first "
+         "queryOrderedBy is currently on field '%s' instead.",
+        inequalityField.CanonicalString().c_str(), inequalityField.CanonicalString().c_str(),
+        orderByField.CanonicalString().c_str());
   }
 }
 
@@ -572,8 +578,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (FSTBound *)boundFromSnapshot:(FIRDocumentSnapshot *)snapshot isBefore:(BOOL)isBefore {
   if (![snapshot exists]) {
-    ThrowInvalidArgument("Invalid query. You are trying to start or end a query using a document "
-                         "that doesn't exist.");
+    FSTThrowInvalidUsage(@"InvalidQueryException",
+                         @"Invalid query. You are trying to start or end a query using a document "
+                         @"that doesn't exist.");
   }
   FSTDocument *document = snapshot.internalDocument;
   NSMutableArray<FSTFieldValue *> *components = [NSMutableArray array];
@@ -591,19 +598,21 @@ NS_ASSUME_NONNULL_BEGIN
     } else {
       FSTFieldValue *value = [document fieldForPath:sortOrder.field];
 
-      if (value.type == FieldValue::Type::ServerTimestamp) {
-        ThrowInvalidArgument(
-            "Invalid query. You are trying to start or end a query using a document for which the "
-            "field '%s' is an uncommitted server timestamp. (Since the value of this field is "
-            "unknown, you cannot start/end a query with it.)",
-            sortOrder.field.CanonicalString());
+      if ([value isKindOfClass:[FSTServerTimestampValue class]]) {
+        FSTThrowInvalidUsage(@"InvalidQueryException",
+                             @"Invalid query. You are trying to start or end a query using a "
+                              "document for which the field '%s' is an uncommitted server "
+                              "timestamp. (Since the value of this field is unknown, you cannot "
+                              "start/end a query with it.)",
+                             sortOrder.field.CanonicalString().c_str());
       } else if (value != nil) {
         [components addObject:value];
       } else {
-        ThrowInvalidArgument(
-            "Invalid query. You are trying to start or end a query using a document for which the "
-            "field '%s' (used as the order by) does not exist.",
-            sortOrder.field.CanonicalString());
+        FSTThrowInvalidUsage(@"InvalidQueryException",
+                             @"Invalid query. You are trying to start or end a query using a "
+                              "document for which the field '%s' (used as the order by) "
+                              "does not exist.",
+                             sortOrder.field.CanonicalString().c_str());
       }
     }
   }
@@ -615,8 +624,9 @@ NS_ASSUME_NONNULL_BEGIN
   // Use explicit sort order because it has to match the query the user made
   NSArray<FSTSortOrder *> *explicitSortOrders = self.query.explicitSortOrders;
   if (fieldValues.count > explicitSortOrders.count) {
-    ThrowInvalidArgument("Invalid query. You are trying to start or end a query using more values "
-                         "than were specified in the order by.");
+    FSTThrowInvalidUsage(@"InvalidQueryException",
+                         @"Invalid query. You are trying to start or end a query using more values "
+                         @"than were specified in the order by.");
   }
 
   NSMutableArray<FSTFieldValue *> *components = [NSMutableArray array];
@@ -624,20 +634,25 @@ NS_ASSUME_NONNULL_BEGIN
     FSTSortOrder *sortOrder = explicitSortOrders[idx];
     if (sortOrder.field == FieldPath::KeyFieldPath()) {
       if (![rawValue isKindOfClass:[NSString class]]) {
-        ThrowInvalidArgument("Invalid query. Expected a string for the document ID.");
+        FSTThrowInvalidUsage(@"InvalidQueryException",
+                             @"Invalid query. Expected a string for the document ID.");
       }
       NSString *documentID = (NSString *)rawValue;
       if (![self.query isCollectionGroupQuery] && [documentID containsString:@"/"]) {
-        ThrowInvalidArgument("Invalid query. When querying a collection and ordering by document "
-                             "ID, you must pass a plain document ID, but '%s' contains a slash.",
-                             documentID);
+        FSTThrowInvalidUsage(
+            @"InvalidQueryException",
+            @"Invalid query. When querying a collection and ordering by document ID, "
+             "you must pass a plain document ID, but '%@' contains a slash.",
+            documentID);
       }
       ResourcePath path = self.query.path.Append(ResourcePath::FromString([documentID UTF8String]));
       if (!DocumentKey::IsDocumentKey(path)) {
-        ThrowInvalidArgument("Invalid query. When querying a collection group and ordering by "
-                             "document ID, you must pass a value that results in a valid document "
-                             "path, but '%s' is not because it contains an odd number of segments.",
-                             path.CanonicalString());
+        FSTThrowInvalidUsage(
+            @"InvalidQueryException",
+            @"Invalid query. When querying a collection group and ordering by document ID, "
+             "you must pass a value that results in a valid document path, but '%s' "
+             "is not because it contains an odd number of segments.",
+            path.CanonicalString().c_str());
       }
       DocumentKey key{path};
       [components

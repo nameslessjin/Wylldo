@@ -32,10 +32,6 @@
 #include "Firestore/core/src/firebase/firestore/util/hard_assert.h"
 #include "absl/types/optional.h"
 
-#if __OBJC__
-@class FSTFieldValue;
-#endif  // __OBJC__
-
 namespace firebase {
 namespace firestore {
 namespace model {
@@ -84,14 +80,6 @@ class FieldValue {
     // position instead, see the doc comment above.
   };
 
-  /**
-   * Checks if the given type is a numeric, such as Type::Integer or
-   * Type::Double.
-   */
-  static bool IsNumber(Type type) {
-    return type == Type::Integer || type == Type::Double;
-  }
-
   FieldValue() {
   }
 
@@ -104,10 +92,6 @@ class FieldValue {
 
   FieldValue& operator=(const FieldValue& value);
   FieldValue& operator=(FieldValue&& value);
-
-#if __OBJC__
-  FSTFieldValue* Wrap() &&;
-#endif  // __OBJC__
 
   /** Returns the true type for this value. */
   Type type() const {
@@ -189,8 +173,6 @@ class FieldValue {
   static FieldValue FromArray(std::vector<FieldValue>&& value);
   static FieldValue FromMap(const Map& value);
   static FieldValue FromMap(Map&& value);
-
-  size_t Hash() const;
 
   friend bool operator<(const FieldValue& lhs, const FieldValue& rhs);
 

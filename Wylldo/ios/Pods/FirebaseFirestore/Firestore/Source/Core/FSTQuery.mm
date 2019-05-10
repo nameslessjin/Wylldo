@@ -24,21 +24,18 @@
 #import "Firestore/Source/Model/FSTDocument.h"
 #import "Firestore/Source/Model/FSTFieldValue.h"
 #import "Firestore/Source/Util/FSTClasses.h"
+#import "Firestore/Source/Util/FSTUsageValidation.h"
 
-#include "Firestore/core/src/firebase/firestore/api/input_validation.h"
 #include "Firestore/core/src/firebase/firestore/model/document_key.h"
 #include "Firestore/core/src/firebase/firestore/model/field_path.h"
-#include "Firestore/core/src/firebase/firestore/model/field_value.h"
 #include "Firestore/core/src/firebase/firestore/model/resource_path.h"
 #include "Firestore/core/src/firebase/firestore/util/hard_assert.h"
 #include "Firestore/core/src/firebase/firestore/util/hashing.h"
 #include "Firestore/core/src/firebase/firestore/util/string_apple.h"
 
 namespace util = firebase::firestore::util;
-using firebase::firestore::api::ThrowInvalidArgument;
 using firebase::firestore::model::DocumentKey;
 using firebase::firestore::model::FieldPath;
-using firebase::firestore::model::FieldValue;
 using firebase::firestore::model::ResourcePath;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -78,12 +75,15 @@ NSString *FSTStringFromQueryRelationOperator(FSTRelationFilterOperator filterOpe
                           value:(FSTFieldValue *)value {
   if ([value isEqual:[FSTNullValue nullValue]]) {
     if (op != FSTRelationFilterOperatorEqual) {
-      ThrowInvalidArgument("Invalid Query. Nil and NSNull only support equality comparisons.");
+      FSTThrowInvalidUsage(@"InvalidQueryException",
+                           @"Invalid Query. You can only perform equality comparisons on nil / "
+                            "NSNull.");
     }
     return [[FSTNullFilter alloc] initWithField:field];
   } else if ([value isEqual:[FSTDoubleValue nanValue]]) {
     if (op != FSTRelationFilterOperatorEqual) {
-      ThrowInvalidArgument("Invalid Query. NaN only supports equality comparisons.");
+      FSTThrowInvalidUsage(@"InvalidQueryException",
+                           @"Invalid Query. You can only perform equality comparisons on NaN.");
     }
     return [[FSTNanFilter alloc] initWithField:field];
   } else {
@@ -183,7 +183,7 @@ NSString *FSTStringFromQueryRelationOperator(FSTRelationFilterOperator filterOpe
 
 - (BOOL)matchesDocument:(FSTDocument *)document {
   if (_field.IsKeyFieldPath()) {
-    HARD_ASSERT(self.value.type == FieldValue::Type::Reference,
+    HARD_ASSERT([self.value isKindOfClass:[FSTReferenceValue class]],
                 "Comparing on key, but filter value not a FSTReferenceValue.");
     HARD_ASSERT(self.filterOperator != FSTRelationFilterOperatorArrayContains,
                 "arrayContains queries don't make sense on document keys.");
@@ -472,7 +472,7 @@ NSString *FSTStringFromQueryRelationOperator(FSTRelationFilterOperator filterOpe
     FSTSortOrder *sortOrderComponent = sortOrder[idx];
     NSComparisonResult comparison;
     if (sortOrderComponent.field == FieldPath::KeyFieldPath()) {
-      HARD_ASSERT(fieldValue.type == FieldValue::Type::Reference,
+      HARD_ASSERT([fieldValue isKindOfClass:[FSTReferenceValue class]],
                   "FSTBound has a non-key value where the key path is being used %s", fieldValue);
       FSTReferenceValue *refValue = (FSTReferenceValue *)fieldValue;
       comparison = CompareKeys(refValue.value.key, document.key);

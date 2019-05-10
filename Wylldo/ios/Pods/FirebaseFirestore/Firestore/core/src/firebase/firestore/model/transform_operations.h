@@ -27,7 +27,6 @@
 #import "Firestore/Source/Model/FSTFieldValue.h"
 
 #include "Firestore/core/include/firebase/firestore/timestamp.h"
-#include "Firestore/core/src/firebase/firestore/model/field_value.h"
 
 namespace firebase {
 namespace firestore {
@@ -260,18 +259,18 @@ class NumericIncrementTransform : public TransformOperation {
       FIRTimestamp* /* localWriteTime */) const override {
     // Return an integer value only if the previous value and the operand is an
     // integer.
-    if (previousValue.type == FieldValue::Type::Integer &&
-        operand_.type == FieldValue::Type::Integer) {
+    if ([previousValue isKindOfClass:[FSTIntegerValue class]] &&
+        [operand_ isKindOfClass:[FSTIntegerValue class]]) {
       int64_t sum = SafeIncrement(
           (static_cast<FSTIntegerValue*>(previousValue)).internalValue,
           (static_cast<FSTIntegerValue*>(operand_)).internalValue);
       return [FSTIntegerValue integerValue:sum];
-    } else if (previousValue.type == FieldValue::Type::Integer) {
+    } else if ([previousValue isKindOfClass:[FSTIntegerValue class]]) {
       double sum =
           (static_cast<FSTIntegerValue*>(previousValue)).internalValue +
           OperandAsDouble();
       return [FSTDoubleValue doubleValue:sum];
-    } else if (previousValue.type == FieldValue::Type::Double) {
+    } else if ([previousValue isKindOfClass:[FSTDoubleValue class]]) {
       double sum = (static_cast<FSTDoubleValue*>(previousValue)).internalValue +
                    OperandAsDouble();
       return [FSTDoubleValue doubleValue:sum];
@@ -330,9 +329,9 @@ class NumericIncrementTransform : public TransformOperation {
   }
 
   double OperandAsDouble() const {
-    if (operand_.type == FieldValue::Type::Double) {
+    if ([operand_ isKindOfClass:[FSTDoubleValue class]]) {
       return (static_cast<FSTDoubleValue*>(operand_)).internalValue;
-    } else if (operand_.type == FieldValue::Type::Integer) {
+    } else if ([operand_ isKindOfClass:[FSTIntegerValue class]]) {
       return (static_cast<FSTIntegerValue*>(operand_)).internalValue;
     } else {
       HARD_FAIL("Expected 'operand' to be of FSTNumerValue type, but was %s",
