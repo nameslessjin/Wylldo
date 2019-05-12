@@ -59,7 +59,7 @@ class EventTable extends React.Component{
         }
         this.setState({refreshing: true})
 
-        const {eventData, cursor} = await Fire.getEvents({size: 5, start: lastKey})
+        const {eventData, cursor} = await Fire.getEvents({size: 3, start: lastKey})
         this.lastKnownKey = cursor
 
         console.log(eventData)
@@ -72,9 +72,13 @@ class EventTable extends React.Component{
 
     _onRefresh = () => this.getEventData().then(events => {this.props.onGetEvents(events)})
 
+    //When swipe up, trigger to load more evens
+    //this function is triggered twice frequently
+    //Current solution reduced the load size from 5 to 3
     _loadMore = () => {
         this.setState({loading: true})
         if (this.lastKnownKey){
+            // console.log("make sure this doesn't go twice")
             this.getEventData(this.lastKnownKey).then(events => {
                 this.props.onLoadMoreEvents(events)
             })
@@ -108,7 +112,7 @@ class EventTable extends React.Component{
                         />
                     }
                     onEndReached = {this._loadMore}
-                    onEndReachedThreshold = {1}
+                    onEndReachedThreshold = {0.3}
 
                 />
             </View>

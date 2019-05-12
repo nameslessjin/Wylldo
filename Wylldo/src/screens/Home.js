@@ -56,6 +56,11 @@ class Home extends React.Component{
         }
     }
 
+    // When mark is pressed.  This part it rendered twice.
+    // shouldComponentUpdate(nextProps, nextState){
+    //     return nextState.mapEventKey != this.state.mapEventKey
+    // }
+
     getCurrentUserData = async () => {
         const currentUserData = await Fire.getUserData()
         return currentUserData
@@ -74,6 +79,7 @@ class Home extends React.Component{
 
     getPressedEvent = async (mapEventKey) =>{
         const pressedEventData = await Fire.getEventsWithId(mapEventKey)
+        // console.log("make sure this doesn't go twice")
         this.setState({pressedEvent: pressedEventData})
     }
 
@@ -110,8 +116,6 @@ class Home extends React.Component{
         let popUp = null 
         if (this.state.markPressed && !this.state.mapPressed){         
             const pressedEvent = this.state.pressedEvent
-            console.log(pressedEvent)
-
             popUp = <PopUpWnd {...pressedEvent}  componentId={this.props.componentId}/>
         } else {
             popUp = <View></View>
