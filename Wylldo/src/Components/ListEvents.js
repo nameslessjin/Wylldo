@@ -1,7 +1,7 @@
 import React from 'react'
-import {StyleSheet, FlatList,View} from 'react-native'
+import {FlatList} from 'react-native'
 import EventDisplay from '../Components/EventDisplay'
-import {Navigation} from 'react-native-navigation'
+
 
 export default class ListEvents extends React.Component{
     
@@ -9,13 +9,14 @@ export default class ListEvents extends React.Component{
     renderItem = ({item}) => <EventDisplay {...item} componentId={this.props.componentId} />;
 
     render(){
+        const  {...props} = this.props
         return(
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={this.props.events}
                 keyExtractor={this._keyExtractor}
                 renderItem={this.renderItem}
-            
+                {...props}
             />
         )
     }

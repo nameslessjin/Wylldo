@@ -8,20 +8,21 @@ class Fire {
 
     constructor(){
         firebase.auth().onAuthStateChanged(user => {
+            // console.log(user)
         })
     }
 
 
 
     //Download Data
-    // get data here
-    getEvents = async (size) => {
+    // get data here for wylldoList
+    getEvents = async ({size, start}) => {
         let ref = this.eventsCollection.orderBy('timestamp', 'desc').limit(size);
-        // try{
-        //     if(start){
-        //         ref = ref.startAfter(start)
-        //     }
-        // }
+        try{
+            if(start){
+                ref = ref.startAfter(start)
+            }
+        
             const querySnapshot = await ref.get();
             const eventData = []
             querySnapshot.forEach(doc => {
@@ -35,8 +36,39 @@ class Fire {
                 }
             })
             // console.log(eventData)
-            return eventData
+            const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+            // console.log(lastVisible)
+            return {eventData, cursor: lastVisible}
+        } catch(error){
+            console.log(error.message)
+        }
+    }
 
+    getEventsWithId = async(eventId) => {
+        let ref = this.eventsCollection.doc(eventId)
+        const querySnapshot = await ref.get();
+        return querySnapshot.data()
+        
+    }
+
+    //used to get location and tag for the map.
+    getMapEvents = async() => {
+        let ref = firebase.firestore().collection('mapEvents')
+        const querySnapshot = await ref.get()
+        const mapEventsData = []
+        querySnapshot.forEach(doc => {
+            if(doc.exists){
+                const mapEvent = doc.data() || {}
+                const mapEventsWithKey = {
+                    key: doc.id,
+                    ...mapEvent
+                }
+                mapEventsData.push(mapEventsWithKey)
+            }
+        })
+        // console.log(mapEventsData)
+
+        return mapEventsData
     }
 
     // Upload Data

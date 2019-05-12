@@ -1,4 +1,4 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER} from "../actions/actionTypes"
+import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, LOAD_MORE_EVENTS} from "../actions/actionTypes"
 
 //This is reducers for events.  Currently support Add_event, Get_Event, Get_CurrentUser, Signout and Update_user
 //This reducer is not connect to firebase.  Data is retrieved from somewhere else and then store here and later
@@ -6,7 +6,8 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER} from "../
 //Will move get_CurrentUser, Signout and update_user to a userdata reducer
 const initialState = {
     Events: [],
-    currentUser: null
+    currentUser: null,
+    mapEvents: []
 }
 
 export default reducer = (state = initialState, action) => {
@@ -19,9 +20,21 @@ export default reducer = (state = initialState, action) => {
                 ...state,
                 Events: updateEvents
             }
+        
+        case GET_MAPEVENTS:
+            return{
+                ...state,
+                mapEvents: state.mapEvents.concat(action.mapEvents)
+            }
 
         //store retrieved events through firebase and then store to state so it can be used with redux connected screen
         case GET_EVENTS:
+            return{
+                ...state,
+                Events: action.Events
+            }
+
+        case LOAD_MORE_EVENTS:
             return{
                 ...state,
                 Events: state.Events.concat(action.Events)

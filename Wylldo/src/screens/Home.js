@@ -1,16 +1,14 @@
 //Home page
 
 import React from 'react'
-import {View, Text, StyleSheet, AsyncStorage, Dimensions, Button, Platform, PermissionsAndroid, YellowBox} from 'react-native'
-import {Navigation} from 'react-native-navigation'
-import {USER_KEY} from '../config'
+import {View, StyleSheet, Platform, PermissionsAndroid} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import PopUpWnd from '../Components/PopUpWnd'
 import {connect} from 'react-redux'
 import Fire from '../firebase/Fire'
-import {getEvents, getCurrentUser} from '../store/actions/action.index'
+import {getCurrentUser, getMapEvents} from '../store/actions/action.index'
 import {goToAuth} from '../navigation'
 
 class Home extends React.Component{
@@ -39,20 +37,23 @@ class Home extends React.Component{
         markPressed: false,
         mapPressed: false,
         eventKey: null,
+        pressedEvent: null
     }
-
     componentDidMount(){
         if (Fire.uid){
             this.getCurrentUserData().then( currentUserData => {
-                this.props.onGetCurrentUser(currentUserData._data);
-                this.getEventData().then( events =>{
-                    this.props.onGetEvents(events)
+                this.props.onGetCurrentUser(currentUserData.data());
+                this.getMapEventData().then( mapEvents => {
+                    this.props.onGetMapEvents(mapEvents)
                 })
+            })
+            .catch(error => {
+                console.log(error.message)
+                goToAuth()
             })
         } else {
             goToAuth()
         }
-
     }
 
     getCurrentUserData = async () => {
@@ -60,9 +61,9 @@ class Home extends React.Component{
         return currentUserData
     }
 
-    getEventData = async () => {
-        const eventData = await Fire.getEvents(20)
-        return eventData
+    getMapEventData = async () => {
+        const mapEventData = await Fire.getMapEvents()
+        return mapEventData
     }
 
     mapViewPressedHandler = () => {
@@ -70,9 +71,15 @@ class Home extends React.Component{
    
 
     }
+
+    getPressedEvent = async (mapEventKey) =>{
+        const pressedEventData = await Fire.getEventsWithId(mapEventKey)
+        this.setState({pressedEvent: pressedEventData})
+    }
+
     markPressedHandler = () => {
         this.setState({markPressed: true, mapPressed: false})
-
+        this.getPressedEvent(this.state.mapEventKey)
     }
 
     onMapReady = () =>{
@@ -82,17 +89,19 @@ class Home extends React.Component{
             })
     }
 
+
+
     render(){
-        const Markers = this.props.events.map(event => {
-            if (event.coords.latitude !== null){
+        const Markers = this.props.mapEvents.map(mapEvent => {
+            if (mapEvent.coords.latitude !== null){
                 return(
                     <Marker
-                    coordinate={event.coords}
-                    key={event.key}
-                    onPress={() => this.setState({eventKey : event.key}) }
+                    coordinate={mapEvent.coords}
+                    key={mapEvent.key}
+                    onPress={() => this.setState({mapEventKey : mapEvent.key}) }
                     >       
                      
-                    <CustomMarker icon={event.tag} hostAvatar={event.hostAvatar} likes={event.likes} />
+                    <CustomMarker icon={mapEvent.tag} hostAvatar={mapEvent.hostAvatar} likes={mapEvent.likes} />
                     </Marker>
                 )
             }
@@ -100,10 +109,10 @@ class Home extends React.Component{
 
         let popUp = null 
         if (this.state.markPressed && !this.state.mapPressed){         
-            const markerEvent = this.props.events.filter(event=> {
-                return event.key === this.state.eventKey
-            })
-            popUp = <PopUpWnd {...markerEvent[0]}  componentId={this.props.componentId}/>
+            const pressedEvent = this.state.pressedEvent
+            console.log(pressedEvent)
+
+            popUp = <PopUpWnd {...pressedEvent}  componentId={this.props.componentId}/>
         } else {
             popUp = <View></View>
         }
@@ -138,14 +147,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return{
-        events: state.events.Events
+        events: state.events.Events,
+        mapEvents: state.events.mapEvents
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return{
-        onGetEvents: (events) => dispatch(getEvents(events)),
-        onGetCurrentUser: (currentUserData) => dispatch(getCurrentUser(currentUserData))
+        onGetCurrentUser: (currentUserData) => dispatch(getCurrentUser(currentUserData)),
+        onGetMapEvents: (mapEvents) => dispatch(getMapEvents(mapEvents))
 
     }
 }

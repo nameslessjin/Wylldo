@@ -59,7 +59,9 @@ class AddMap extends React.Component{
                 timestamp: Date.now(),
                 hostUserid: Fire.uid,
                 hostUsername: this.props.currentUserData.name,
-                hostAvatar: this.props.currentUserData.avatarUri
+                hostAvatar: this.props.currentUserData.avatarUri,
+                startTime: null,
+                endTime: null
             }
             const image = this.props.image
 

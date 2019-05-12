@@ -1,10 +1,13 @@
 //This page is a convinent instagram like viewing page that lists all correct events
 
 import React from 'react'
-import {View, StyleSheet} from 'react-native'
+import {View, StyleSheet, RefreshControl} from 'react-native'
 import  {Navigation} from 'react-native-navigation'
 import {connect} from 'react-redux'
 import ListEvents from '../Components/ListEvents'
+import {getEvents, loadMoreEvents} from '../store/actions/action.index'
+import Fire from '../firebase/Fire'
+import { goToAuth } from '../navigation';
 
 
 
@@ -32,7 +35,51 @@ class EventTable extends React.Component{
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);
-        
+        this.state = {
+            loading: false,
+            refreshing: false
+        }
+    }
+
+    //This part actually load when the home page is launched
+    componentDidMount(){
+        if (Fire.uid){
+            this.getEventData().then(events => {
+                this.props.onGetEvents(events)
+            })
+        } else{
+            goToAuth()
+        }
+    }
+
+    getEventData = async (lastKey) => {
+
+        if (this.state.refreshing){
+            return;
+        }
+        this.setState({refreshing: true})
+
+        const {eventData, cursor} = await Fire.getEvents({size: 5, start: lastKey})
+        this.lastKnownKey = cursor
+
+        console.log(eventData)
+        console.log(this.lastKnownKey)
+
+        this.setState({refreshing: false, loading: false})
+
+        return eventData
+    }
+
+    _onRefresh = () => this.getEventData().then(events => {this.props.onGetEvents(events)})
+
+    _loadMore = () => {
+        this.setState({loading: true})
+        if (this.lastKnownKey){
+            this.getEventData(this.lastKnownKey).then(events => {
+                this.props.onLoadMoreEvents(events)
+            })
+            .catch(error => (console.log(error.message)))
+        }
     }
 
     //once the "post" button is clicked, move to addevent screen page. (stack up from WylldoList screen)
@@ -50,9 +97,20 @@ class EventTable extends React.Component{
 
         return(
             <View style={styles.container}>
-
                 {/* passing all the event data from redux to listevent screen to further process list */}
-                <ListEvents events={this.props.events} componentId={this.props.componentId} />
+                <ListEvents 
+                    events={this.props.events} 
+                    componentId={this.props.componentId} 
+                    refreshControl= {
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }
+                    onEndReached = {this._loadMore}
+                    onEndReachedThreshold = {1}
+
+                />
             </View>
         )
     }
@@ -66,8 +124,14 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return{
+        onGetEvents: (events) => dispatch(getEvents(events)),
+        onLoadMoreEvents: (events) => dispatch(loadMoreEvents(events))
+    }
+}
 
-export default connect(mapStateToProps)(EventTable)
+export default connect(mapStateToProps, mapDispatchToProps)(EventTable)
 
 const styles = StyleSheet.create({
     container:{

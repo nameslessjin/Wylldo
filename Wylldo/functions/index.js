@@ -31,7 +31,6 @@ exports.onEventCreated = functions.firestore
                 hostAvatar: snap.data().hostAvatar,
                 eventId: snap.id,
                 likes: snap.data().likes,
-                startTime: null,
                 endTime: null
             }
             console.log(mapEventData)
