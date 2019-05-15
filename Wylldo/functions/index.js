@@ -37,5 +37,5 @@ exports.onEventCreated = functions.firestore
             return db.collection('mapEvents').doc(snap.id).set(mapEventData).catch((error) => {console.log(error.message)})
         }
 
-        return
+        return null
     })

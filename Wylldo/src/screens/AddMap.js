@@ -60,8 +60,8 @@ class AddMap extends React.Component{
                 hostUserid: Fire.uid,
                 hostUsername: this.props.currentUserData.name,
                 hostAvatar: this.props.currentUserData.avatarUri,
-                startTime: null,
-                endTime: null
+                startTime: this.props.startTime,
+                endTime: this.props.endTime
             }
             const image = this.props.image
 
@@ -100,7 +100,7 @@ class AddMap extends React.Component{
         if(this.state.eventLocation.latitude){
             marker= <Marker coordinate={this.state.eventLocation} ></Marker>
         }
-
+        console.log(this.props)
         return(
             <View style={{width: "100%", height: "100%", paddingTop: 0}}>
                 <MapView

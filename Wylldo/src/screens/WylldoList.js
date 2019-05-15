@@ -1,7 +1,7 @@
 //This page is a convinent instagram like viewing page that lists all correct events
 
 import React from 'react'
-import {View, StyleSheet, RefreshControl} from 'react-native'
+import {View, StyleSheet, RefreshControl, LayoutAnimation} from 'react-native'
 import  {Navigation} from 'react-native-navigation'
 import {connect} from 'react-redux'
 import ListEvents from '../Components/ListEvents'
@@ -44,9 +44,7 @@ class EventTable extends React.Component{
     //This part actually load when the home page is launched
     componentDidMount(){
         if (Fire.uid){
-            this.getEventData().then(events => {
-                this.props.onGetEvents(events)
-            })
+            this._onRefresh()
         } else{
             goToAuth()
         }
@@ -54,9 +52,7 @@ class EventTable extends React.Component{
 
     getEventData = async (lastKey) => {
 
-        if (this.state.refreshing){
-            return;
-        }
+        
         this.setState({refreshing: true})
 
         const {eventData, cursor} = await Fire.getEvents({size: 3, start: lastKey})
@@ -84,6 +80,7 @@ class EventTable extends React.Component{
             })
             .catch(error => (console.log(error.message)))
         }
+        this.setState({refreshing: false, loading: false})
     }
 
     //once the "post" button is clicked, move to addevent screen page. (stack up from WylldoList screen)
@@ -98,7 +95,7 @@ class EventTable extends React.Component{
     }
 
     render(){
-
+        LayoutAnimation.easeInEaseOut()
         return(
             <View style={styles.container}>
                 {/* passing all the event data from redux to listevent screen to further process list */}
@@ -112,7 +109,7 @@ class EventTable extends React.Component{
                         />
                     }
                     onEndReached = {this._loadMore}
-                    onEndReachedThreshold = {0.3}
+                    onEndReachedThreshold = {0.4}
 
                 />
             </View>

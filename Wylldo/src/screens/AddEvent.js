@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TextInput, Platform, Keyboard, TouchableWithoutF
 import PickImage from '../Components/ImagePicker'
 import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
+import DatePicker from '../Components/DatePicker'
 
 
 
@@ -41,7 +42,9 @@ export default class addEvent extends React.Component{
                     passProps:{
                         description: this.state.description.trim(),
                         image: this.state.image,
-                        tag: this.state.tag
+                        tag: this.state.tag,
+                        startTime: this.state.startTime,
+                        endTime: this.state.endTime
                     }
                 }
             })
@@ -76,6 +79,10 @@ export default class addEvent extends React.Component{
                     <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
                         <PickTag defaultTag={this.state.tag} updateTag={(updatedTagName) => this.setState({tag: updatedTagName})} />
                     </View>
+                    <DatePicker 
+                        startTime={(startTime) => this.setState({startTime: startTime})} 
+                        endTime={(endTime) => this.setState({endTime: endTime})}
+                    />
                 </View>
             </TouchableWithoutFeedback>
 
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: "white",
         borderBottomWidth: 0.5,
-        borderColor: "#DDDED1"
+        borderColor: "#DDDED1",
     },
     DescriptionView:{
         height: "16%",
@@ -113,14 +120,16 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "6%",
         backgroundColor: "white",
-        marginTop: 0.5,
+        borderBottomWidth: 0.5,
+        borderColor: "#DDDED1",
         padding: 3
     },
     IconTagViewIOS:{
         width: "100%",
         height: "6%",
         backgroundColor: "white",
-        marginTop: 0.5,
+        borderBottomWidth: 0.5,
+        borderColor: "#DDDED1",
         paddingTop: 6
-    }
+    },
 })
