@@ -4,6 +4,7 @@ import PickImage from '../Components/ImagePicker'
 import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
 import DatePicker from '../Components/DatePicker'
+import GuestSetting from '../Components/GuestSetting'
 
 
 
@@ -36,18 +37,22 @@ export default class addEvent extends React.Component{
 
     navigationButtonPressed({buttonId}){
         if (buttonId == "addMap"){
-            Navigation.push(this.props.componentId, {
-                component:{
-                    name: 'AddMap',
-                    passProps:{
-                        description: this.state.description.trim(),
-                        image: this.state.image,
-                        tag: this.state.tag,
-                        startTime: this.state.startTime,
-                        endTime: this.state.endTime
+            if (this.state.endTime > this.state.startTime){
+                Navigation.push(this.props.componentId, {
+                    component:{
+                        name: 'AddMap',
+                        passProps:{
+                            description: this.state.description.trim(),
+                            image: this.state.image,
+                            tag: this.state.tag,
+                            startTime: this.state.startTime,
+                            endTime: this.state.endTime
+                        }
                     }
-                }
-            })
+                })
+            } else{
+                alert("End Time must be greater than Start Time")
+            }
         }
     }
 
@@ -83,6 +88,7 @@ export default class addEvent extends React.Component{
                         startTime={(startTime) => this.setState({startTime: startTime})} 
                         endTime={(endTime) => this.setState({endTime: endTime})}
                     />
+                    <GuestSetting/>
                 </View>
             </TouchableWithoutFeedback>
 

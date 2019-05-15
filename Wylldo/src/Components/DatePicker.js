@@ -1,6 +1,6 @@
 // a lot of things needed to be checked in this part to avoid potential bug
 import React from 'react'
-import {Platform, View, StyleSheet, Text, TouchableOpacity} from 'react-native'
+import {Platform, View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native'
 import DateTimePicker from "react-native-modal-datetime-picker"
 
 
@@ -19,19 +19,14 @@ export default class DatePicker extends React.Component{
             startTime: new Date(),
             endTime: null,
             maxEndTime: null,
-
+            monthDate: null
         }
     }
 
     componentDidMount(){
         let chosenDate = new Date()
         this.startDateToString(chosenDate)
-        chosenDate.setHours(23,59,59)
-        this.endDateToString(chosenDate)
         this.maxStartDateTime()
-        this.setState({minuteInterval: 10})
-        this.setMaxEndTime()
-        
     }
 
     showDateTimePicker = () => {
@@ -42,8 +37,8 @@ export default class DatePicker extends React.Component{
         this.setState({isTimePickerVisible: true})
     }
 
-    setMaxEndTime = () => {
-        let maxEndTime = this.state.startTime
+    setMaxEndTime = (chosenDate) => {
+        let maxEndTime = new Date(chosenDate)
         maxEndTime.setHours(23,59,59)
         this.setState({maxEndTime: maxEndTime})
     }
@@ -53,11 +48,9 @@ export default class DatePicker extends React.Component{
     }
 
     handleTimePicked = date => {
-        console.log(this.state.startTime)
         this.hideDateTimePicker()
-        console.log(date)
         if (this.state.startTime >= date){
-            alert("Start Time must be larger than End Time")
+            alert("End Time must be greater than Start Time")
         } else {
             this.endDateToString(date)
         }
@@ -107,15 +100,18 @@ export default class DatePicker extends React.Component{
             hours = hours - 12
             AM = "PM"
         }
-        const startTimeString = day + " " + month + " " + date + " " + hours + ":" + minutes + AM
-        this.setState({startTimeString: startTimeString, startTime: chosenDate})
+        const startTimeString = hours + ":" + minutes + AM
+        const monthDate = day + " " + month + " " + date 
+        this.setState({startTimeString: startTimeString, startTime: chosenDate, monthDate: monthDate})
+        this.endDateToString(chosenDate)
         this.props.startTime(chosenDate)
+        this.setMaxEndTime(chosenDate)
     }
 
     render(){
         let startTimePicker = null
         let endTimePicker = null
-        if(Platform.OS === "android"){
+        if(Platform.OS === 'android'){
 
             startTimePicker=(
                 <DateTimePicker
@@ -123,10 +119,9 @@ export default class DatePicker extends React.Component{
                     onCancel={this.hideDateTimePicker}
                     onConfirm={this.handleDatePicked}
                     mode={'datetime'}
-                    // minuteInterval={this.state.minuteInterval}
                     minimumDate={this.state.minStartDate}
                     maximumDate={this.state.maxStartDate}
-                    
+                    date={this.state.startTime}
                 />
             )
 
@@ -135,7 +130,6 @@ export default class DatePicker extends React.Component{
                     isVisible={this.state.isTimePickerVisible}
                     onCancel={this.hideDateTimePicker}
                     onConfirm={this.handleTimePicked}
-                    // minuteInterval={this.state.minuteInterval}
                     mode={'time'}
                     date={this.state.startTime}
                 />
@@ -148,9 +142,9 @@ export default class DatePicker extends React.Component{
                     onCancel={this.hideDateTimePicker}
                     onConfirm={this.handleDatePicked}
                     mode={'datetime'}
-                    // minuteInterval={this.state.minuteInterval}
                     minimumDate={this.state.minStartDate}
                     maximumDate={this.state.maxStartDate}
+                    date={this.state.startTime}
                 />
             )
 
@@ -159,9 +153,9 @@ export default class DatePicker extends React.Component{
                     isVisible={this.state.isTimePickerVisible}
                     onCancel={this.hideDateTimePicker}
                     onConfirm={this.handleTimePicked}
-                    // minuteInterval={this.state.minuteInterval}
                     mode={'time'}
-                    minimumDate={this.state.startTime.setM}
+                    date={this.state.endTime}
+                    minimumDate={this.state.startTime}
                     maximumDate={this.state.maxEndTime}
                 />
             )
@@ -170,8 +164,9 @@ export default class DatePicker extends React.Component{
 
         return(
             <View style={styles.container}>
-                <Text style={styles.timeText}>From</Text>
                 <TouchableOpacity style={styles.timeContainer} onPress = {this.showDateTimePicker}>
+                    <Text style={styles.timeText}>{this.state.monthDate}</Text>
+                    <Text style={styles.timeText}>From</Text>
                     <Text>{this.state.startTimeString}</Text>
                 </TouchableOpacity>
                 {startTimePicker}
