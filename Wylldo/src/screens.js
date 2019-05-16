@@ -11,6 +11,7 @@ export function registerScreens(){
     Navigation.registerComponentWithRedux('AddMap', () => require('./screens/AddMap').default, Provider, store)
     Navigation.registerComponentWithRedux('Settings', () => require('./screens/Settings').default, Provider, store)
     Navigation.registerComponentWithRedux('Profile', () => require('./screens/Profile').default, Provider, store)
+    Navigation.registerComponentWithRedux('followerSelect', () => require('./screens/followerSelect').default, Provider, store)
     Navigation.registerComponent('Initializing', (sc) => require('./screens/Initializing').default)
     Navigation.registerComponent('LogIn', () => require('./screens/LogIn').default)
     Navigation.registerComponent('SignUp', () => require('./screens/SignUp').default)

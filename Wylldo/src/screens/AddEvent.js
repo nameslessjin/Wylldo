@@ -88,7 +88,7 @@ export default class addEvent extends React.Component{
                         startTime={(startTime) => this.setState({startTime: startTime})} 
                         endTime={(endTime) => this.setState({endTime: endTime})}
                     />
-                    <GuestSetting/>
+                    <GuestSetting componentId={this.props.componentId}/>
                 </View>
             </TouchableWithoutFeedback>
 
