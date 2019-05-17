@@ -11,7 +11,7 @@ export default class GuestSeeting extends React.Component{
         inviteLabel: 'Choose the number of people you want to invite',
         isInviteVisible: false,
         pickerOpacity: 0.4,
-        viewChosen: 'Public',
+        viewType: 'Public',
         isViewVisible: false,
         Custom:[]
     }
@@ -21,13 +21,15 @@ export default class GuestSeeting extends React.Component{
     }
     onInviteConfirmPressed = () => {
         this.setState({isInviteVisible: false, pickerOpacity: 0})
+        this.props.inviteCount(this.state.inviteCount)
     }
     onViewConfirmPressed = () => {
         this.setState({isViewVisible: false, pickerOpacity: 0})
-    }
+        this.props.viewType(this.state.viewType)
+    }   
 
     onModalHide = () => {
-        if (this.state.viewChosen == 'Custom'){
+        if (this.state.viewType == 'Custom'){
             Navigation.push(this.props.componentId, {
                 component:{
                     name: 'followerSelect'
@@ -62,9 +64,9 @@ export default class GuestSeeting extends React.Component{
 
         const viewOptions = (
             <Picker
-                selectedValue={this.state.viewChosen}
+                selectedValue={this.state.viewType}
                 onValueChange={(itemValue, itemIndex) => {
-                    this.setState({viewChosen: itemValue})
+                    this.setState({viewType: itemValue})
                 }}
             >
                 <Picker.Item label="Public" value='Public'/>
@@ -108,7 +110,7 @@ export default class GuestSeeting extends React.Component{
 
                 <TouchableOpacity style={styles.subContainer} onPress={this.onViewPressed}> 
                     <Text style={styles.text}>View</Text>
-                    <Text>{this.state.viewChosen}</Text>
+                    <Text>{this.state.viewType}</Text>
                 </TouchableOpacity>
 
                 <Modal 

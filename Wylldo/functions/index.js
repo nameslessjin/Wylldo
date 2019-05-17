@@ -24,6 +24,15 @@ exports.onEventCreated = functions.firestore
     .document('Events/{eventId}')
     .onCreate((snap, context) => {
 
+        userId = snap.data().hostUserid
+        console.log(userId)
+        const createdEvent = {
+            ...snap.data(),
+            eventId: snap.id
+        }
+        userEventCreated = db.collection('Users').doc(userId).collection('CreatedEvents').doc(snap.id).set(createdEvent).catch((error) => {console.log(error.message)})
+
+        let mapEventCreated = null
         if (snap.data().coords.latitude != null){
             const mapEventData = {
                 coords: snap.data().coords,
@@ -31,11 +40,11 @@ exports.onEventCreated = functions.firestore
                 hostAvatar: snap.data().hostAvatar,
                 eventId: snap.id,
                 likes: snap.data().likes,
-                endTime: null
+                startTime: snap.data().startTime,
+                endTime: snap.data().endTime
             }
-            console.log(mapEventData)
-            return db.collection('mapEvents').doc(snap.id).set(mapEventData).catch((error) => {console.log(error.message)})
+            mapEventCreated = db.collection('mapEvents').doc(snap.id).set(mapEventData).catch((error) => {console.log(error.message)})
         }
 
-        return null
+        return {userEventCreated, mapEventCreated}
     })

@@ -46,7 +46,9 @@ export default class addEvent extends React.Component{
                             image: this.state.image,
                             tag: this.state.tag,
                             startTime: this.state.startTime,
-                            endTime: this.state.endTime
+                            endTime: this.state.endTime,
+                            viewType: this.state.viewType,
+                            inviteCount: this.state.inviteCount
                         }
                     }
                 })
@@ -60,7 +62,9 @@ export default class addEvent extends React.Component{
         description: "",
         image: null,
         android: false,
-        tag: 'md-beer'
+        tag: 'md-beer',
+        viewType: 'Public',
+        inviteCount: 5
     }
 
 
@@ -88,7 +92,11 @@ export default class addEvent extends React.Component{
                         startTime={(startTime) => this.setState({startTime: startTime})} 
                         endTime={(endTime) => this.setState({endTime: endTime})}
                     />
-                    <GuestSetting componentId={this.props.componentId}/>
+                    <GuestSetting 
+                        componentId={this.props.componentId} 
+                        inviteCount={(inviteCount) => this.setState({inviteCount: inviteCount})}
+                        viewType={(viewType) => this.setState({viewType: viewType})}
+                    />
                 </View>
             </TouchableWithoutFeedback>
 

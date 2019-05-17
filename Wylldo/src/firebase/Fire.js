@@ -72,7 +72,7 @@ class Fire {
     }
 
     // Upload Data
-    addEvent = async(EventInfo,image) => {
+    addEvent = async(EventInfo, image) => {
    
         const imgStorageUri = !(image === null) ? await this.uploadPhotoAsync(image.uri) : null
         const uploadedImag =  !(image === null) ? {

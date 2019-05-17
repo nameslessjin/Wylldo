@@ -100,7 +100,6 @@ class AddMap extends React.Component{
         if(this.state.eventLocation.latitude){
             marker= <Marker coordinate={this.state.eventLocation} ></Marker>
         }
-        console.log(this.props)
         return(
             <View style={{width: "100%", height: "100%", paddingTop: 0}}>
                 <MapView
