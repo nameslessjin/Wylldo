@@ -25,7 +25,6 @@ exports.onEventCreated = functions.firestore
     .onCreate((snap, context) => {
 
         userId = snap.data().hostUserid
-        console.log(userId)
         const createdEvent = {
             ...snap.data(),
             eventId: snap.id

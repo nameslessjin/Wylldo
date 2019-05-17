@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
         width: '23%',
         borderRadius: 50,
         backgroundColor: 'orange',
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: 20
     },
     image:{
         resizeMode: 'cover',

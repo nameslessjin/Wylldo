@@ -31,7 +31,9 @@ class Profile extends React.Component{
         Navigation.events().bindComponent(this)
     }
 
-    state={}
+    state={
+        selectedOption: 'Liked'
+    }
 
     navigationButtonPressed({buttonId}){
         if(buttonId == "settingBtn"){
@@ -53,7 +55,7 @@ class Profile extends React.Component{
 
         let displayName = null
         if(this.props.currentUserData){
-            displayName = <Text style={{fontSize: 15}}>{this.props.currentUserData.name}</Text>
+            displayName = <Text style={{fontSize: 16}}>{this.props.currentUserData.name}</Text>
         }
 
         return(
@@ -64,27 +66,36 @@ class Profile extends React.Component{
                         .then(updatedUserData => this.props.onUpdatedUserData(updatedUserData))}} />
                     {displayName}
                     <View style={styles.followContainer}>
-                    <TouchableOpacity style={styles.followTouchBtn}>
-                        <Text style={styles.followNum}>1000</Text>
-                        <Text style={styles.followText}>followers</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.followTouchBtn}>
-                        <Text style={styles.followNum}>0</Text>
-                        <Text style={styles.followText}>following</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.followTouchBtn}>
+                            <Text style={styles.followNum}>1000</Text>
+                            <Text style={styles.followText}>followers</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.followTouchBtn}>
+                            <Text style={styles.followNum}>0</Text>
+                            <Text style={styles.followText}>following</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 
                 <View style={styles.historyContainer}>
                     <View style={styles.optionContainer}>
-                        <TouchableOpacity style={styles.optionBtn}>
-                            <Text>Created</Text>
+                        <TouchableOpacity 
+                            style={ (this.state.selectedOption == 'Liked') ? styles.selectedoptionBtn : styles.optionBtn}
+                            onPress={() => this.setState({selectedOption: 'Liked'})}    
+                        >
+                            <Text style={(this.state.selectedOption == 'Liked') ? styles.selectedOptionsText : styles.optionsText}>Liked</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.optionBtn}>
-                            <Text>Liked</Text>
+                        <TouchableOpacity 
+                            style={(this.state.selectedOption == 'Joined') ? styles.selectedoptionBtn : styles.optionBtn}
+                            onPress={() => this.setState({selectedOption: 'Joined'})}      
+                        >
+                            <Text style={(this.state.selectedOption == 'Joined') ? styles.selectedOptionsText : styles.optionsText}>Joined</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.optionBtn}>
-                            <Text>Joined</Text>
+                        <TouchableOpacity 
+                            style={(this.state.selectedOption == 'Created') ? styles.selectedoptionBtn : styles.optionBtn}
+                            onPress={() => this.setState({selectedOption: 'Created'})}  
+                        >
+                            <Text style={(this.state.selectedOption == 'Created') ? styles.selectedOptionsText : styles.optionsText}>Created</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.historyDisplay}>
@@ -147,12 +158,12 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     followNum:{
-        fontSize: 20,
+        fontSize: 18,
     },  
     optionContainer:{
         width: '95%',
         height: '10%',
-        backgroundColor: 'green',
+        backgroundColor: 'white',
         borderRadius: 10,
         flexDirection: 'row',
         marginVertical: 7
@@ -161,12 +172,28 @@ const styles = StyleSheet.create({
         width: '33%',
         height: '100%',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderRadius: 10,
+    },
+    selectedoptionBtn:{
+        width: '33%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FE4C4C',
+        borderRadius: 10,
     },
     historyDisplay:{
         width: '95%',
         height: '85%',
         alignItems: 'center',
         backgroundColor: 'white'
+    },
+    optionsText:{
+        fontWeight: 'bold'
+    },
+    selectedOptionsText:{
+        color: 'white',
+        fontWeight: 'bold'
     }
 })
