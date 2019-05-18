@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PickAvatar from '../Components/PickAvatar';
 import {connect} from 'react-redux'
 import {updateUserdata} from '../store/actions/action.index'
+import ProfileListEvents from '../Components/ProfileListEvents'
 
 class Profile extends React.Component{
     static get options(){
@@ -98,8 +99,13 @@ class Profile extends React.Component{
                             <Text style={(this.state.selectedOption == 'Created') ? styles.selectedOptionsText : styles.optionsText}>Created</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.historyDisplay}>
 
+
+                    <View style={styles.historyDisplay}>
+                        <ProfileListEvents
+                            events = {this.props.events}
+                            componentId={this.props.componentId} 
+                        />
                     </View>
                 </View>
             </View>
@@ -109,7 +115,8 @@ class Profile extends React.Component{
 
 const mapStateToProps = state => {
     return {
-        currentUserData: state.events.currentUser
+        currentUserData: state.events.currentUser,
+        events: state.events.Events
     }
 }
 
@@ -161,7 +168,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },  
     optionContainer:{
-        width: '95%',
+        width: '90%',
         height: '10%',
         backgroundColor: 'white',
         borderRadius: 10,
@@ -184,7 +191,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     historyDisplay:{
-        width: '95%',
+        width: '90%',
         height: '85%',
         alignItems: 'center',
         backgroundColor: 'white'

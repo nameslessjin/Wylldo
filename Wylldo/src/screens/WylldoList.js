@@ -57,10 +57,7 @@ class EventTable extends React.Component{
 
         const {eventData, cursor} = await Fire.getEvents({size: 3, start: lastKey})
         this.lastKnownKey = cursor
-
         console.log(eventData)
-        console.log(this.lastKnownKey)
-
         this.setState({refreshing: false, loading: false})
 
         return eventData
