@@ -46,6 +46,7 @@ class AddMap extends React.Component{
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);
+        console.log(this.props)
     }
 
     navigationButtonPressed({buttonId}){

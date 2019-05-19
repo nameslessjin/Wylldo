@@ -63,7 +63,7 @@ export default class ProfileEventDisplay extends React.Component{
     }
 
     render(){
-        console.log(this.props)
+
         return(
             <TouchableOpacity style={styles.container}>
                 <View style={styles.header}>
@@ -73,7 +73,6 @@ export default class ProfileEventDisplay extends React.Component{
                     </View>
                     <Text style={styles.dateText}>{this.differenceOnTime(this.props.timestamp)}</Text>
                 </View>
-                <Text>{this.props.startTime}</Text>
                 <Text>{this.props.description}</Text>
             </TouchableOpacity>
         )
@@ -83,7 +82,7 @@ export default class ProfileEventDisplay extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: 'red',
+        backgroundColor: 'white',
         marginBottom: 5,
         borderRadius: 10,
         padding: 10

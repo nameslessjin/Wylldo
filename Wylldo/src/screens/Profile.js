@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     historyContainer:{
         width: '100%',
         height: '70%',
-        backgroundColor: 'yellow',
         alignItems: 'center'
     },
     followContainer:{
@@ -173,7 +172,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 10,
         flexDirection: 'row',
-        marginVertical: 7
+        marginVertical: 7,
+        justifyContent: 'space-evenly'
     },
     optionBtn:{
         width: '33%',

@@ -50,6 +50,7 @@ export default class GuestSeeting extends React.Component{
                     this.setState({inviteCount: itemValue})
                 }}
             >
+                <Picker.Item label="1" value={1}/>
                 <Picker.Item label="2" value={2}/>
                 <Picker.Item label="3" value={3}/>
                 <Picker.Item label="4" value={4}/>
@@ -94,6 +95,7 @@ export default class GuestSeeting extends React.Component{
                         <View style={ (Platform.OS === 'android') ? styles.pickerStyleAndroid : styles.pickerStyleIOS}>
                             <View style={styles.titleContainer}>
                                 <Text style={styles.titleText}>The number of people you want to invite</Text>
+                                <Text style={styles.titleText}>(Self-include)</Text>
                             </View>
                             {inviteOptions}
                         </View>
@@ -204,6 +206,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#d5d5d5',
         borderBottomWidth: 0.5,
         padding: 14,
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

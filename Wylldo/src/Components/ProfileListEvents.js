@@ -27,5 +27,6 @@ export default class ProfileListEvents extends React.Component{
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        backgroundColor: '#eee'
     }
 })

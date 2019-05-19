@@ -3,7 +3,6 @@ import React from 'react'
 import {Platform, View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native'
 import DateTimePicker from "react-native-modal-datetime-picker"
 
-
 export default class DatePicker extends React.Component{
 
     constructor(props){
@@ -87,7 +86,7 @@ export default class DatePicker extends React.Component{
     startDateToString = (chosenDate) => {
         const dateInWeek = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"]
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        const day = dateInWeek[chosenDate.getDay() - 1]
+        const day =  (chosenDate.getDay() === 0) ? dateInWeek[6] : dateInWeek[chosenDate.getDay() - 1]
         const month = months[chosenDate.getMonth()]
         const date = chosenDate.getDate()
         let hours = chosenDate.getHours().toString()

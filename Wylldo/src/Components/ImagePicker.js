@@ -1,16 +1,18 @@
 import React from 'react'
 import {View, Image, TouchableOpacity, StyleSheet, Text} from "react-native"
-import ImagePicker from "react-native-image-picker";
+import ImagePicker from "react-native-image-picker"
+import ImageResizer from "react-native-image-resizer"
 
 export default class PickImage extends React.Component{
     state = {
         pickedImage: null,
-        Clicked: false
+        Clicked: false,
+        resizedImageUri: null
     }
 
     reset = () => {
         this.setState({
-            pickedImage: null
+            pickedImage: null,
         })
     }
 
@@ -21,6 +23,8 @@ export default class PickImage extends React.Component{
             } else if (res.error){
                 console.log("Error", error)
             } else {
+                console.log(res.uri)
+                console.log(res.fileSize)
                 this.setState({
                     pickedImage: {
                         uri: res.uri,
@@ -29,10 +33,19 @@ export default class PickImage extends React.Component{
                     },
                     Clicked: true
                 })
+                this.resizeImage(res.uri)
                 this.props.updateImage(this.state.pickedImage)
+                this.props.resizedImageUri(this.state.resizedImageUri)
             }
         })
     }
+
+    resizeImage = (imageUri) => {
+        ImageResizer.createResizedImage(imageUri, 300, 300, "JPEG", 70, 0, null).then(res => console.log(res))
+        .catch(err => console.log(err))
+
+    }
+
 
     render(){
         const displayMessage = <Text>Click to add image</Text>
