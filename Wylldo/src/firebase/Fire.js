@@ -30,6 +30,7 @@ class Fire {
                     const event = doc.data() || {}
                     const eventWithKey = {
                         key: doc.id,
+                        eventId: doc.id,
                         ...event
                     }
                 eventData.push(eventWithKey)
@@ -82,7 +83,8 @@ class Fire {
         const uploadEventInfo = {
             ...EventInfo,
             image: uploadedImag,
-            createdTime: firebase.firestore.FieldValue.serverTimestamp()
+            createdTime: firebase.firestore.FieldValue.serverTimestamp(),
+            like_userIDs: []
             
         }
 
@@ -94,6 +96,18 @@ class Fire {
         }]
 
         return updateEventInfo
+    }
+
+    //an event is liked, add to user document
+    createLikedEvent = async(eventInfo) => {
+        this.usersCollection.doc(this.uid).collection('likedEvents').doc(eventInfo.eventId).set(eventInfo)
+        .catch((error) => {console.log(error)})
+    }
+
+    //an event is unliked, delete from user document
+    deleteLikedEvent = async(eventId) => {
+        this.usersCollection.doc(this.uid).collection('likedEvents').doc(eventId).delete()
+        .catch(error => {console.log(error)})
     }
 
     updateUserInformation = async(currentData, avatar) => {
