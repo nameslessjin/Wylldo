@@ -2,11 +2,13 @@ import React from 'react'
 import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {Navigation} from 'react-native-navigation'
+import Fire from '../firebase/Fire'
 
 export default class PopUpWnd extends React.Component{
 
     state={
-        heartPressed: false
+        heartPressed: false,
+        likes: this.props.likes
     }
 
     onWindowPressed = () => {
@@ -20,17 +22,64 @@ export default class PopUpWnd extends React.Component{
         })
     }
 
+    componentDidMount(){
+        this.checkUserLikeEvent()
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps != this.props){
+            this.setState({likes: this.props.likes})
+            this.checkUserLikeEvent()
+        }
+    }
+
+    checkUserLikeEvent = () => {
+        if (this.props.like_userIDs.find(userId => userId === Fire.uid)){
+            this.setState({heartPressed: true})
+        } else{
+            this.setState({heartPressed: false})
+        }
+    }
+
 
     onHeartBtnPressed = () => {
-        this.setState(prevState => {
-            return{
-                heartPressed: !prevState.heartPressed
+
+        let updatedLikes = this.state.likes
+        if (this.state.heartPressed){
+            updatedLikes = updatedLikes - 1
+            this.setState({heartPressed: false, likes: updatedLikes})
+            this.userUnlikeEvent(this.props.eventId)
+
+        } else{
+            updatedLikes = updatedLikes + 1
+            this.setState({heartPressed: true, likes: updatedLikes})
+            let like_userIDs = this.props.like_userIDs
+            like_userIDs.push(Fire.uid)
+            const likedEvent = {
+                createdTime: this.props.createdTime,
+                timestamp: this.props.timestamp,
+                eventId: this.props.eventId,
+                tag: this.props.tag,
+                description: this.props.description,
+                hostUsername: this.props.hostUsername,
+                hostUserid: this.props.hostUserid,
+                hostAvatar: this.props.hostAvatar
             }
-        })
+            this.userLikeEvent(likedEvent)
+        }
+
+    }
+
+    userLikeEvent = async (eventInfo) => {
+
+        await Fire.createLikedEvent(eventInfo) 
+    }
+    userUnlikeEvent = async (eventId) => {
+
+        await Fire.deleteLikedEvent(eventId)
     }
 
     render(){
-
         const heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
                             <Icon 
                                 name={(this.state.heartPressed) ? 'md-heart' : 'md-heart-empty'} 
@@ -67,7 +116,7 @@ export default class PopUpWnd extends React.Component{
                         </TouchableOpacity>
                         <View style={styles.buttonContainer}>
                             {heartBtn}
-                            <Text style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.props.likes}</Text>
+                            <Text style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
                             <Icon name={'md-share-alt'} size={30} />
                         </View>
                     </View>

@@ -79,9 +79,11 @@ export default class Header extends React.Component{
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.dateText}>{this.differenceOnTime(this.props.timestamp)}</Text>
+
                     <TouchableOpacity style={styles.optionsTouchBar}>
                         <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
                     </TouchableOpacity>
+                    
                 </View>
             </View>
         )

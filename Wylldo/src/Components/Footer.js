@@ -13,8 +13,18 @@ export default class Footer extends React.Component{
     }
 
     componentDidMount(){
+        this.checkUserLikeEvent()
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps != this.props){
+            this.setState({likes: this.props.likes})
+            this.checkUserLikeEvent()
+        }
+    }
+
+    checkUserLikeEvent = () => {
         if (this.props.like_userIDs.find(userId => userId === Fire.uid)){
-            console.log('true')
             this.setState({heartPressed: true})
         } else{
             this.setState({heartPressed: false})
@@ -101,9 +111,12 @@ export default class Footer extends React.Component{
                         <Text style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
                         <Icon name={'md-share-alt'} size={30} />
                     </View>
-                    <TouchableOpacity style={styles.joinBtn}>
-                        <Text style={{fontSize: 20, color:'white'}}>JOIN</Text>
-                    </TouchableOpacity>
+                    <View style={{alignItems: 'center', width: '22%', marginTop: 5}}>
+                        <TouchableOpacity style={styles.joinBtn}>
+                            <Text style={styles.joinTextStyle}>JOIN</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.countStyle}>5/10</Text>
+                    </View>
                 </View>
 
                 <View>
@@ -137,7 +150,7 @@ const styles = StyleSheet.create({
         marginTop: -13
     },
     buttonsContainer:{
-        height: 40,
+        height: '30%',
         width: '100%',
         flex: 1,
         flexDirection: 'row',
@@ -148,10 +161,19 @@ const styles = StyleSheet.create({
     joinBtn:{
         backgroundColor: '#FE4C4C',
         borderRadius: 5,
-        width: '22%',
+        width: '100%',
         height: '100%',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+    },
+    countStyle:{
+        fontSize: 15,
+        color:'grey'
+    },
+    joinTextStyle:{
+        fontSize: 20, 
+        color:'white',
+        fontFamily: 'ArialRoundedMTBold',
     }
 
 })

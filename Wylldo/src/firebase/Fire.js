@@ -62,7 +62,8 @@ class Fire {
                 const mapEvent = doc.data() || {}
                 const mapEventsWithKey = {
                     key: doc.id,
-                    ...mapEvent
+                    ...mapEvent,
+                    eventId: doc.id
                 }
                 mapEventsData.push(mapEventsWithKey)
             }
@@ -84,7 +85,8 @@ class Fire {
             ...EventInfo,
             image: uploadedImag,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
-            like_userIDs: []
+            like_userIDs: [],
+            joinedNum: 1
             
         }
 
@@ -92,7 +94,8 @@ class Fire {
         
         const updateEventInfo = [{
             ...uploadEventInfo,
-            key: createdEvent.id
+            key: createdEvent.id,
+            eventId: createdEvent.id
         }]
 
         return updateEventInfo

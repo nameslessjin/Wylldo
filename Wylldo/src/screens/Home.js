@@ -78,8 +78,12 @@ class Home extends React.Component{
     }
 
     getPressedEvent = async (mapEventKey) =>{
-        const pressedEventData = await Fire.getEventsWithId(mapEventKey)
+        let pressedEventData = await Fire.getEventsWithId(mapEventKey)
         // console.log("make sure this doesn't go twice")
+        pressedEventData = {
+            ...pressedEventData,
+            eventId: mapEventKey
+        }
         this.setState({pressedEvent: pressedEventData})
     }
 
@@ -116,7 +120,11 @@ class Home extends React.Component{
         let popUp = null 
         if (this.state.markPressed && !this.state.mapPressed){         
             const pressedEvent = this.state.pressedEvent
-            popUp = <PopUpWnd {...pressedEvent}  componentId={this.props.componentId}/>
+            if (pressedEvent){
+                popUp = <PopUpWnd {...pressedEvent}  componentId={this.props.componentId}/>
+            } else{
+                popUp = null
+            }
         } else {
             popUp = <View></View>
         }

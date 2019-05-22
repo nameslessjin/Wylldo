@@ -50,6 +50,10 @@ class EventTable extends React.Component{
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return nextProps != this.props
+    }
+
     getEventData = async (lastKey) => {
 
         
@@ -57,7 +61,7 @@ class EventTable extends React.Component{
 
         const {eventData, cursor} = await Fire.getEvents({size: 3, start: lastKey})
         this.lastKnownKey = cursor
-        console.log(eventData)
+        
         this.setState({refreshing: false, loading: false})
 
         return eventData
@@ -91,6 +95,7 @@ class EventTable extends React.Component{
         }
     }
 
+
     render(){
         LayoutAnimation.easeInEaseOut()
         return(
@@ -113,6 +118,7 @@ class EventTable extends React.Component{
         )
     }
 }
+
 
 //get eventdata and currentuser data from redux though currentuser data doesn't seem to be used
 const mapStateToProps = (state) => {
