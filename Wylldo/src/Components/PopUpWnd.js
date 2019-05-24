@@ -3,6 +3,7 @@ import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
+import Modal from 'react-native-modal'
 
 export default class PopUpWnd extends React.Component{
 
@@ -53,30 +54,16 @@ export default class PopUpWnd extends React.Component{
         } else{
             updatedLikes = updatedLikes + 1
             this.setState({heartPressed: true, likes: updatedLikes})
-            let like_userIDs = this.props.like_userIDs
-            like_userIDs.push(Fire.uid)
-            const likedEvent = {
-                createdTime: this.props.createdTime,
-                timestamp: this.props.timestamp,
-                eventId: this.props.eventId,
-                tag: this.props.tag,
-                description: this.props.description,
-                hostUsername: this.props.hostUsername,
-                hostUserid: this.props.hostUserid,
-                hostAvatar: this.props.hostAvatar
-            }
-            this.userLikeEvent(likedEvent)
+            this.userLikeEvent(this.props.eventId)
         }
 
     }
 
-    userLikeEvent = async (eventInfo) => {
-
-        await Fire.createLikedEvent(eventInfo) 
+    userLikeEvent = async (eventId) => {
+        await Fire.onLikeEvent(eventId) 
     }
     userUnlikeEvent = async (eventId) => {
-
-        await Fire.deleteLikedEvent(eventId)
+        await Fire.onUnlikeEvent(eventId)
     }
 
     render(){

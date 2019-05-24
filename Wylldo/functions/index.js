@@ -25,11 +25,6 @@ exports.onEventCreated = functions.firestore
     .onCreate((snap, context) => {
 
         userId = snap.data().hostUserid
-        const createdEvent = {
-            ...snap.data(),
-            eventId: snap.id
-        }
-        const userEventCreated = db.collection('Users').doc(userId).collection('createdEvents').doc(snap.id).set(createdEvent).catch((error) => {console.log(error.message)})
 
         let mapEventCreated = null
         if (snap.data().coords.latitude != null){
@@ -45,43 +40,45 @@ exports.onEventCreated = functions.firestore
             mapEventCreated = db.collection('mapEvents').doc(snap.id).set(mapEventData).catch((error) => {console.log(error.message)})
         }
 
-        return {userEventCreated, mapEventCreated}
+        return mapEventCreated
     })
 
-exports.onLikedCreated = functions.firestore
-    .document('Users/{userId}/likedEvents/{eventId}')
-    .onCreate((snap, context) => {
-        const eventRef = db.collection('Events').doc(context.params.eventId)
-        return db.runTransaction(transaction => {
-            return transaction.get(eventRef).then(eventDoc => {
-                const newLikesNum = eventDoc.data().likes + 1
-                let newLike_userIDs = eventDoc.data().like_userIDs
-                newLike_userIDs.push(context.params.userId)
 
-                return transaction.update(eventRef, {
-                    likes: newLikesNum,
-                    like_userIDs: newLike_userIDs
-                })
-            })
-        })
+// exports.onLikedCreated = functions.firestore
+//     .document('Users/{userId}/likedEvents/{eventId}')
+//     .onCreate((snap, context) => {
+//         const eventRef = db.collection('Events').doc(context.params.eventId)
+//         return db.runTransaction(transaction => {
+//             return transaction.get(eventRef).then(eventDoc => {
+//                 const newLikesNum = eventDoc.data().likes + 1
+//                 let newLike_userIDs = eventDoc.data().like_userIDs
+//                 newLike_userIDs.push(context.params.userId)
 
-    })
+//                 return transaction.update(eventRef, {
+//                     likes: newLikesNum,
+//                     like_userIDs: newLike_userIDs
+//                 })
+//             })
+//         })
 
-exports.onLikedDeleted = functions.firestore
-    .document('Users/{userId}/likedEvents/{eventId}')
-    .onDelete((snap, context) => {
-        const eventRef = db.collection('Events').doc(context.params.eventId)
+//     })
+
+// exports.onLikedDeleted = functions.firestore
+//     .document('Users/{userId}/likedEvents/{eventId}')
+//     .onDelete((snap, context) => {
+//         const eventRef = db.collection('Events').doc(context.params.eventId)
         
-        return db.runTransaction(transaction => {
-            return transaction.get(eventRef).then(eventDoc => {
-                const newLikesNum = eventDoc.data().likes - 1
-                let newLike_userIDs = eventDoc.data().like_userIDs.filter(item => item !== context.params.userId )
 
-                return transaction.update(eventRef, {
-                    likes: newLikesNum,
-                    like_userIDs: newLike_userIDs
-                })
-            })
-        })
+//         return db.runTransaction(transaction => {
+//             return transaction.get(eventRef).then(eventDoc => {
+//                 const newLikesNum = eventDoc.data().likes - 1
+//                 let newLike_userIDs = eventDoc.data().like_userIDs.filter(item => item !== context.params.userId )
 
-    })
+//                 return transaction.update(eventRef, {
+//                     likes: newLikesNum,
+//                     like_userIDs: newLike_userIDs
+//                 })
+//             })
+//         })
+
+//     })

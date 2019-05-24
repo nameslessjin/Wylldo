@@ -10,6 +10,7 @@ import {connect} from 'react-redux'
 import Fire from '../firebase/Fire'
 import {getCurrentUser, getMapEvents} from '../store/actions/action.index'
 import {goToAuth} from '../navigation'
+import {Navigation} from 'react-native-navigation'
 
 class Home extends React.Component{
     static get options(){
@@ -39,6 +40,40 @@ class Home extends React.Component{
         eventKey: null,
         pressedEvent: null
     }
+
+    constructor(props){
+        super(props)
+        this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(this.tabChanged)
+    }
+
+    tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
+
+        if (selectedTabIndex == 0 && unselectedTabIndex != 0){
+            if(Fire.uid){
+                this.getMapEventData().then(mapEvents => {
+                    this.props.onGetMapEvents(mapEvents)
+                })
+            } else {
+                goToAuth()
+            }
+        }
+        else if (selectedTabIndex==2 && unselectedTabIndex != 2){
+            if(Fire.uid){
+                this.getCurrentUserData().then(currentUserData => {
+                    this.props.onGetCurrentUser(currentUserData.data())
+                })
+            } else {
+                goToAuth()
+            }
+        }
+
+    }
+
+    componentWillUnmount(){
+        this.bottomTabEventListener.remove()
+        super.componentWillUnmount()
+    }
+
     componentDidMount(){
         if (Fire.uid){
             this.getCurrentUserData().then( currentUserData => {
@@ -55,6 +90,7 @@ class Home extends React.Component{
             goToAuth()
         }
     }
+
 
     // When mark is pressed.  This part it rendered twice.
     // shouldComponentUpdate(nextProps, nextState){

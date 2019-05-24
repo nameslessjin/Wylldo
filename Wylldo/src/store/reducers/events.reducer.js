@@ -37,7 +37,7 @@ export default reducer = (state = initialState, action) => {
         case GET_MAPEVENTS:
             return{
                 ...state,
-                mapEvents: state.mapEvents.concat(action.mapEvents)
+                mapEvents: action.mapEvents
             }
 
         //store retrieved events through firebase and then store to state so it can be used with redux connected screen

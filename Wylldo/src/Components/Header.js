@@ -1,9 +1,14 @@
 import React from 'react'
 import {StyleSheet, View, Text, Image, TouchableOpacity} from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
+import EventOption from './EventOption'
 
 
 export default class Header extends React.Component{
+
+    state = {
+        isOptionVisible: false
+    }
 
     differenceOnTime = (timestamp) => {
         const nowTime = Date.now()
@@ -63,10 +68,11 @@ export default class Header extends React.Component{
         }
     }
 
+    setEventOption = () => {
+        this.setState({isOptionVisible: true})
+    }
+
     render(){
-
-
-
         return(
             <View style={styles.container}>
                 <View style={styles.row}>
@@ -80,10 +86,15 @@ export default class Header extends React.Component{
                 <View style={styles.row}>
                     <Text style={styles.dateText}>{this.differenceOnTime(this.props.timestamp)}</Text>
 
-                    <TouchableOpacity style={styles.optionsTouchBar}>
+                    <TouchableOpacity style={styles.optionsTouchBar} onPress={this.setEventOption}>
                         <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
                     </TouchableOpacity>
-                    
+                    <EventOption
+                    isOptionVisible={this.state.isOptionVisible}
+                    hostUserid= {this.props.hostUserid}
+                    eventId = {this.props.eventId}
+                    />
+
                 </View>
             </View>
         )

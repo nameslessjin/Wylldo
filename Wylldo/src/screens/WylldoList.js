@@ -39,31 +39,34 @@ class EventTable extends React.Component{
             loading: false,
             refreshing: false
         }
+        this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(this.tabChanged)
     }
 
-    //This part actually load when the home page is launched
-    componentDidMount(){
-        if (Fire.uid){
-            this._onRefresh()
-        } else{
-            goToAuth()
+    tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
+        if (selectedTabIndex == 1 && unselectedTabIndex != 1){
+            if(Fire.uid){
+                this._onRefresh()
+            } else {
+                goToAuth()
+            }
         }
     }
 
+    componentWillUnmount(){
+        this.bottomTabEventListener.remove()
+        super.componentWillUnmount()
+    }
+
+    //This part actually load when the home page is launched
     shouldComponentUpdate(nextProps, nextState){
         return nextProps != this.props
     }
 
     getEventData = async (lastKey) => {
-
-        
         this.setState({refreshing: true})
-
         const {eventData, cursor} = await Fire.getEvents({size: 3, start: lastKey})
         this.lastKnownKey = cursor
-        
         this.setState({refreshing: false, loading: false})
-
         return eventData
     }
 

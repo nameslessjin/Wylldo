@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, LayoutAnimation} from 'react-native'
 import Fire from '../firebase/Fire'
 import  {Navigation} from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -53,7 +53,7 @@ class Profile extends React.Component{
 
 
     render(){
-
+        LayoutAnimation.easeInEaseOut()
         let displayName = null
         if(this.props.currentUserData){
             displayName = <Text style={{fontSize: 16}}>{this.props.currentUserData.name}</Text>

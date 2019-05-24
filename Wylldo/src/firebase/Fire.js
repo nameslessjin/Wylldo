@@ -12,8 +12,6 @@ class Fire {
         })
     }
 
-
-
     //Download Data
     // get data here for wylldoList
     getEvents = async ({size, start}) => {
@@ -86,7 +84,7 @@ class Fire {
             image: uploadedImag,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             like_userIDs: [],
-            joinedNum: 1
+            joinedNum: 1,
             
         }
 
@@ -102,16 +100,45 @@ class Fire {
     }
 
     //an event is liked, add to user document
-    createLikedEvent = async(eventInfo) => {
-        this.usersCollection.doc(this.uid).collection('likedEvents').doc(eventInfo.eventId).set(eventInfo)
-        .catch((error) => {console.log(error)})
+    onLikeEvent = async(eventId) => {
+        const eventRef = this.eventsCollection.doc(eventId)
+        this.db.runTransaction(async transaction => {
+            const doc = await transaction.get(eventRef)
+            const newNumLikes = doc.data().likes + 1
+            let newLike_userIDs = doc.data().like_userIDs
+            newLike_userIDs.push(this.uid)
+            transaction.update(eventRef, {
+                likes: newNumLikes,
+                like_userIDs: newLike_userIDs
+            })
+
+        })
+        .catch(error => {
+            console.log('like event failed: ', error)
+        })
+
     }
 
+
     //an event is unliked, delete from user document
-    deleteLikedEvent = async(eventId) => {
-        this.usersCollection.doc(this.uid).collection('likedEvents').doc(eventId).delete()
-        .catch(error => {console.log(error)})
+    onUnlikeEvent = async(eventId) => {
+        const eventRef = this.eventsCollection.doc(eventId)
+        this.db.runTransaction(async transaction => {
+            const doc = await transaction.get(eventRef)
+
+            const newNumLikes = doc.data().likes - 1
+            let newLike_userIDs = doc.data().like_userIDs.filter(userId => userId !== this.uid)
+
+            transaction.update(eventRef,{
+                likes: newNumLikes,
+                like_userIDs: newLike_userIDs
+            })
+        })
+        .catch(error => {
+            console.log('unlike event failed: ', error)
+        })
     }
+
 
     updateUserInformation = async(currentData, avatar) => {
         const avatStorageUri = !(avatar === null) ? await this.uploadAvatarAsync(avatar.uri) : null
@@ -128,6 +155,28 @@ class Fire {
         
         return updateUserdata
         
+    }
+
+    // group collection query try on liked event
+    tryFunction = async(eventId) => {
+        console.log(eventId)
+        const likedEventUser = this.usersCollection.doc().collection('likedEvents').where('eventId', '==', eventId)
+        const like = this.db.collection
+        try{
+            console.log('this should trigger')
+        
+            const querySnapshot = await likedEventUser.get()
+            console.log(querySnapshot)
+            querySnapshot.forEach(doc => {
+                if(doc.exists){
+                    console.log(doc.data())
+                } else{
+                    console.log('dont exist')
+                }
+            })
+        } catch(error){
+            console.log(error)
+        }
     }
 
     uploadAvatarAsync = async uri => {
@@ -178,6 +227,10 @@ class Fire {
 
     get usersCollection(){
         return firebase.firestore().collection('Users')
+    }
+
+    get db(){
+        return firebase.firestore()
     }
 
 
