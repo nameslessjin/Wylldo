@@ -46,7 +46,6 @@ class AddMap extends React.Component{
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);
-        console.log(this.props)
     }
 
     navigationButtonPressed({buttonId}){
@@ -77,7 +76,7 @@ class AddMap extends React.Component{
 
     createEvent = async (eventInfo, image) => {
         const eventData = await Fire.addEvent(eventInfo, image)
-        
+        console.log('eventData: ', eventData)
         return eventData
     }
 

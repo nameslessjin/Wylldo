@@ -139,15 +139,16 @@ class Home extends React.Component{
 
     render(){
         const Markers = this.props.mapEvents.map(mapEvent => {
-            if (mapEvent.coords.latitude !== null){
+            const coordinate = {latitude: mapEvent.l.latitude, longitude: mapEvent.l.longitude}
+            if (mapEvent.l !== null){
                 return(
                     <Marker
-                    coordinate={mapEvent.coords}
+                    coordinate={coordinate}
                     key={mapEvent.key}
                     onPress={() => this.setState({mapEventKey : mapEvent.key}) }
                     >       
                      
-                    <CustomMarker icon={mapEvent.tag} hostAvatar={mapEvent.hostAvatar} likes={mapEvent.likes} />
+                    <CustomMarker icon={mapEvent.d.tag} hostAvatar={mapEvent.d.hostAvatar} likes={mapEvent.d.likes} />
                     </Marker>
                 )
             }

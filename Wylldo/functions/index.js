@@ -10,7 +10,6 @@ const admin = require('firebase-admin')
 
 admin.initializeApp(functions.config().firebase);
 var db = admin.firestore()
-
 // exports.onCreateUser = functions.auth.user().onCreate((user) => {
 
 //     // this.usersCollection.doc(this.uid).set(signUpUserInfo)
@@ -29,13 +28,17 @@ exports.onEventCreated = functions.firestore
         let mapEventCreated = null
         if (snap.data().coords.latitude != null){
             const mapEventData = {
-                coords: snap.data().coords,
-                tag: snap.data().tag,
-                hostAvatar: snap.data().hostAvatar,
-                eventId: snap.id,
-                likes: snap.data().likes,
-                startTime: snap.data().startTime,
-                endTime: snap.data().endTime
+                d:{
+                    tag: snap.data().tag,
+                    hostAvatar: snap.data().hostAvatar,
+                    eventId: snap.id,
+                    likes: snap.data().likes,
+                    startTime: snap.data().startTime,
+                    endTime: snap.data().endTime,
+                },
+                g: snap.data().geoHash,
+                l: snap.data().geoCoordinates
+
             }
             mapEventCreated = db.collection('mapEvents').doc(snap.id).set(mapEventData).catch((error) => {console.log(error.message)})
         }

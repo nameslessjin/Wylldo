@@ -1,8 +1,8 @@
 import firebase from 'react-native-firebase'
 import uuid from 'uuid'
 import uploadPhoto from '../firebase/uploadPhoto'
-import {AsyncStorage} from 'react-native'
-
+import {GeoCollectionReference, GeoFirestore, GeoQuery, GeoDocumentReference} from 'geofirestore'
+import geohash from 'ngeohash'
 
 class Fire {
 
@@ -79,22 +79,54 @@ class Fire {
             ...image,
             uri: imgStorageUri
         } : null
+
         const uploadEventInfo = {
             ...EventInfo,
             image: uploadedImag,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             like_userIDs: [],
             joinedNum: 1,
-            
+            geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
+            geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }
 
-        const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch( () => {console.log('rejected')})
+        const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
         
         const updateEventInfo = [{
             ...uploadEventInfo,
             key: createdEvent.id,
             eventId: createdEvent.id
         }]
+
+        // let updateMapEventData = null
+        // if (uploadEventInfo.location){
+        //     const mapEventData = {
+        //         tag: uploadEventInfo.tag,
+        //         hostAvatar: uploadEventInfo.hostAvatar,
+        //         eventId: createdEvent.id,
+        //         likes: uploadEventInfo.likes,
+        //         startTime: uploadEventInfo.startTime,
+        //         endTime: uploadEventInfo.endTime,
+        //         coordinates: new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude)
+        //     }
+
+        //     const createMapEvent = await this.geoDB.collection('mapEvents').doc(createdEvent.id).set(mapEventData).then(result => console.log(result))
+        //     .catch(error => {console.log(error)})
+
+        //     updateMapEventData = [{
+        //         d:{
+        //             ...mapEventData
+        //         },
+        //         l: mapEventData.coordinates,
+        //         key: createdEvent.id,
+        //         eventId: createdEvent.id
+        //     }]
+
+        // }
+
+
+        // console.log(updateEventInfo, updateMapEventData)
+
 
         return updateEventInfo
     }
@@ -231,6 +263,11 @@ class Fire {
 
     get db(){
         return firebase.firestore()
+    }
+
+    get geoDB(){
+        const geoFirestore = new GeoFirestore(this.db)
+        return geoFirestore
     }
 
 
