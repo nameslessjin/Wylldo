@@ -30,7 +30,7 @@ class Home extends React.Component{
     state = {
         userLocation:{
             latitude: 40.798699,
-            longitude: -77.859954 ,
+            longitude: -77.859954,
             latitudeDelta: 0.0122,
             longitudeDelta: 0.0122
         },
@@ -139,16 +139,17 @@ class Home extends React.Component{
 
     render(){
         const Markers = this.props.mapEvents.map(mapEvent => {
-            const coordinate = {latitude: mapEvent.l.latitude, longitude: mapEvent.l.longitude}
-            if (mapEvent.l !== null){
+            // const coordinate = {latitude: mapEvent.l.latitude, longitude: mapEvent.l.longitude}
+            if (mapEvent.coords._latitude !== null){
+                const coords = {latitude: mapEvent.coords._latitude, longitude: mapEvent.coords._longitude}
                 return(
                     <Marker
-                    coordinate={coordinate}
+                    coordinate={coords}
                     key={mapEvent.key}
                     onPress={() => this.setState({mapEventKey : mapEvent.key}) }
                     >       
                      
-                    <CustomMarker icon={mapEvent.d.tag} hostAvatar={mapEvent.d.hostAvatar} likes={mapEvent.d.likes} />
+                    <CustomMarker icon={mapEvent.tag} hostAvatar={mapEvent.hostAvatar} likes={mapEvent.likes} />
                     </Marker>
                 )
             }

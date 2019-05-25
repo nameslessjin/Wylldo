@@ -16,16 +16,13 @@ export default reducer = (state = initialState, action) => {
         //add newly added event on the top of retrieved events to avoid refresh (maybe should be replaced with listener)
         case ADD_EVENT:
             const mapEventData = [{
-                d:{
-                    tag: action.EventInfo[0].tag,
-                    hostAvatar: action.EventInfo[0].hostAvatar,
-                    eventId: action.EventInfo[0].id,
-                    likes: action.EventInfo[0].likes,
-                    startTime: action.EventInfo[0].startTime,
-                    endTime: action.EventInfo[0].endTime,
-                },
-                l: action.EventInfo[0].geoCoordinates,
-                g: action.EventInfo[0].geoHash,
+                tag: action.EventInfo[0].tag,
+                hostAvatar: action.EventInfo[0].hostAvatar,
+                eventId: action.EventInfo[0].id,
+                likes: action.EventInfo[0].likes,
+                startTime: action.EventInfo[0].startTime,
+                endTime: action.EventInfo[0].endTime,
+                coords: action.EventInfo[0].geoCoordinates,
                 eventId: action.EventInfo[0].key,
                 key: action.EventInfo[0].key
             }]

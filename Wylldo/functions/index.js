@@ -35,6 +35,7 @@ exports.onEventCreated = functions.firestore
                     likes: snap.data().likes,
                     startTime: snap.data().startTime,
                     endTime: snap.data().endTime,
+                    coords: snap.data().geoCoordinates
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates

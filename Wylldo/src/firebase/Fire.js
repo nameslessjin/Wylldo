@@ -10,6 +10,9 @@ class Fire {
         firebase.auth().onAuthStateChanged(user => {
             // console.log(user)
         })
+        this.state = {
+            mapEventData: []
+        }
     }
 
     //Download Data
@@ -52,7 +55,7 @@ class Fire {
 
     //used to get location and tag for the map.
     getMapEvents = async() => {
-        let ref = firebase.firestore().collection('mapEvents')
+        const ref = firebase.firestore().collection('mapEvents')
         const querySnapshot = await ref.get()
         const mapEventsData = []
         querySnapshot.forEach(doc => {
@@ -66,9 +69,27 @@ class Fire {
                 mapEventsData.push(mapEventsWithKey)
             }
         })
-        // console.log(mapEventsData)
 
-        return mapEventsData
+        const mapRef = this.geoDB.collection('mapEvents')
+        const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(40.798699, -77.859954), radius: 8.5})
+        const mapEventsDataTry = await geoQuery.get().then(geoQuerySnapshot => {
+            return geoQuerySnapshot.forEach(doc => {
+                    const mapEventsData = []
+                    if (doc.exists){
+                        const mapEvent = doc.data() || {}
+                        const mapEventsWithKey = {
+                            key: doc.id,
+                            ...mapEvent,
+                            eventId: doc.id
+                        }
+                        mapEventsData.push(mapEventsWithKey)
+                    }
+                    this.state.mapEventData = mapEventsData
+                    return mapEventsData
+            })
+        })
+
+        return this.state.mapEventData
     }
 
     // Upload Data
