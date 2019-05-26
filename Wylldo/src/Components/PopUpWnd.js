@@ -13,6 +13,7 @@ export default class PopUpWnd extends React.Component{
     }
 
     onWindowPressed = () => {
+        this.props.onPress()
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'SingleEvent',

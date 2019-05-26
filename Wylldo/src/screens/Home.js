@@ -57,7 +57,11 @@ class Home extends React.Component{
                 goToAuth()
             }
         }
+        else if (selectedTabIndex==1 && unselectedTabIndex !=1){
+            this.setState({markPressed: false, mapPressed: false})
+        }
         else if (selectedTabIndex==2 && unselectedTabIndex != 2){
+            this.setState({markPressed: false, mapPressed: false})
             if(Fire.uid){
                 this.getCurrentUserData().then(currentUserData => {
                     this.props.onGetCurrentUser(currentUserData.data())
@@ -135,7 +139,9 @@ class Home extends React.Component{
             })
     }
 
-
+    onPopUpPress = () => {
+        this.setState({markPressed: false, mapPressed: false})
+    }
 
     render(){
         const Markers = this.props.mapEvents.map(mapEvent => {
@@ -159,7 +165,7 @@ class Home extends React.Component{
         if (this.state.markPressed && !this.state.mapPressed){         
             const pressedEvent = this.state.pressedEvent
             if (pressedEvent){
-                popUp = <PopUpWnd {...pressedEvent}  componentId={this.props.componentId}/>
+                popUp = <PopUpWnd {...pressedEvent}  componentId={this.props.componentId} onPress={() => this.onPopUpPress()} />
             } else{
                 popUp = null
             }
