@@ -4,9 +4,6 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEV
 
 //get already upload event data and add to the top of current loaded event data instead of freshing.  Maybe should be replaced with listener
 export const addEvent = (eventInfo) => {
-
-    console.log(eventInfo)
-
     return{
         type: ADD_EVENT,
         EventInfo: eventInfo

@@ -9,7 +9,7 @@ import {getEvents, loadMoreEvents} from '../store/actions/action.index'
 import Fire from '../firebase/Fire'
 import { goToAuth } from '../navigation';
 
-
+const DOC_NUM = 5
 
 class EventTable extends React.Component{
 
@@ -32,6 +32,7 @@ class EventTable extends React.Component{
         }
     }
 
+    
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);
@@ -62,10 +63,10 @@ class EventTable extends React.Component{
         return nextProps != this.props
     }
 
-    getEventData = async (lastKey) => {
+    getEventData = async (startPosition) => {
         this.setState({refreshing: true})
-        const {eventData, cursor} = await Fire.getEvents({size: 3, start: lastKey})
-        this.lastKnownKey = cursor
+        const {eventData, cursor} = await Fire.getEvents({size: DOC_NUM, start: startPosition, eventIdList: this.props.mapEventIdList})
+        this.startPosition = cursor
         this.setState({refreshing: false, loading: false})
         return eventData
     }
@@ -74,12 +75,10 @@ class EventTable extends React.Component{
 
     //When swipe up, trigger to load more evens
     //this function is triggered twice frequently
-    //Current solution reduced the load size from 5 to 3
     _loadMore = () => {
         this.setState({loading: true})
-        if (this.lastKnownKey){
-            // console.log("make sure this doesn't go twice")
-            this.getEventData(this.lastKnownKey).then(events => {
+        if (this.startPosition){
+            this.getEventData(this.startPosition).then(events => {
                 this.props.onLoadMoreEvents(events)
             })
             .catch(error => (console.log(error.message)))
@@ -114,7 +113,7 @@ class EventTable extends React.Component{
                         />
                     }
                     onEndReached = {this._loadMore}
-                    onEndReachedThreshold = {0.4}
+                    onEndReachedThreshold = {0.5}
 
                 />
             </View>
@@ -127,7 +126,8 @@ class EventTable extends React.Component{
 const mapStateToProps = (state) => {
     return {
         events: state.events.Events,
-        currentUser: state.events.currentUser
+        currentUser: state.events.currentUser,
+        mapEventIdList: state.events.mapEventIdList
     }
 }
 

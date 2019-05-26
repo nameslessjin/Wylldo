@@ -4,46 +4,76 @@ import uploadPhoto from '../firebase/uploadPhoto'
 import {GeoCollectionReference, GeoFirestore, GeoQuery, GeoDocumentReference} from 'geofirestore'
 import geohash from 'ngeohash'
 
+
 class Fire {
 
     constructor(){
         firebase.auth().onAuthStateChanged(user => {
             // console.log(user)
         })
-        this.state = {
-            mapEventData: []
-        }
+        this.mapEventData = []
+        
     }
 
     //Download Data
     // get data here for wylldoList
-    getEvents = async ({size, start}) => {
-        let ref = this.eventsCollection.orderBy('timestamp', 'desc').limit(size);
-        try{
-            if(start){
-                ref = ref.startAfter(start)
-            }
-        
-            const querySnapshot = await ref.get();
-            const eventData = []
-            querySnapshot.forEach(doc => {
-                if (doc.exists){
-                    const event = doc.data() || {}
-                    const eventWithKey = {
-                        key: doc.id,
-                        eventId: doc.id,
-                        ...event
-                    }
-                eventData.push(eventWithKey)
-                }
-            })
-            // console.log(eventData)
-            const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-            // console.log(lastVisible)
-            return {eventData, cursor: lastVisible}
-        } catch(error){
-            console.log(error.message)
+    getEvents = async ({size, start, eventIdList}) => {
+        let eventData = []
+        let startPosition = 0
+        if (start){
+            startPosition = start
         }
+
+        while (eventData.length != size && startPosition < eventIdList.length){
+
+            let docRef = this.eventsCollection.doc(eventIdList[startPosition][1])
+            const querySnapshot = await docRef.get()
+            if (querySnapshot.exists){
+                const event = querySnapshot.data() || {}
+                const eventWithKey = {
+                    key: querySnapshot.id,
+                    eventId: querySnapshot.id,
+                    ...event
+                }
+                eventData.push(eventWithKey)
+            }
+            startPosition = startPosition + 1
+        }
+
+        if (startPosition == eventIdList.length){
+            startPosition = null
+        }
+
+        return {eventData, cursor: startPosition}
+
+        // let ref = this.eventsCollection.orderBy('timestamp', 'desc').limit(size);
+        // try{
+        //     if(start){
+        //         ref = ref.startAfter(start)
+        //     }
+            
+
+
+        //     const querySnapshot = await ref.get();
+        //     const eventData = []
+        //     querySnapshot.forEach(doc => {
+        //         if (doc.exists){
+        //             const event = doc.data() || {}
+        //             const eventWithKey = {
+        //                 key: doc.id,
+        //                 eventId: doc.id,
+        //                 ...event
+        //             }
+        //         eventData.push(eventWithKey)
+        //         }
+        //     })
+        //     // console.log(eventData)
+        //     const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+        //     // console.log(lastVisible)
+        //     return {eventData, cursor: lastVisible}
+        // } catch(error){
+        //     console.log(error.message)
+        // }
     }
 
     getEventsWithId = async(eventId) => {
@@ -55,25 +85,10 @@ class Fire {
 
     //used to get location and tag for the map.
     getMapEvents = async() => {
-        const ref = firebase.firestore().collection('mapEvents')
-        const querySnapshot = await ref.get()
-        const mapEventsData = []
-        querySnapshot.forEach(doc => {
-            if(doc.exists){
-                const mapEvent = doc.data() || {}
-                const mapEventsWithKey = {
-                    key: doc.id,
-                    ...mapEvent,
-                    eventId: doc.id
-                }
-                mapEventsData.push(mapEventsWithKey)
-            }
-        })
-
         const mapRef = this.geoDB.collection('mapEvents')
         const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(40.798699, -77.859954), radius: 8.5})
         const mapEventsDataTry = await geoQuery.get().then(geoQuerySnapshot => {
-            return geoQuerySnapshot.forEach(doc => {
+            geoQuerySnapshot.forEach(doc => {
                     const mapEventsData = []
                     if (doc.exists){
                         const mapEvent = doc.data() || {}
@@ -82,14 +97,13 @@ class Fire {
                             ...mapEvent,
                             eventId: doc.id
                         }
-                        mapEventsData.push(mapEventsWithKey)
+                        this.mapEventData.push(mapEventsWithKey)
                     }
-                    this.state.mapEventData = mapEventsData
-                    return mapEventsData
             })
         })
-
-        return this.state.mapEventData
+        const mapEventData = this.mapEventData
+        this.mapEventData = []
+        return mapEventData
     }
 
     // Upload Data
@@ -118,36 +132,6 @@ class Fire {
             key: createdEvent.id,
             eventId: createdEvent.id
         }]
-
-        // let updateMapEventData = null
-        // if (uploadEventInfo.location){
-        //     const mapEventData = {
-        //         tag: uploadEventInfo.tag,
-        //         hostAvatar: uploadEventInfo.hostAvatar,
-        //         eventId: createdEvent.id,
-        //         likes: uploadEventInfo.likes,
-        //         startTime: uploadEventInfo.startTime,
-        //         endTime: uploadEventInfo.endTime,
-        //         coordinates: new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude)
-        //     }
-
-        //     const createMapEvent = await this.geoDB.collection('mapEvents').doc(createdEvent.id).set(mapEventData).then(result => console.log(result))
-        //     .catch(error => {console.log(error)})
-
-        //     updateMapEventData = [{
-        //         d:{
-        //             ...mapEventData
-        //         },
-        //         l: mapEventData.coordinates,
-        //         key: createdEvent.id,
-        //         eventId: createdEvent.id
-        //     }]
-
-        // }
-
-
-        // console.log(updateEventInfo, updateMapEventData)
-
 
         return updateEventInfo
     }

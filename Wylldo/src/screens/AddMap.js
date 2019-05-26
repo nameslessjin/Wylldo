@@ -76,7 +76,6 @@ class AddMap extends React.Component{
 
     createEvent = async (eventInfo, image) => {
         const eventData = await Fire.addEvent(eventInfo, image)
-        console.log('eventData: ', eventData)
         return eventData
     }
 

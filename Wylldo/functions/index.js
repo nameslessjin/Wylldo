@@ -1,23 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin')
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
 admin.initializeApp(functions.config().firebase);
 var db = admin.firestore()
-// exports.onCreateUser = functions.auth.user().onCreate((user) => {
 
-//     // this.usersCollection.doc(this.uid).set(signUpUserInfo)
-//     // .catch((error) => {console.log(error.message)})
-
-//     return db.collection('newUser').doc(user.uid).set({name:1})
-
-// })
 
 exports.onEventCreated = functions.firestore
     .document('Events/{eventId}')
@@ -35,7 +21,8 @@ exports.onEventCreated = functions.firestore
                     likes: snap.data().likes,
                     startTime: snap.data().startTime,
                     endTime: snap.data().endTime,
-                    coords: snap.data().geoCoordinates
+                    coords: snap.data().geoCoordinates,
+                    createdTime: snap.data().timestamp
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates

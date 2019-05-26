@@ -7,7 +7,8 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEV
 const initialState = {
     Events: [],
     currentUser: null,
-    mapEvents: []
+    mapEvents: [],
+    mapEventIdList: []
 }
 
 export default reducer = (state = initialState, action) => {
@@ -23,21 +24,33 @@ export default reducer = (state = initialState, action) => {
                 startTime: action.EventInfo[0].startTime,
                 endTime: action.EventInfo[0].endTime,
                 coords: action.EventInfo[0].geoCoordinates,
-                eventId: action.EventInfo[0].key,
-                key: action.EventInfo[0].key
+                key: action.EventInfo[0].key,
+                createdTime: action.EventInfo[0].timestamp
             }]
             const updateEvents = action.EventInfo.concat(state.Events)
             const updateMapEvents = mapEventData.concat(state.mapEvents)
+            const updateMapEventIdList = [action.EventInfo[0].timestamp, action.EventInfo[0].key].concat(state.mapEventIdList)
             return{
                 ...state,
                 Events: updateEvents,
-                mapEvents: updateMapEvents
+                mapEvents: updateMapEvents, 
+                mapEventIdList: updateMapEventIdList 
             }
         
         case GET_MAPEVENTS:
+            let mapEventIdList = []
+            action.mapEvents.forEach(doc => {
+                const eventArray = [new Date(doc.createdTime), doc.eventId]
+                mapEventIdList.push(eventArray)
+            })
+
+            mapEventIdList.sort((a, b) => {
+                return (a[0] < b[0])
+            })
             return{
                 ...state,
-                mapEvents: action.mapEvents
+                mapEvents: action.mapEvents,
+                mapEventIdList: mapEventIdList
             }
 
         //store retrieved events through firebase and then store to state so it can be used with redux connected screen

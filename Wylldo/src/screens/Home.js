@@ -81,6 +81,7 @@ class Home extends React.Component{
                 this.getMapEventData().then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
                 })
+                .catch(error => {console.log(error)})
             })
             .catch(error => {
                 console.log(error.message)
@@ -115,7 +116,6 @@ class Home extends React.Component{
 
     getPressedEvent = async (mapEventKey) =>{
         let pressedEventData = await Fire.getEventsWithId(mapEventKey)
-        // console.log("make sure this doesn't go twice")
         pressedEventData = {
             ...pressedEventData,
             eventId: mapEventKey

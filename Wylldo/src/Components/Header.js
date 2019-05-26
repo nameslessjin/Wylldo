@@ -73,6 +73,11 @@ export default class Header extends React.Component{
     }
 
     render(){
+        let createdTime = 'Now'
+        if (this.differenceOnTime(this.props.timestamp)){
+            createdTime = this.differenceOnTime(this.props.timestamp)
+        }
+        
         return(
             <View style={styles.container}>
                 <View style={styles.row}>
@@ -84,7 +89,7 @@ export default class Header extends React.Component{
                     <Icon name={this.props.tag} size={20} style={{marginLeft: 5}}/>
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.dateText}>{this.differenceOnTime(this.props.timestamp)}</Text>
+                    <Text style={styles.dateText}>{createdTime}</Text>
 
                     <TouchableOpacity style={styles.optionsTouchBar} onPress={this.setEventOption}>
                         <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
