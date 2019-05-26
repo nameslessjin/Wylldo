@@ -14,6 +14,9 @@ export default class Footer extends React.Component{
 
     componentDidMount(){
         this.checkUserLikeEvent()
+        if (this.props.popUpWndLikes != null){
+            this.setState({likes: this.props.popUpWndLikes, heartPressed: this.props.popUpWndHeartPressed})
+        }
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -30,10 +33,6 @@ export default class Footer extends React.Component{
             this.setState({heartPressed: false})
         }
 
-     
-        if (this.props.stateLikes){
-            this.setState({likes: this.props.stateLikes, heartPressed: this.props.stateHeartPressed})
-        }
     }
 
     onLocationBtnPressed = () => {
