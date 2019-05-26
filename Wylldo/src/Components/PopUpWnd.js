@@ -18,7 +18,9 @@ export default class PopUpWnd extends React.Component{
             component: {
                 name: 'SingleEvent',
                 passProps:{
-                    ...this.props
+                    ...this.props,
+                    stateLikes: this.state.likes,
+                    stateHeartPressed: this.state.heartPressed
                 }
             }
         })

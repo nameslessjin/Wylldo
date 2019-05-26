@@ -29,6 +29,11 @@ export default class Footer extends React.Component{
         } else{
             this.setState({heartPressed: false})
         }
+
+     
+        if (this.props.stateLikes){
+            this.setState({likes: this.props.stateLikes, heartPressed: this.props.stateHeartPressed})
+        }
     }
 
     onLocationBtnPressed = () => {

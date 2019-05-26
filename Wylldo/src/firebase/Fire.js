@@ -141,9 +141,9 @@ class Fire {
         const eventRef = this.eventsCollection.doc(eventId)
         this.db.runTransaction(async transaction => {
             const doc = await transaction.get(eventRef)
-            const newNumLikes = doc.data().likes + 1
             let newLike_userIDs = doc.data().like_userIDs
             newLike_userIDs.push(this.uid)
+            const newNumLikes = newLike_userIDs.length
             transaction.update(eventRef, {
                 likes: newNumLikes,
                 like_userIDs: newLike_userIDs
@@ -163,9 +163,8 @@ class Fire {
         this.db.runTransaction(async transaction => {
             const doc = await transaction.get(eventRef)
 
-            const newNumLikes = doc.data().likes - 1
             let newLike_userIDs = doc.data().like_userIDs.filter(userId => userId !== this.uid)
-
+            const newNumLikes = newLike_userIDs.length
             transaction.update(eventRef,{
                 likes: newNumLikes,
                 like_userIDs: newLike_userIDs
