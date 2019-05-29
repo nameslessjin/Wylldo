@@ -10,6 +10,7 @@ export default class Footer extends React.Component{
     state={
         heartPressed: false,
         likes: this.props.likes,
+        joinBtn: 'JOIN'
     }
 
     componentDidMount(){
@@ -69,6 +70,24 @@ export default class Footer extends React.Component{
         await Fire.onUnlikeEvent(eventId)
     }
 
+    onJoinBtnPressed = () => {
+
+        if (this.checkJoinTime()){
+            alert('Joined!')
+        } else {
+            alert('This event has expired')
+        }
+
+    }
+
+    checkJoinTime = () =>{
+        const currentTime = (new Date().getTime() / 1000)
+        if (this.props.endTime.seconds <= currentTime){
+            this.setState({joinBtn: 'EXPIRED'})
+            return false
+        }
+        return true
+    }
 
     render(){
         let locationBtn = null
@@ -89,6 +108,20 @@ export default class Footer extends React.Component{
                                 color={(this.state.heartPressed) ? '#E91E63' : null}/>
                         </TouchableOpacity>
 
+        const currentTime = (new Date().getTime() / 1000)
+        let joinBtn = null
+        if (this.props.endTime.seconds > currentTime){
+            if (this.state.joinBtn == 'JOIN'){
+                joinBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
+                            <Text style={styles.joinTextStyle}>JOIN</Text>
+                        </TouchableOpacity>
+            }
+        } else if (this.state.joinBtn == 'EXPIRED' || this.props.endTime.seconds <= currentTime) {
+            joinBtn = <View style={styles.expireBtn}>
+                        <Text style={styles.expireTextStyle}>EXPIRED</Text>
+                    </View>
+        }
+
 
         return(
             <View style={{backgroundColor: 'white', margin: 10}}>
@@ -104,9 +137,7 @@ export default class Footer extends React.Component{
                         <Icon name={'md-share-alt'} size={30} />
                     </View>
                     <View style={{alignItems: 'center', width: '22%', marginTop: 5}}>
-                        <TouchableOpacity style={styles.joinBtn}>
-                            <Text style={styles.joinTextStyle}>JOIN</Text>
-                        </TouchableOpacity>
+                        {joinBtn}
                         <Text style={styles.countStyle}>5/10</Text>
                     </View>
                 </View>
@@ -158,12 +189,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    expireBtn:{
+        backgroundColor: 'grey',
+        borderRadius: 5,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     countStyle:{
         fontSize: 15,
         color:'grey'
     },
     joinTextStyle:{
         fontSize: 20, 
+        color:'white',
+        fontFamily: 'ArialRoundedMTBold',
+    },
+    expireTextStyle:{
+        fontSize: 15, 
         color:'white',
         fontFamily: 'ArialRoundedMTBold',
     }

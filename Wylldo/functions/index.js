@@ -44,6 +44,23 @@ exports.onEventDeleted = functions.firestore
         return deletetMapEvent
     })
 
+exports.checkExpiredMapEvents = functions.pubsub.schedule('every 5 minutes').onRun((context) => {
+
+    const currentTime = new Date()
+    const query = db.collection('mapEvents').where('d.endTime', '<=', currentTime)
+    const deleteExpiredEvents = query.get()
+                                    .then((snapshot) => {
+                                        const batch = db.batch()
+                                        snapshot.docs.forEach(doc => {
+                                            batch.delete(doc.ref)
+                                        })
+                                        return batch.commit()
+                                    })
+                                    .catch(error => console.log(error))
+
+    return deleteExpiredEvents
+
+})
 
 // exports.onLikedCreated = functions.firestore
 //     .document('Users/{userId}/likedEvents/{eventId}')
