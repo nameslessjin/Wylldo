@@ -45,34 +45,6 @@ class Fire {
 
         return {eventData, cursor: startPosition}
 
-        // let ref = this.eventsCollection.orderBy('timestamp', 'desc').limit(size);
-        // try{
-        //     if(start){
-        //         ref = ref.startAfter(start)
-        //     }
-            
-
-
-        //     const querySnapshot = await ref.get();
-        //     const eventData = []
-        //     querySnapshot.forEach(doc => {
-        //         if (doc.exists){
-        //             const event = doc.data() || {}
-        //             const eventWithKey = {
-        //                 key: doc.id,
-        //                 eventId: doc.id,
-        //                 ...event
-        //             }
-        //         eventData.push(eventWithKey)
-        //         }
-        //     })
-        //     // console.log(eventData)
-        //     const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-        //     // console.log(lastVisible)
-        //     return {eventData, cursor: lastVisible}
-        // } catch(error){
-        //     console.log(error.message)
-        // }
     }
 
     getEventsWithId = async(eventId) => {
@@ -106,16 +78,22 @@ class Fire {
     }
 
     // Upload Data
-    addEvent = async(EventInfo, image) => {
-   
-        const imgStorageUri = !(image === null) ? await this.uploadPhotoAsync(image.uri) : null
+    addEvent = async(EventInfo, image, resizedImage) => {
+        const imgStorageUri = !(image === null) ? await this.uploadImageAsync(image.uri) : null
         const uploadedImag =  !(image === null) ? {
             ...image,
             uri: imgStorageUri
         } : null
 
+        const resImgStorageUri = !(resizedImage === null) ? await this.uploadresizedImageAsync(resizedImage.uri) : null
+        const uploadedResImag = !(resizedImage === null) ? {
+            uri : resImgStorageUri,
+        } : null
+
+
         const uploadEventInfo = {
             ...EventInfo,
+            resizedImage: uploadedResImag,
             image: uploadedImag,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             like_userIDs: [],
@@ -126,6 +104,7 @@ class Fire {
 
         const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
         
+
         const updateEventInfo = [{
             ...uploadEventInfo,
             key: createdEvent.id,
@@ -200,14 +179,20 @@ class Fire {
     }
 
     uploadAvatarAsync = async uri => {
-        const path = `${'Users'}/${this.uid}/${uuid.v4()}.jpg`
+        const path = `${'Users'}/${this.uid}/${'Profile_Pic'}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path)
     }
 
-    uploadPhotoAsync = async uri => {
+    uploadImageAsync = async uri => {
         const path = `${'Events'}/${this.uid}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path)
     }
+
+    uploadresizedImageAsync = async uri => {
+        const path = `${'Events'}/${this.uid}/${'resizedImage'}/${uuid.v4()}.jpg`
+        return uploadPhoto(uri, path).catch(error => console.log(error))
+    }
+
 
     signUpUser = async(email, password) => {
 

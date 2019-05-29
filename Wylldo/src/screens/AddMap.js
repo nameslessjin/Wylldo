@@ -50,7 +50,7 @@ class AddMap extends React.Component{
 
     navigationButtonPressed({buttonId}){
         if(buttonId == "Post"){
-            const eventState={
+            const eventData={
                 description : this.props.description,
                 tag : this.props.tag,
                 coords : this.state.eventLocation,
@@ -61,11 +61,12 @@ class AddMap extends React.Component{
                 hostUsername: this.props.currentUserData.name,
                 hostAvatar: this.props.currentUserData.avatarUri,
                 startTime: this.props.startTime,
-                endTime: this.props.endTime
+                endTime: this.props.endTime,
+                inviteCount: this.props.inviteCount
             }
             const image = this.props.image
-
-            this.createEvent(eventState, image).then(newEvent => {
+            const resizedImage = this.props.resizedImage
+            this.createEvent(eventData, image, resizedImage).then(newEvent => {
                 this.props.onAddEvent(newEvent)
             })
             .catch((error) => (console.log(error.message)))
@@ -74,8 +75,8 @@ class AddMap extends React.Component{
         }
     }
 
-    createEvent = async (eventInfo, image) => {
-        const eventData = await Fire.addEvent(eventInfo, image)
+    createEvent = async (eventInfo, image, resizedImage) => {
+        const eventData = await Fire.addEvent(eventInfo, image, resizedImage)
         return eventData
     }
 

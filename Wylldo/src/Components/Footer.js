@@ -71,13 +71,11 @@ export default class Footer extends React.Component{
     }
 
     onJoinBtnPressed = () => {
-
         if (this.checkJoinTime()){
             alert('Joined!')
         } else {
             alert('This event has expired')
         }
-
     }
 
     checkJoinTime = () =>{
@@ -138,7 +136,7 @@ export default class Footer extends React.Component{
                     </View>
                     <View style={{alignItems: 'center', width: '22%', marginTop: 5}}>
                         {joinBtn}
-                        <Text style={styles.countStyle}>5/10</Text>
+                        <Text style={styles.countStyle}>{this.props.joinedNum}/{this.props.inviteCount}</Text>
                     </View>
                 </View>
 

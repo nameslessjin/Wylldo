@@ -17,5 +17,5 @@ export default uploadPhoto = (uri, uploadUri) => {
                 res(url)
             }
         )
-    })
+    }).catch(error => console.log(error))
 }

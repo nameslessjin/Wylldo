@@ -23,8 +23,6 @@ export default class PickImage extends React.Component{
             } else if (res.error){
                 console.log("Error", error)
             } else {
-                console.log(res.uri)
-                console.log(res.fileSize)
                 this.setState({
                     pickedImage: {
                         uri: res.uri,
@@ -35,13 +33,17 @@ export default class PickImage extends React.Component{
                 })
                 this.resizeImage(res.uri)
                 this.props.updateImage(this.state.pickedImage)
-                this.props.resizedImageUri(this.state.resizedImageUri)
             }
         })
     }
 
     resizeImage = (imageUri) => {
-        ImageResizer.createResizedImage(imageUri, 300, 300, "JPEG", 70, 0, null).then(res => console.log('resizeWorks:', res))
+        ImageResizer.createResizedImage(imageUri, 300, 300, "JPEG", 70, 0, null).then(res => {
+            const resizedImage = {
+                uri: res.uri,
+            }
+            this.props.resizedImage(resizedImage)
+        })
         .catch(err => console.log(err))
 
     }

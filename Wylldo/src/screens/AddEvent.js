@@ -66,7 +66,7 @@ export default class addEvent extends React.Component{
         tag: 'md-beer',
         viewType: 'Public',
         inviteCount: 5,
-        resizedImageUri: null
+        resizedImage: null
     }
 
 
@@ -76,7 +76,7 @@ export default class addEvent extends React.Component{
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <View style={styles.ImgView}> 
-                        <PickImage updateImage= {(updatedImg) => this.setState({image: updatedImg})} resizedImageUri = {(resizedImageUri) => this.setState({resizedImageUri: resizedImageUri})}/>         
+                        <PickImage updateImage= {(updatedImg) => this.setState({image: updatedImg})} resizedImage = {(resizedImage) => this.setState({resizedImage: resizedImage})}/>         
                     </View>
                     <View style={styles.DescriptionView}> 
                         <Text style={styles.emptySpace} ></Text>
