@@ -25,7 +25,8 @@ class Fire {
         }
 
         while (eventData.length != size && startPosition < eventIdList.length){
-
+            // console.log('EventData.length: ', eventData.length)
+            // console.log('startPosition: ', startPosition)
             let docRef = this.eventsCollection.doc(eventIdList[startPosition][1])
             const querySnapshot = await docRef.get()
             if (querySnapshot.exists){
@@ -193,26 +194,11 @@ class Fire {
         
     }
 
-    // group collection query try on liked event
-    tryFunction = async(eventId) => {
-        console.log(eventId)
-        const likedEventUser = this.usersCollection.doc().collection('likedEvents').where('eventId', '==', eventId)
-        const like = this.db.collection
-        try{
-            console.log('this should trigger')
-        
-            const querySnapshot = await likedEventUser.get()
-            console.log(querySnapshot)
-            querySnapshot.forEach(doc => {
-                if(doc.exists){
-                    console.log(doc.data())
-                } else{
-                    console.log('dont exist')
-                }
-            })
-        } catch(error){
-            console.log(error)
-        }
+    //Delete an event
+    deleteEvent = async (eventId) => {
+        const ref = this.eventsCollection.doc(eventId)
+        const deleteEvent = await ref.delete().catch(error => {console.log(error)})
+        return eventId
     }
 
     uploadAvatarAsync = async uri => {
@@ -250,9 +236,9 @@ class Fire {
     }
 
     getUserData = async() => {
-        let ref = this.usersCollection.doc(this.uid)
-        const currentUserData = await ref.get()
-        return currentUserData
+        const ref = this.usersCollection.doc(this.uid)
+        const currentUserData = await ref.get().catch(error => console.log(error))
+        return currentUserData.data()
     }
 
 

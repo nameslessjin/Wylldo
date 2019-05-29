@@ -27,23 +27,25 @@ class Home extends React.Component{
 
 //In initial AppLaunch, retrieve all locations and all events and put to state reducer
 
-    state = {
-        userLocation:{
-            latitude: 40.798699,
-            longitude: -77.859954,
-            latitudeDelta: 0.0122,
-            longitudeDelta: 0.0122
-        },
-        paddingTop: 1,
-        markPressed: false,
-        mapPressed: false,
-        eventKey: null,
-        pressedEvent: null
-    }
+
 
     constructor(props){
         super(props)
         this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(this.tabChanged)
+        this.state = {
+            userLocation:{
+                latitude: 40.798699,
+                longitude: -77.859954,
+                latitudeDelta: 0.0122,
+                longitudeDelta: 0.0122
+            },
+            paddingTop: 1,
+            markPressed: false,
+            mapPressed: false,
+            eventKey: null,
+            pressedEvent: null,
+            mapEventKey: null
+        }
     }
 
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
@@ -64,7 +66,7 @@ class Home extends React.Component{
             this.setState({markPressed: false, mapPressed: false})
             if(Fire.uid){
                 this.getCurrentUserData().then(currentUserData => {
-                    this.props.onGetCurrentUser(currentUserData.data())
+                    this.props.onGetCurrentUser(currentUserData)
                 })
             } else {
                 goToAuth()
@@ -79,9 +81,10 @@ class Home extends React.Component{
     }
 
     componentDidMount(){
+ 
         if (Fire.uid){
             this.getCurrentUserData().then( currentUserData => {
-                this.props.onGetCurrentUser(currentUserData.data());
+                this.props.onGetCurrentUser(currentUserData);
                 this.getMapEventData().then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
                 })
@@ -114,8 +117,6 @@ class Home extends React.Component{
 
     mapViewPressedHandler = () => {
         this.setState({markPressed: false, mapPressed: true})
-   
-
     }
 
     getPressedEvent = async (mapEventKey) =>{
@@ -129,8 +130,8 @@ class Home extends React.Component{
 
     markPressedHandler = () => {
         this.setState({markPressed: true, mapPressed: false})
-        this.getPressedEvent(this.state.mapEventKey)
     }
+
 
     onMapReady = () =>{
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
@@ -152,7 +153,7 @@ class Home extends React.Component{
                     <Marker
                     coordinate={coords}
                     key={mapEvent.key}
-                    onPress={() => this.setState({mapEventKey : mapEvent.key}) }
+                    onPress={() => {this.getPressedEvent(mapEvent.key)} }
                     >       
                      
                     <CustomMarker icon={mapEvent.tag} hostAvatar={mapEvent.hostAvatar} likes={mapEvent.likes} />

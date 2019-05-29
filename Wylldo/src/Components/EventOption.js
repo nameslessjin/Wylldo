@@ -2,10 +2,10 @@ import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import Modal from 'react-native-modal'
 import Fire from '../firebase/Fire'
+import {connect} from 'react-redux'
+import {deleteEvent} from '../store/actions/action.index'
 
-
-
-export default class EventOption extends React.Component{
+class EventOption extends React.Component{
 
     state={
         isOptionVisible: false,
@@ -20,11 +20,20 @@ export default class EventOption extends React.Component{
 
     onBackdropPress = () => {
         this.setState({isOptionVisible: false})
+        this.props.onBackdropPress()
     }
 
     onDeletePress = () => {
-        console.log('Delete pressed')
-        Fire.tryFunction(this.props.eventId)
+        this.onDeleteEvent().then(deleteEventId => {
+            this.props.onDeleteEvent(deleteEventId)
+            this.onBackdropPress
+        })
+
+    }
+
+    onDeleteEvent = async() => {
+        const deleteEventId = await Fire.deleteEvent(this.props.eventId)
+        return deleteEventId
     }
 
     render(){
@@ -60,6 +69,12 @@ export default class EventOption extends React.Component{
 
 }
 
+const mapDispatchToProps = dispatch => {
+    return{
+        onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId))
+    }
+}
+
 const styles = StyleSheet.create({
     container:{
         backgroundColor: 'white',
@@ -85,3 +100,6 @@ const styles = StyleSheet.create({
         width: '100%'
     }
 })
+
+
+export default connect(null, mapDispatchToProps)(EventOption)

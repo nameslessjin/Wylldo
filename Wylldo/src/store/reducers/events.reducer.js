@@ -1,4 +1,4 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, LOAD_MORE_EVENTS} from "../actions/actionTypes"
+import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, LOAD_MORE_EVENTS, DELETE_EVENT} from "../actions/actionTypes"
 
 //This is reducers for events.  Currently support Add_event, Get_Event, Get_CurrentUser, Signout and Update_user
 //This reducer is not connect to firebase.  Data is retrieved from somewhere else and then store here and later
@@ -29,13 +29,24 @@ export default reducer = (state = initialState, action) => {
             }]
             const updateEvents = action.EventInfo.concat(state.Events)
             const updateMapEvents = mapEventData.concat(state.mapEvents)
-            const updateMapEventIdList = [action.EventInfo[0].timestamp, action.EventInfo[0].key].concat(state.mapEventIdList)
+            const updateMapEventIdList = [[action.EventInfo[0].timestamp, action.EventInfo[0].key]].concat(state.mapEventIdList)
             return{
                 ...state,
                 Events: updateEvents,
                 mapEvents: updateMapEvents, 
                 mapEventIdList: updateMapEventIdList 
             }
+        
+        case DELETE_EVENT:
+            let updatedEvents = [...state.Events]
+            updatedEvents = updatedEvents.filter(event => {
+                return event.eventId !== action.eventId
+            })
+
+        return{
+            ...state,
+            Events: updatedEvents
+        }
         
         case GET_MAPEVENTS:
             let mapEventIdList = []
@@ -45,7 +56,7 @@ export default reducer = (state = initialState, action) => {
             })
 
             mapEventIdList.sort((a, b) => {
-                return (a[0] < b[0])
+                return (b[0] - a[0])
             })
             return{
                 ...state,

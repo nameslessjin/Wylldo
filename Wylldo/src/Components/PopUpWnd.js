@@ -3,7 +3,6 @@ import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
-import Modal from 'react-native-modal'
 
 export default class PopUpWnd extends React.Component{
 

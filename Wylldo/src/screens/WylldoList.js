@@ -11,7 +11,7 @@ import { goToAuth } from '../navigation';
 
 const DOC_NUM = 5
 
-class EventTable extends React.Component{
+class WylldoList extends React.Component{
 
     static get options(){
         return{
@@ -138,7 +138,7 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventTable)
+export default connect(mapStateToProps, mapDispatchToProps)(WylldoList)
 
 const styles = StyleSheet.create({
     container:{

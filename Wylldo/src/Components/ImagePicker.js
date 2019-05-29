@@ -41,7 +41,7 @@ export default class PickImage extends React.Component{
     }
 
     resizeImage = (imageUri) => {
-        ImageResizer.createResizedImage(imageUri, 300, 300, "JPEG", 70, 0, null).then(res => console.log(res))
+        ImageResizer.createResizedImage(imageUri, 300, 300, "JPEG", 70, 0, null).then(res => console.log('resizeWorks:', res))
         .catch(err => console.log(err))
 
     }

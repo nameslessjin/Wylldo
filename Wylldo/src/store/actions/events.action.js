@@ -1,4 +1,4 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, LOAD_MORE_EVENTS} from "./actionTypes"
+import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, LOAD_MORE_EVENTS, DELETE_EVENT} from "./actionTypes"
 
 //I want to put connect with firebase here.  However without a state, promise having format trouble to store information
 
@@ -9,6 +9,13 @@ export const addEvent = (eventInfo) => {
         EventInfo: eventInfo
     }
 
+}
+
+export const deleteEvent = (eventId) => {
+    return {
+        type: DELETE_EVENT,
+        eventId: eventId
+    }
 }
 
 //get already retreieved events as parameter and pass to reducers to store them

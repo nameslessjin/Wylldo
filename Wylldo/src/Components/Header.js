@@ -71,6 +71,9 @@ export default class Header extends React.Component{
     setEventOption = () => {
         this.setState({isOptionVisible: true})
     }
+    hideEventOption = () => {
+        this.setState({isOptionVisible: false})
+    }
 
     render(){
         let createdTime = 'Now'
@@ -98,6 +101,7 @@ export default class Header extends React.Component{
                     isOptionVisible={this.state.isOptionVisible}
                     hostUserid= {this.props.hostUserid}
                     eventId = {this.props.eventId}
+                    onBackdropPress={() => this.hideEventOption()}
                     />
 
                 </View>

@@ -34,6 +34,16 @@ exports.onEventCreated = functions.firestore
         return mapEventCreated
     })
 
+exports.onEventDeleted = functions.firestore
+    .document('Events/{eventId}')
+    .onDelete((snap, context) => {
+
+        const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
+        const deletetMapEvent = mapEventRef.delete().catch(error => {console.log(error)})
+
+        return deletetMapEvent
+    })
+
 
 // exports.onLikedCreated = functions.firestore
 //     .document('Users/{userId}/likedEvents/{eventId}')

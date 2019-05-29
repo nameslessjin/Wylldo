@@ -1,1 +1,1 @@
-export {getEvents, addEvent, getCurrentUser, signOut, updateUserdata, getMapEvents, loadMoreEvents} from './events.action'
+export {getEvents, addEvent, getCurrentUser, signOut, updateUserdata, getMapEvents, loadMoreEvents, deleteEvent} from './events.action'
