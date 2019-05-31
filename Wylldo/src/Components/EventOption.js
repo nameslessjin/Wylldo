@@ -39,7 +39,7 @@ class EventOption extends React.Component{
     render(){
 
         let deleteBtn = null
-        if (Fire.uid === this.props.hostUserid){
+        if (Fire.uid === this.props.hostUserId){
             deleteBtn = (
                 <TouchableOpacity style={[styles.optionBtnStyle]} onPress={this.onDeletePress}>
                 <Text style={[styles.optionsTextStyle, {color: 'red'}]}>Delete</Text>
@@ -59,7 +59,7 @@ class EventOption extends React.Component{
                     <TouchableOpacity style={styles.optionBtnStyle}>
                         <Text style={[styles.optionsTextStyle]}>Report</Text>
                     </TouchableOpacity>
-                    {(Fire.uid === this.props.hostUserid) ? <View style={styles.breakLine}/> : null}
+                    {(Fire.uid === this.props.hostUserId) ? <View style={styles.breakLine}/> : null}
                     {deleteBtn}
                 </View>
             </Modal>

@@ -1,4 +1,8 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, LOAD_MORE_EVENTS, DELETE_EVENT} from "../actions/actionTypes"
+import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, 
+        SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
+        LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
+        LOAD_MORE_CREATEDEVENTS
+        } from "../actions/actionTypes"
 
 //This is reducers for events.  Currently support Add_event, Get_Event, Get_CurrentUser, Signout and Update_user
 //This reducer is not connect to firebase.  Data is retrieved from somewhere else and then store here and later
@@ -8,7 +12,8 @@ const initialState = {
     Events: [],
     currentUser: null,
     mapEvents: [],
-    mapEventIdList: []
+    mapEventIdList: [],
+    createdEvents: []
 }
 
 export default reducer = (state = initialState, action) => {
@@ -69,6 +74,17 @@ export default reducer = (state = initialState, action) => {
             return{
                 ...state,
                 Events: action.Events
+            }
+        
+        case GET_CREATEDEVENTS:
+            return{
+                ...state,
+                createdEvents: action.createdEvents
+            }
+        case LOAD_MORE_CREATEDEVENTS:
+            return{
+                ...state,
+                createdEvents: state.createdEvents.concat(action.createdEvents)
             }
 
         case LOAD_MORE_EVENTS:

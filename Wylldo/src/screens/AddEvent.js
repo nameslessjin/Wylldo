@@ -1,12 +1,13 @@
 import React from 'react'
-import {View, Text, StyleSheet, TextInput, Platform, Keyboard, TouchableWithoutFeedback} from 'react-native'
-import PickImage from '../Components/ImagePicker'
+import {View, Text, StyleSheet, TextInput, Platform, Keyboard, TouchableWithoutFeedback, Dimensions} from 'react-native'
+import ImagePicker from '../Components/ImagePicker'
 import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
 import DatePicker from '../Components/DatePicker'
 import GuestSetting from '../Components/GuestSetting'
 
 
+const {height, width} = Dimensions.get('window')
 
 export default class addEvent extends React.Component{
 
@@ -76,7 +77,7 @@ export default class addEvent extends React.Component{
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <View style={styles.ImgView}> 
-                        <PickImage updateImage= {(updatedImg) => this.setState({image: updatedImg})} resizedImage = {(resizedImage) => this.setState({resizedImage: resizedImage})}/>         
+                        <ImagePicker updateImage= {(updatedImg) => this.setState({image: updatedImg})} resizedImage = {(resizedImage) => this.setState({resizedImage: resizedImage})}/>         
                     </View>
                     <View style={styles.DescriptionView}> 
                         <Text style={styles.emptySpace} ></Text>
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     ImgView:{
-        height: "39%",
+        height: width,
         width: "100%",
         backgroundColor: "white",
         borderBottomWidth: 0.5,

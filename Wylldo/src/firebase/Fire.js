@@ -6,7 +6,6 @@ import geohash from 'ngeohash'
 
 
 class Fire {
-
     constructor(){
         firebase.auth().onAuthStateChanged(user => {
             // console.log(user)
@@ -53,6 +52,34 @@ class Fire {
         return querySnapshot.data()
         
     }
+    
+    getCreatedEvents = async(size, start) => {
+        let ref = this.eventsCollection.where('hostUserId', '==', this.uid).orderBy('timestamp', 'DESC').limit(size)
+
+        try{
+            if(start) {
+                ref = ref.startAfter(start)
+            }
+            const querySnapshot = await ref.get().catch(error => console.log(error))
+            const eventData = []
+            querySnapshot.forEach(doc => {
+                if (doc.exists){
+                    const event = doc.data() || {}
+                    const eventWithKey = {
+                        key: doc.id,
+                        eventId: doc.id,
+                        ...event
+                    }
+                    eventData.push(eventWithKey)
+                }
+            })
+            console.log(eventData)
+            const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
+            return {eventData: eventData, cursor: startPosition}
+        } catch ({error}) {
+            console.log('getCreatedEvennts error')
+        }
+    }
 
     //used to get location and tag for the map.
     getMapEvents = async() => {
@@ -98,6 +125,7 @@ class Fire {
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             like_userIDs: [],
             joinedNum: 1,
+            join_userIDs: [this.uid],
             geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
             geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }

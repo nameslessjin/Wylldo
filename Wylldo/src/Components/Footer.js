@@ -18,6 +18,10 @@ export default class Footer extends React.Component{
         if (this.props.popUpWndLikes != null){
             this.setState({likes: this.props.popUpWndLikes, heartPressed: this.props.popUpWndHeartPressed})
         }
+
+        if (this.props.hostUserId === Fire.uid){
+            this.setState({joinBtn: 'VIEW'})
+        }
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -106,12 +110,24 @@ export default class Footer extends React.Component{
                                 color={(this.state.heartPressed) ? '#E91E63' : null}/>
                         </TouchableOpacity>
 
+
         const currentTime = (new Date().getTime() / 1000)
-        let joinBtn = null
+        let joinBtn = (this.state.joinBtn == 'VIEW') ? 
+                        <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
+                            <Text style={styles.joinTextStyle}>VIEW</Text>
+                        </TouchableOpacity>
+                        : <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
+                            <Text style={styles.joinTextStyle}>JOIN</Text>
+                        </TouchableOpacity>
         if (this.props.endTime.seconds > currentTime){
             if (this.state.joinBtn == 'JOIN'){
                 joinBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
                             <Text style={styles.joinTextStyle}>JOIN</Text>
+                        </TouchableOpacity>
+            }
+            else if (this.state.joinBtn == 'VIEW') {
+                joinBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
+                            <Text style={styles.joinTextStyle}>VIEW</Text>
                         </TouchableOpacity>
             }
         } else if (this.state.joinBtn == 'EXPIRED' || this.props.endTime.seconds <= currentTime) {

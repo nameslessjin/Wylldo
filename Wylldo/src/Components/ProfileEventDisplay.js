@@ -62,49 +62,72 @@ export default class ProfileEventDisplay extends React.Component{
         }
     }
 
+    
+
     render(){
+        let createdTime = 'Now'
+        if (this.differenceOnTime(this.props.timestamp)){
+            createdTime = this.differenceOnTime(this.props.timestamp)
+        }
+        
+        const displayImage = (this.props.resizedImage) ? 
+            <View style={styles.imageContainer}>
+                <Image source={this.props.resizedImage} style={styles.image} resizeMode='cover' />
+            </View>
+            : null
+        
 
         return(
             <TouchableOpacity style={styles.container}>
-                <View style={styles.header}>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={styles.row}>{this.props.hostUsername}</Text>
-                        <Icon style={styles.row} name={this.props.tag} size= {20} />
+                {displayImage}
+                <View style={{flex: 1}}>
+                    <View style={styles.header}>
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={styles.row}>{this.props.hostUsername}</Text>
+                            <Icon style={styles.row} name={this.props.tag} size= {20} />
+                        </View>
+                        <Text style={styles.dateText}>{createdTime}</Text>
                     </View>
-                    <Text style={styles.dateText}>{this.differenceOnTime(this.props.timestamp)}</Text>
+                    <Text ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
                 </View>
-                <Text>{this.props.description}</Text>
             </TouchableOpacity>
         )
-
     }
 }
 
 const styles = StyleSheet.create({
     container:{
         backgroundColor: 'white',
-        marginBottom: 5,
         borderRadius: 10,
-        padding: 10
+        padding: 10,
+        flexDirection: 'row',
+        marginBottom: 10
     },
     header:{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    userProfilePic:{
-        width: 30,
-        height: 30,
-        aspectRatio: 1,
-        borderRadius: 20,
-        marginHorizontal: 7,
-        backgroundColor: 'green'
-    },
     row:{
         marginRight: 5
     },
     dateText:{
         color: 'grey',
-        marginRight: 12
+        marginHorizontal: 15
     },
+    image:{
+        width: '100%',
+        height: '100%',
+        borderRadius: 20,
+    },
+    imageContainer:{
+        backgroundColor: 'grey',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 80,
+        width: 80,
+        borderRadius: 20,
+        marginRight: 10
+        
+    }
 })

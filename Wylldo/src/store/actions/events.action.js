@@ -1,4 +1,8 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, LOAD_MORE_EVENTS, DELETE_EVENT} from "./actionTypes"
+import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, 
+        SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
+        LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
+        LOAD_MORE_CREATEDEVENTS
+        } from "./actionTypes"
 
 //I want to put connect with firebase here.  However without a state, promise having format trouble to store information
 
@@ -8,7 +12,6 @@ export const addEvent = (eventInfo) => {
         type: ADD_EVENT,
         EventInfo: eventInfo
     }
-
 }
 
 export const deleteEvent = (eventId) => {
@@ -26,10 +29,24 @@ export const getEvents = (events) => {
     }
 }
 
+export const getCreatedEvents = (createdEvents) => {
+    return {
+        type: GET_CREATEDEVENTS,
+        createdEvents: createdEvents
+    }
+}
+
 export const loadMoreEvents = (events) => {
     return {
         type: LOAD_MORE_EVENTS,
         Events: events
+    }
+}
+
+export const loadMoreCreatedEvents = (createdEvents) => {
+    return{
+        type: LOAD_MORE_CREATEDEVENTS,
+        createdEvents: createdEvents
     }
 }
 

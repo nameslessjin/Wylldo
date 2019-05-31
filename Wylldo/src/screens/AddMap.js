@@ -57,7 +57,7 @@ class AddMap extends React.Component{
                 likes: 0,
                 commentNum: 0,
                 timestamp: Date.now(),
-                hostUserid: Fire.uid,
+                hostUserId: Fire.uid,
                 hostUsername: this.props.currentUserData.name,
                 hostAvatar: this.props.currentUserData.avatarUri,
                 startTime: this.props.startTime,

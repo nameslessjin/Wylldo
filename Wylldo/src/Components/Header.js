@@ -99,7 +99,7 @@ export default class Header extends React.Component{
                     </TouchableOpacity>
                     <EventOption
                     isOptionVisible={this.state.isOptionVisible}
-                    hostUserid= {this.props.hostUserid}
+                    hostUserId= {this.props.hostUserId}
                     eventId = {this.props.eventId}
                     onBackdropPress={() => this.hideEventOption()}
                     />

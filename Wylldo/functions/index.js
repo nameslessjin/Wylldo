@@ -9,8 +9,6 @@ exports.onEventCreated = functions.firestore
     .document('Events/{eventId}')
     .onCreate((snap, context) => {
 
-        userId = snap.data().hostUserid
-
         let mapEventCreated = null
         if (snap.data().coords.latitude != null){
             const mapEventData = {
@@ -22,7 +20,8 @@ exports.onEventCreated = functions.firestore
                     startTime: snap.data().startTime,
                     endTime: snap.data().endTime,
                     coords: snap.data().geoCoordinates,
-                    createdTime: snap.data().timestamp
+                    createdTime: snap.data().timestamp,
+                    joinedNum: snap.data().joinedNum
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates

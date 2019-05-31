@@ -5,8 +5,11 @@ import  {Navigation} from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PickAvatar from '../Components/PickAvatar';
 import {connect} from 'react-redux'
-import {updateUserdata} from '../store/actions/action.index'
+import {updateUserdata, getCreatedEvents, loadMoreCreatedEvents} from '../store/actions/action.index'
 import ProfileListEvents from '../Components/ProfileListEvents'
+
+
+const size = 5
 
 class Profile extends React.Component{
     static get options(){
@@ -51,12 +54,38 @@ class Profile extends React.Component{
         return updateUserData
     }
 
+    onLikedPressed = () => {
+        this.setState({selectedOption: 'Liked'})
+    }
+
+    onJoinedPressed = () => {
+        this.setState({selectedOption: 'Joined'})
+    }
+
+    onCreatedPressed = () => {
+        this.setState({selectedOption: 'Created'})
+        this.getCreatedEvents().then(createdEvents => {
+            this.props.onGetCreatedEvents(createdEvents)
+        })
+        
+    }
+
+    getCreatedEvents = async (startPosition) => {
+        const {eventData, cursor} = await Fire.getCreatedEvents(size, startPosition)
+        this.getCreatedEventPosition = cursor
+        return eventData
+    }
 
     render(){
         LayoutAnimation.easeInEaseOut()
         let displayName = null
         if(this.props.currentUserData){
             displayName = <Text style={{fontSize: 16}}>{this.props.currentUserData.name}</Text>
+        }
+
+        let displayEvents = null
+        if(this.state.selectedOption == 'Created'){
+            displayEvents = this.props.createdEvents
         }
 
         return(
@@ -78,23 +107,24 @@ class Profile extends React.Component{
                     </View>
                 </View>
                 
+
                 <View style={styles.historyContainer}>
                     <View style={styles.optionContainer}>
                         <TouchableOpacity 
                             style={ (this.state.selectedOption == 'Liked') ? styles.selectedoptionBtn : styles.optionBtn}
-                            onPress={() => this.setState({selectedOption: 'Liked'})}    
+                            onPress={this.onLikedPressed}    
                         >
                             <Text style={(this.state.selectedOption == 'Liked') ? styles.selectedOptionsText : styles.optionsText}>Liked</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={(this.state.selectedOption == 'Joined') ? styles.selectedoptionBtn : styles.optionBtn}
-                            onPress={() => this.setState({selectedOption: 'Joined'})}      
+                            onPress={this.onJoinedPressed}      
                         >
                             <Text style={(this.state.selectedOption == 'Joined') ? styles.selectedOptionsText : styles.optionsText}>Joined</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={(this.state.selectedOption == 'Created') ? styles.selectedoptionBtn : styles.optionBtn}
-                            onPress={() => this.setState({selectedOption: 'Created'})}  
+                            onPress={this.onCreatedPressed}  
                         >
                             <Text style={(this.state.selectedOption == 'Created') ? styles.selectedOptionsText : styles.optionsText}>Created</Text>
                         </TouchableOpacity>
@@ -103,7 +133,7 @@ class Profile extends React.Component{
 
                     <View style={styles.historyDisplay}>
                         <ProfileListEvents
-                            events = {this.props.events}
+                            events = {displayEvents}
                             componentId={this.props.componentId} 
                         />
                     </View>
@@ -116,13 +146,15 @@ class Profile extends React.Component{
 const mapStateToProps = state => {
     return {
         currentUserData: state.events.currentUser,
-        events: state.events.Events
+        createdEvents: state.events.createdEvents
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return{
-        onUpdatedUserData: (updatedUserData) => dispatch(updateUserdata(updatedUserData))
+        onUpdatedUserData: (updatedUserData) => dispatch(updateUserdata(updatedUserData)),
+        onGetCreatedEvents: (createdEvents) => dispatch(getCreatedEvents(createdEvents)),
+        onLoadMoreCreatedEvents: (createdEvents) => dispatch(loadMoreCreatedEvents(createdEvents))
     }
 }
 
