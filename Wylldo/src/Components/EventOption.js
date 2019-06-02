@@ -4,6 +4,7 @@ import Modal from 'react-native-modal'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
 import {deleteEvent} from '../store/actions/action.index'
+import {Navigation} from 'react-native-navigation'
 
 class EventOption extends React.Component{
 
@@ -26,7 +27,8 @@ class EventOption extends React.Component{
     onDeletePress = () => {
         this.onDeleteEvent().then(deleteEventId => {
             this.props.onDeleteEvent(deleteEventId)
-            this.onBackdropPress
+            Navigation.popToRoot(this.props.componentId)
+
         })
 
     }
@@ -37,8 +39,6 @@ class EventOption extends React.Component{
     }
 
     render(){
-
-        console.log(this.props)
 
         let deleteBtn = null
         if (Fire.uid === this.props.hostUserId){
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     },
     breakLine:{
         borderBottomColor: "#DDDED1",
-        borderBottomWidth: 1.5,
+        borderBottomWidth: 1,
         width: '100%'
     }
 })

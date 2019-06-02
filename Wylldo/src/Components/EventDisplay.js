@@ -6,6 +6,7 @@ import Footer from './Footer'
 
 export default class EventDispaly extends React.Component{
  
+
     render(){
         let aspect = null
         let imgW = null

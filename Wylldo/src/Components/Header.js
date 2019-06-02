@@ -100,6 +100,7 @@ export default class Header extends React.Component{
                     <EventOption
                     isOptionVisible={this.state.isOptionVisible}
                     hostUserId= {this.props.hostUserId}
+                    componentId = {this.props.componentId}
                     eventId = {this.props.eventId}
                     onBackdropPress={() => this.hideEventOption()}
                     />

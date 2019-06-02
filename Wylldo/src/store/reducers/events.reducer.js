@@ -51,9 +51,33 @@ export default reducer = (state = initialState, action) => {
                 return event.eventId !== action.eventId
             })
 
+            let updatedLikedEvents = [...state.likedEvents]
+            updatedLikedEvents = updatedLikedEvents.filter(event => {
+                return event.eventId !== action.eventId
+            })
+
+            let updatedCreatedEvents = [...state.createdEvents]
+            updatedCreatedEvents = updatedCreatedEvents.filter(event => {
+                return event.eventId !== action.eventId
+            })
+
+            let updatedMapEvents = [...state.mapEvents]
+            updatedMapEvents = updatedMapEvents.filter(event => {
+                return event.eventId !== action.eventId
+            })
+
+            let updatedJoinedEvents = [...state.joinedEvents]
+            updatedJoinedEvents = updatedJoinedEvents.filter(event => {
+                return event.eventId !== action.eventId
+            })
+
         return{
             ...state,
-            Events: updatedEvents
+            Events: updatedEvents,
+            likedEvents: updatedLikedEvents,
+            createdEvents: updatedCreatedEvents,
+            mapEvents: updatedMapEvents,
+            joinedEvents: updatedJoinedEvents
         }
         
         case GET_MAPEVENTS:
