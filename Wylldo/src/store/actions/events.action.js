@@ -1,7 +1,8 @@
 import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, 
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
         LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
-        LOAD_MORE_CREATEDEVENTS
+        LOAD_MORE_CREATEDEVENTS, GET_LIKEDEVENTS, LOAD_MORE_LIKEDEVENTS,
+        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS
         } from "./actionTypes"
 
 //I want to put connect with firebase here.  However without a state, promise having format trouble to store information
@@ -29,13 +30,6 @@ export const getEvents = (events) => {
     }
 }
 
-export const getCreatedEvents = (createdEvents) => {
-    return {
-        type: GET_CREATEDEVENTS,
-        createdEvents: createdEvents
-    }
-}
-
 export const loadMoreEvents = (events) => {
     return {
         type: LOAD_MORE_EVENTS,
@@ -43,10 +37,45 @@ export const loadMoreEvents = (events) => {
     }
 }
 
+export const getCreatedEvents = (createdEvents) => {
+    return {
+        type: GET_CREATEDEVENTS,
+        createdEvents: createdEvents
+    }
+}
+
 export const loadMoreCreatedEvents = (createdEvents) => {
     return{
         type: LOAD_MORE_CREATEDEVENTS,
         createdEvents: createdEvents
+    }
+}
+
+export const getJoinedEvents = (joinedEvents) => {
+    return{
+        type: GET_JOINEDEVENTS,
+        joinedEvents: joinedEvents
+    }
+}
+
+export const loadMoreJoinedEvents = (joinedEvents) => {
+    return{
+        type: LOAD_MORE_JOINEDEVENTS,
+        joinedEvents: joinedEvents
+    }
+}
+
+export const getLikedEvents = (likedEvents) => {
+    return {
+        type: GET_LIKEDEVENTS,
+        likedEvents: likedEvents
+    }
+}
+
+export const loadMoreLikedEvents = (likedEvents) => {
+    return{
+        type: LOAD_MORE_LIKEDEVENTS,
+        likedEvents: likedEvents
     }
 }
 

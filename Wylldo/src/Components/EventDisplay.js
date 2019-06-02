@@ -15,7 +15,6 @@ export default class EventDispaly extends React.Component{
             imgH = this.props.image.height
             aspect = imgW / imgH
         }
-
         const displayImage= (
             <View style={[styles.imageContainer, {aspectRatio: aspect}]}>
                 <Image source={this.props.image} resizeMode='contain' style={styles.image} />

@@ -53,8 +53,15 @@ class Fire {
         
     }
     
-    getCreatedEvents = async(size, start) => {
-        let ref = this.eventsCollection.where('hostUserId', '==', this.uid).orderBy('timestamp', 'DESC').limit(size)
+    getProfileEvents = async({size, start, type}) => {
+        let ref = null
+        if(type == 'Created'){
+            ref = this.eventsCollection.where('hostUserId', '==', this.uid).orderBy('timestamp', 'DESC').limit(size)
+        } else if (type == 'Liked'){
+            ref = this.eventsCollection.where('like_userIDs', 'array-contains', this.uid).orderBy('timestamp', 'DESC').limit(size)
+        } else if (type == 'Joined'){
+            ref = this.eventsCollection.where('join_userIDs', 'array-contains', this.uid).orderBy('timestamp', 'DESC').limit(size)
+        }
 
         try{
             if(start) {
@@ -73,7 +80,6 @@ class Fire {
                     eventData.push(eventWithKey)
                 }
             })
-            console.log(eventData)
             const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
             return {eventData: eventData, cursor: startPosition}
         } catch ({error}) {
@@ -125,7 +131,7 @@ class Fire {
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             like_userIDs: [],
             joinedNum: 1,
-            join_userIDs: [this.uid],
+            join_userIDs: [],
             geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
             geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }

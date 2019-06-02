@@ -1,6 +1,7 @@
 import React from 'react'
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import {Navigation} from 'react-native-navigation'
 
 export default class ProfileEventDisplay extends React.Component{
 
@@ -62,6 +63,18 @@ export default class ProfileEventDisplay extends React.Component{
         }
     }
 
+    onEventPressed = () => {
+        console.log(this.props.componentId)
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'SingleEvent',
+                passProps:{
+                    ...this.props,
+                }
+            }
+        })
+    }
+
     
 
     render(){
@@ -78,7 +91,7 @@ export default class ProfileEventDisplay extends React.Component{
         
 
         return(
-            <TouchableOpacity style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={this.onEventPressed}>
                 {displayImage}
                 <View style={{flex: 1}}>
                     <View style={styles.header}>

@@ -80,7 +80,7 @@ export default class Header extends React.Component{
         if (this.differenceOnTime(this.props.timestamp)){
             createdTime = this.differenceOnTime(this.props.timestamp)
         }
-        
+
         return(
             <View style={styles.container}>
                 <View style={styles.row}>

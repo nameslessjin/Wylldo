@@ -1,15 +1,14 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, LayoutAnimation} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
 import Fire from '../firebase/Fire'
 import  {Navigation} from 'react-native-navigation'
-import Icon from 'react-native-vector-icons/Ionicons'
 import PickAvatar from '../Components/PickAvatar';
 import {connect} from 'react-redux'
-import {updateUserdata, getCreatedEvents, loadMoreCreatedEvents} from '../store/actions/action.index'
-import ProfileListEvents from '../Components/ProfileListEvents'
+import {updateUserdata,} from '../store/actions/action.index'
+import ProfileHistory from '../Components/ProfileHistory'
 
 
-const size = 5
+const SIZE = 7
 
 class Profile extends React.Component{
     static get options(){
@@ -35,10 +34,6 @@ class Profile extends React.Component{
         Navigation.events().bindComponent(this)
     }
 
-    state={
-        selectedOption: 'Liked'
-    }
-
     navigationButtonPressed({buttonId}){
         if(buttonId == "settingBtn"){
             Navigation.push(this.props.componentId, {
@@ -54,40 +49,11 @@ class Profile extends React.Component{
         return updateUserData
     }
 
-    onLikedPressed = () => {
-        this.setState({selectedOption: 'Liked'})
-    }
-
-    onJoinedPressed = () => {
-        this.setState({selectedOption: 'Joined'})
-    }
-
-    onCreatedPressed = () => {
-        this.setState({selectedOption: 'Created'})
-        this.getCreatedEvents().then(createdEvents => {
-            this.props.onGetCreatedEvents(createdEvents)
-        })
-        
-    }
-
-    getCreatedEvents = async (startPosition) => {
-        const {eventData, cursor} = await Fire.getCreatedEvents(size, startPosition)
-        this.getCreatedEventPosition = cursor
-        return eventData
-    }
-
     render(){
-        LayoutAnimation.easeInEaseOut()
         let displayName = null
         if(this.props.currentUserData){
             displayName = <Text style={{fontSize: 16}}>{this.props.currentUserData.name}</Text>
         }
-
-        let displayEvents = null
-        if(this.state.selectedOption == 'Created'){
-            displayEvents = this.props.createdEvents
-        }
-
         return(
             <View style={styles.container}>
                 <View style={styles.userContainer}>
@@ -106,38 +72,9 @@ class Profile extends React.Component{
                         </TouchableOpacity>
                     </View>
                 </View>
-                
+    
+                <ProfileHistory componentId={this.props.componentId}/>
 
-                <View style={styles.historyContainer}>
-                    <View style={styles.optionContainer}>
-                        <TouchableOpacity 
-                            style={ (this.state.selectedOption == 'Liked') ? styles.selectedoptionBtn : styles.optionBtn}
-                            onPress={this.onLikedPressed}    
-                        >
-                            <Text style={(this.state.selectedOption == 'Liked') ? styles.selectedOptionsText : styles.optionsText}>Liked</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={(this.state.selectedOption == 'Joined') ? styles.selectedoptionBtn : styles.optionBtn}
-                            onPress={this.onJoinedPressed}      
-                        >
-                            <Text style={(this.state.selectedOption == 'Joined') ? styles.selectedOptionsText : styles.optionsText}>Joined</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={(this.state.selectedOption == 'Created') ? styles.selectedoptionBtn : styles.optionBtn}
-                            onPress={this.onCreatedPressed}  
-                        >
-                            <Text style={(this.state.selectedOption == 'Created') ? styles.selectedOptionsText : styles.optionsText}>Created</Text>
-                        </TouchableOpacity>
-                    </View>
-
-
-                    <View style={styles.historyDisplay}>
-                        <ProfileListEvents
-                            events = {displayEvents}
-                            componentId={this.props.componentId} 
-                        />
-                    </View>
-                </View>
             </View>
         )
     }
@@ -146,15 +83,12 @@ class Profile extends React.Component{
 const mapStateToProps = state => {
     return {
         currentUserData: state.events.currentUser,
-        createdEvents: state.events.createdEvents
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return{
         onUpdatedUserData: (updatedUserData) => dispatch(updateUserdata(updatedUserData)),
-        onGetCreatedEvents: (createdEvents) => dispatch(getCreatedEvents(createdEvents)),
-        onLoadMoreCreatedEvents: (createdEvents) => dispatch(loadMoreCreatedEvents(createdEvents))
     }
 }
 
@@ -198,41 +132,4 @@ const styles = StyleSheet.create({
     followNum:{
         fontSize: 18,
     },  
-    optionContainer:{
-        width: '90%',
-        height: '10%',
-        backgroundColor: 'white',
-        borderRadius: 10,
-        flexDirection: 'row',
-        marginVertical: 7,
-        justifyContent: 'space-evenly'
-    },
-    optionBtn:{
-        width: '33%',
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
-    },
-    selectedoptionBtn:{
-        width: '33%',
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#FE4C4C',
-        borderRadius: 10,
-    },
-    historyDisplay:{
-        width: '90%',
-        height: '85%',
-        alignItems: 'center',
-        backgroundColor: 'white'
-    },
-    optionsText:{
-        fontWeight: 'bold'
-    },
-    selectedOptionsText:{
-        color: 'white',
-        fontWeight: 'bold'
-    }
 })

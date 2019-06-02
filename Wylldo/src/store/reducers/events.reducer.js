@@ -1,7 +1,8 @@
 import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, 
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
         LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
-        LOAD_MORE_CREATEDEVENTS
+        LOAD_MORE_CREATEDEVENTS, GET_LIKEDEVENTS, LOAD_MORE_LIKEDEVENTS,
+        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS
         } from "../actions/actionTypes"
 
 //This is reducers for events.  Currently support Add_event, Get_Event, Get_CurrentUser, Signout and Update_user
@@ -13,7 +14,9 @@ const initialState = {
     currentUser: null,
     mapEvents: [],
     mapEventIdList: [],
-    createdEvents: []
+    createdEvents: [],
+    likedEvents: [],
+    joinedEvents: []
 }
 
 export default reducer = (state = initialState, action) => {
@@ -75,6 +78,12 @@ export default reducer = (state = initialState, action) => {
                 ...state,
                 Events: action.Events
             }
+
+        case LOAD_MORE_EVENTS:
+                return{
+                    ...state,
+                    Events: state.Events.concat(action.Events)
+                }
         
         case GET_CREATEDEVENTS:
             return{
@@ -87,10 +96,28 @@ export default reducer = (state = initialState, action) => {
                 createdEvents: state.createdEvents.concat(action.createdEvents)
             }
 
-        case LOAD_MORE_EVENTS:
+        case GET_LIKEDEVENTS:
             return{
                 ...state,
-                Events: state.Events.concat(action.Events)
+                likedEvents: action.likedEvents
+            }
+
+        case LOAD_MORE_LIKEDEVENTS:
+            return{
+                ...state,
+                likedEvents: state.likedEvents.concat(action.likedEvents)
+            }
+        
+        case GET_JOINEDEVENTS:
+            return{
+                ...state,
+                joinedEvents: action.joinedEvents
+            }
+
+        case LOAD_MORE_JOINEDEVENTS:
+            return{
+                ...state,
+                joinedEvents: state.joinedEvents.concat(action.joinedEvents)
             }
 
         //store retrieved currently login user and store to state so it can be used with redux connected screen

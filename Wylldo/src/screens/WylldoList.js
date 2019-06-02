@@ -106,7 +106,7 @@ class WylldoList extends React.Component{
                 <ListEvents 
                     events={this.props.events} 
                     componentId={this.props.componentId} 
-                    refreshControl= {
+                    refreshControl={
                         <RefreshControl
                             refreshing={this.state.refreshing}
                             onRefresh={this._onRefresh}

@@ -38,6 +38,8 @@ class EventOption extends React.Component{
 
     render(){
 
+        console.log(this.props)
+
         let deleteBtn = null
         if (Fire.uid === this.props.hostUserId){
             deleteBtn = (
