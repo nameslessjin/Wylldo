@@ -77,7 +77,6 @@ class Home extends React.Component{
 
     componentWillUnmount(){
         this.bottomTabEventListener.remove()
-        super.componentWillUnmount()
     }
 
     componentDidMount(){

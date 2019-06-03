@@ -1,14 +1,12 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
 import Fire from '../firebase/Fire'
-import  {Navigation} from 'react-native-navigation'
+import {Navigation} from 'react-native-navigation'
 import PickAvatar from '../Components/PickAvatar';
 import {connect} from 'react-redux'
 import {updateUserdata,} from '../store/actions/action.index'
 import ProfileHistory from '../Components/ProfileHistory'
 
-
-const SIZE = 7
 
 class Profile extends React.Component{
     static get options(){

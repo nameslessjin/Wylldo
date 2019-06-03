@@ -22,6 +22,8 @@ class Settings extends React.Component{
         firebase.auth().signOut().then(() => goToAuth())
     }
 
+    
+
 
     render(){
         return(

@@ -55,7 +55,6 @@ class WylldoList extends React.Component{
 
     componentWillUnmount(){
         this.bottomTabEventListener.remove()
-        super.componentWillUnmount()
     }
 
     //This part actually load when the home page is launched

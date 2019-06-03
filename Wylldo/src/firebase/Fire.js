@@ -11,7 +11,7 @@ class Fire {
             // console.log(user)
         })
         this.mapEventData = []
-        
+        this.joinResult = null
     }
 
     //Download Data
@@ -185,6 +185,28 @@ class Fire {
         .catch(error => {
             console.log('unlike event failed: ', error)
         })
+    }
+
+    onJoinEvent = async(eventId) => {
+        const eventRef = this.eventsCollection.doc(eventId)
+        await this.db.runTransaction(async transaction => {
+            const doc = await transaction.get(eventRef)
+            let newJoin_userIDs = doc.data().join_userIDs.filter(userId => userId !== this.uid)
+            newJoin_userIDs.push(this.uid)
+            const newJoinedNum = newJoin_userIDs.length + 1
+            if (newJoinedNum <= doc.data().inviteCount){
+                transaction.update(eventRef, {
+                    joinedNum: newJoinedNum,
+                    join_userIDs: newJoin_userIDs
+                })
+                this.joinResult = newJoinedNum
+            } else {
+                this.joinResult = doc.data().inviteCount
+            }
+        })
+
+        const joinResult = this.joinResult
+        return joinResult
     }
 
 

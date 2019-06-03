@@ -31,10 +31,12 @@ export default class Initializing extends React.Component{
 
         //if user is loged in move to home page.  (some concern about user token)
         //else move to authorization page
+        console.log(Fire.uid)
         if (Fire.uid){
-            console.log(Fire.uid)
+            console.log('GoHome')
             goHome()
         } else{
+            console.log('GoToAuth')
             goToAuth()
         }
 

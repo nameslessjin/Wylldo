@@ -7,7 +7,7 @@ import {getCreatedEvents, loadMoreCreatedEvents,
         getJoinedEvents, loadMoreJoinedEvents
     } from '../store/actions/action.index'
 import ProfileListEvents from '../Components/ProfileListEvents'
-import  {Navigation} from 'react-native-navigation'
+import {Navigation} from 'react-native-navigation'
 
 const SIZE = 7
 
@@ -32,7 +32,6 @@ class ProfileHistory extends React.Component{
 
     componentWillUnmount(){
         this.bottomTabEventListener.remove()
-        super.componentWillUnmount()
     }
 
     onLikedPressed = () => {
@@ -137,11 +136,11 @@ class ProfileHistory extends React.Component{
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.refreshing}
-                                onRefresh={this._onRefresh}
+                                onRefresh={() => this._onRefresh(this.state.selectedOption)}
                             />
                         }
                         onEndReached = {this._loadMore}
-                        onEndReachedThreshold = {0.4}
+                        onEndReachedThreshold = {0.5}
                     />
                 </View>
             </View>

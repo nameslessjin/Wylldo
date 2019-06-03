@@ -155,7 +155,12 @@ export default reducer = (state = initialState, action) => {
         case SIGN_OUT:
             return{
                 Events: [],
-                currentUser: null
+                currentUser: null,
+                mapEvents: [],
+                mapEventIdList: [],
+                createdEvents: [],
+                likedEvents: [],
+                joinedEvents: []
             }
         
         //no event is changed.  current user information like profile picture if updated and store immediately to avoid extra read

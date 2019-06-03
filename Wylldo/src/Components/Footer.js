@@ -3,6 +3,8 @@ import {StyleSheet, View, Text, TouchableOpacity} from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
+import JoinBtn from './JoinBtn'
+import TimeNLocation from './TimeNLocation'
 
 export default class Footer extends React.Component{
 
@@ -10,45 +12,28 @@ export default class Footer extends React.Component{
     state={
         heartPressed: false,
         likes: this.props.likes,
-        joinBtn: 'JOIN'
     }
 
     componentDidMount(){
-        this.checkUserLikeEvent()
         if (this.props.popUpWndLikes != null){
             this.setState({likes: this.props.popUpWndLikes, heartPressed: this.props.popUpWndHeartPressed})
         }
-
-        if (this.props.hostUserId === Fire.uid){
-            this.setState({joinBtn: 'VIEW'})
-        }
+        this.checkUserOnEvent()
     }
 
     componentDidUpdate(prevProps, prevState){
         if (prevProps != this.props){
             this.setState({likes: this.props.likes})
-            this.checkUserLikeEvent()
+            this.checkUserOnEvent()
         }
     }
 
-    checkUserLikeEvent = () => {
+    checkUserOnEvent = () => {
         if (this.props.like_userIDs.find(userId => userId === Fire.uid)){
             this.setState({heartPressed: true})
         } else{
             this.setState({heartPressed: false})
         }
-
-    }
-
-    onLocationBtnPressed = () => {
-        Navigation.push(this.props.componentId, {
-            component: {
-                name: 'ShowMap',
-                passProps:{
-                    ...this.props
-                }
-            }
-        })
     }
 
     onHeartBtnPressed = () => {
@@ -74,34 +59,7 @@ export default class Footer extends React.Component{
         await Fire.onUnlikeEvent(eventId)
     }
 
-    onJoinBtnPressed = () => {
-        if (this.checkJoinTime()){
-            alert('Joined!')
-        } else {
-            alert('This event has expired')
-        }
-    }
-
-    checkJoinTime = () =>{
-        const currentTime = (new Date().getTime() / 1000)
-        if (this.props.endTime.seconds <= currentTime){
-            this.setState({joinBtn: 'EXPIRED'})
-            return false
-        }
-        return true
-    }
-
     render(){
-        let locationBtn = null
-        if (this.props.coords.latitude){
-            locationBtn = (<TouchableOpacity onPress={() => this.onLocationBtnPressed()}>
-                            <Text style={{fontSize: 15, fontWeight: 'bold', color: '#3498db'}}>Location</Text> 
-                          </TouchableOpacity>)
-                           
-        } else{
-            locationBtn = (<Text style={{fontSize: 15, fontWeight: 'bold', color: '#7f8c8d'}}>Location</Text>)
-        }
-
 
         const heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
                             <Icon 
@@ -111,38 +69,10 @@ export default class Footer extends React.Component{
                         </TouchableOpacity>
 
 
-        const currentTime = (new Date().getTime() / 1000)
-        let joinBtn = (this.state.joinBtn == 'VIEW') ? 
-                        <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
-                            <Text style={styles.joinTextStyle}>VIEW</Text>
-                        </TouchableOpacity>
-                        : <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
-                            <Text style={styles.joinTextStyle}>JOIN</Text>
-                        </TouchableOpacity>
-        if (this.props.endTime.seconds > currentTime){
-            if (this.state.joinBtn == 'JOIN'){
-                joinBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
-                            <Text style={styles.joinTextStyle}>JOIN</Text>
-                        </TouchableOpacity>
-            }
-            else if (this.state.joinBtn == 'VIEW') {
-                joinBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
-                            <Text style={styles.joinTextStyle}>VIEW</Text>
-                        </TouchableOpacity>
-            }
-        } else if (this.state.joinBtn == 'EXPIRED' || this.props.endTime.seconds <= currentTime) {
-            joinBtn = <View style={styles.expireBtn}>
-                        <Text style={styles.expireTextStyle}>EXPIRED</Text>
-                    </View>
-        }
-
-
         return(
             <View style={{backgroundColor: 'white', margin: 10}}>
-                <View style={styles.timeLocationContainer}>
-                    <Text style={{fontSize: 15, fontWeight: 'bold', marginEnd: 5}}>Thur Apr 2 13:00</Text>
-                    {locationBtn}
-                </View>
+
+                <TimeNLocation {...this.props} componentId = {this.props.componentId} />
 
                 <View style={styles.buttonsContainer}>
                     <View style={{flexDirection:'row', alignItems: 'center'}}>
@@ -150,11 +80,11 @@ export default class Footer extends React.Component{
                         <Text style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
                         <Icon name={'md-share-alt'} size={30} />
                     </View>
-                    <View style={{alignItems: 'center', width: '22%', marginTop: 5}}>
-                        {joinBtn}
-                        <Text style={styles.countStyle}>{this.props.joinedNum}/{this.props.inviteCount}</Text>
-                    </View>
+                    <JoinBtn {...this.props} componentId = {this.props.componentId} />
                 </View>
+
+
+
 
                 <View>
                     <Text style={styles.name}>{this.props.hostUsername}</Text>
@@ -178,14 +108,6 @@ const styles = StyleSheet.create({
     comment:{
         fontSize: 14,
     },
-    timeLocationContainer:{
-        height: 40,
-        width: '100%',
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: -13
-    },
     buttonsContainer:{
         height: '30%',
         width: '100%',
@@ -194,36 +116,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginTop: -10
-    },
-    joinBtn:{
-        backgroundColor: '#FE4C4C',
-        borderRadius: 5,
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    expireBtn:{
-        backgroundColor: 'grey',
-        borderRadius: 5,
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    countStyle:{
-        fontSize: 15,
-        color:'grey'
-    },
-    joinTextStyle:{
-        fontSize: 20, 
-        color:'white',
-        fontFamily: 'ArialRoundedMTBold',
-    },
-    expireTextStyle:{
-        fontSize: 15, 
-        color:'white',
-        fontFamily: 'ArialRoundedMTBold',
     }
-
 })

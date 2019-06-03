@@ -84,9 +84,9 @@ export default class DatePicker extends React.Component{
     }
 
     startDateToString = (chosenDate) => {
-        const dateInWeek = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"]
+        const dateInWeek = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"]
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        const day =  (chosenDate.getDay() === 0) ? dateInWeek[6] : dateInWeek[chosenDate.getDay() - 1]
+        const day =  dateInWeek[chosenDate.getDay()]
         const month = months[chosenDate.getMonth()]
         const date = chosenDate.getDate()
         let hours = chosenDate.getHours().toString()

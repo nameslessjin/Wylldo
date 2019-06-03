@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     ImgView:{
-        height: width,
+        height: '40%',
         width: "100%",
         backgroundColor: "white",
         borderBottomWidth: 0.5,

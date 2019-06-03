@@ -13,7 +13,7 @@ export default class Header extends React.Component{
     differenceOnTime = (timestamp) => {
         const nowTime = Date.now()
         const differenceInSec = Math.round((nowTime - timestamp) / 1000)
-        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         const initDate = new Date(timestamp)
         const createdDate = initDate.getDate()
         const createdMonth = months[initDate.getMonth()]

@@ -92,3 +92,17 @@ export const goToAuth = () => Navigation.setRoot({
         }
     }
 })
+
+export const goToInitial = () => Navigation.setRoot({
+    root: {
+        stack:{
+            children:[
+                {
+                    component:{
+                        name: 'Initializing'
+                    }
+                }
+            ]
+        }
+    }
+})
