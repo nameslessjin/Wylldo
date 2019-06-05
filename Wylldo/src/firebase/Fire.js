@@ -46,6 +46,33 @@ class Fire {
 
     }
 
+    getUsers = async({size, start, userIdList, type}) => {
+        let userList = []
+        let startPosition = 0
+        if (start){
+            startPosition = start
+        }
+
+        while (userList.length <= size && startPosition < userIdList.length){
+            let docRef = this.usersCollection.doc(userIdList[startPosition])
+            const querySnapshot = await docRef.get()
+            if (querySnapshot.exists){
+                const user = querySnapshot.data() || {}
+                const userWithKey = {
+                    key: querySnapshot.id,
+                    userId: querySnapshot.id,
+                    ...user
+                }
+                userList.push(userWithKey)
+            }
+            startPosition = startPosition + 1
+        }
+        if (startPosition == userIdList.length){
+            startPosition = null
+        }
+        return {userList, start: startPosition}
+    }
+
     getEventsWithId = async(eventId) => {
         let ref = this.eventsCollection.doc(eventId)
         const querySnapshot = await ref.get();
@@ -165,7 +192,6 @@ class Fire {
         .catch(error => {
             console.log('like event failed: ', error)
         })
-
     }
 
 

@@ -16,9 +16,20 @@ export default class TimeNLocation extends React.Component {
         })
     }
 
+    state = {
+        time: null
+    }
+
     timeFormat = () => {
-        const startTime = new Date(this.props.startTime.seconds * 1000)
-        const endTime = new Date(this.props.endTime.seconds * 1000)
+        let startTime = null
+        let endTime = null
+        if(this.props.startTime.seconds){
+             startTime = new Date(this.props.startTime.seconds * 1000)
+             endTime = new Date(this.props.endTime.seconds * 1000)
+        } else {
+             startTime = new Date(this.props.startTime)
+             endTime = new Date(this.props.endTime)
+        }
         const monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         const dateInWeek = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"]
         const date = startTime.getDate().toString()
@@ -47,11 +58,12 @@ export default class TimeNLocation extends React.Component {
 
         const timeFormat = day + ' ' + month + ' ' + date + ' ' + startHours + ":" + startMinutes + startAM 
                             + " - " + endHours + ":" + endMinutes + endAM
-
+        
         return timeFormat
     }
 
     render(){
+
         const locationIcon = <Icon name='md-pin' size={25} />
         let locationBtn = null
         if (this.props.coords.latitude){
