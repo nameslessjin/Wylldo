@@ -256,7 +256,10 @@ class Fire {
             this.joinNum = newJoinedNum
             this.joinUserIds = newJoin_userIDs
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            this.joinNum = 0
+            this.joinUserIds = []
+        })
         
         const joinNum = this.joinNum
         const joinUserIds = this.joinUserIds

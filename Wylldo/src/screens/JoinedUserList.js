@@ -123,6 +123,11 @@ class JoinedUserList extends React.Component{
             this.onCancelEvent().then(res => {
                 this.updatedJoin_userIDs = res.joinUserIds
                 this.updatedJoinedNum = res.joinNum
+                if (res.joinNum == 0){
+                    this.onDeleteEvent().then(deleteEvent => {
+                        this.props.onDeleteEvent(deleteEvent)
+                    })
+                }
             })
         }
 
