@@ -2,8 +2,10 @@ import React from 'react'
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
+import {connect} from 'react-redux'
+import {deleteEvent} from '../store/actions/action.index'
 
-export default class JoinBtn extends React.Component{
+class JoinBtn extends React.Component{
 
     state ={
         joinBtn: 'JOIN',
@@ -39,7 +41,11 @@ export default class JoinBtn extends React.Component{
         if (this.checkJoinTime()){
             if (this.state.joinBtn == 'JOIN'){
                 this.onJoinEvent(this.props.eventId).then(joinedResult => {
-                    if (joinedResult.joinNum <= this.props.inviteCount){
+                    if(joinedResult.joinNum == 0){
+                        alert('Event has been canceled')
+                        this.props.onDeleteEvent(this.props.eventId)
+                    }
+                    else if (joinedResult.joinNum <= this.props.inviteCount){
                         this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'VIEW', join_userIDs: joinedResult.joinUserIds})
                     } else {
                         this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'FULL', join_userIDs: joinedResult.joinUserIds})
@@ -123,6 +129,14 @@ export default class JoinBtn extends React.Component{
      }
 
 }
+
+const mapDispatchToProps = dispatch => {
+    return{
+        onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(JoinBtn)
 
 const styles = StyleSheet.create({
     container:{

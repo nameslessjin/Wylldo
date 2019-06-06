@@ -30,9 +30,9 @@ export default class PickAvatar extends React.Component{
     render(){
 
         let displayImage = null
-        if (this.props.currentUser){
+        if (this.props.avatarUri){
             if (!this.state.Clicked){
-                displayImage = <Image source={this.props.currentUser.avatarUri} style={styles.image} />
+                displayImage = <Image source={this.props.avatarUri} style={styles.image} />
             } else {
                 displayImage = <Image source={this.state.pickedAvatar} style={styles.image} />
             }

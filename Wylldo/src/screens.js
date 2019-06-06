@@ -25,4 +25,5 @@ export function registerScreens(){
     //this is not a screen
     Navigation.registerComponentWithRedux('EventOption', () => require('./Components/EventOption').default, Provider, store)
     Navigation.registerComponentWithRedux('ProfileHistory',() => require('./Components/ProfileHistory').default, Provider, store )
+    Navigation.registerComponentWithRedux('JoinBtn', () => require('./Components/JoinBtn').default, Provider, store)
 }

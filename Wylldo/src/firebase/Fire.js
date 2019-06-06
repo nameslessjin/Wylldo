@@ -5,6 +5,7 @@ import {GeoCollectionReference, GeoFirestore, GeoQuery, GeoDocumentReference} fr
 import geohash from 'ngeohash'
 
 
+
 class Fire {
     constructor(){
         firebase.auth().onAuthStateChanged(user => {
@@ -231,6 +232,10 @@ class Fire {
                 this.joinNum = doc.data().inviteCount
                 this.joinUserIds = doc.data().join_userIDs
             }
+        })
+        .catch(error => {
+            this.joinNum = 0
+            this.joinUserIds = []
         })
 
         const joinNum = this.joinNum

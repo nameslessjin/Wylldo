@@ -48,26 +48,31 @@ class Profile extends React.Component{
     }
 
     render(){
-        let displayName = null
-        if(this.props.currentUserData){
-            displayName = <Text style={{fontSize: 16}}>{this.props.currentUserData.name}</Text>
-        }
+        const displayName = (
+            <Text style={{fontSize: 16}}>{this.props.currentUserData.name}</Text>
+        )
+        const followerDisplay = (
+            <TouchableOpacity style={styles.followTouchBtn}>
+                <Text style={styles.followNum}>{this.props.currentUserData.followerNum}</Text>
+                <Text style={styles.followText}>followers</Text>
+            </TouchableOpacity>
+        )
+        const followingDisplay = (
+            <TouchableOpacity style={styles.followTouchBtn}>
+                <Text style={styles.followNum}>{this.props.currentUserData.followingNum}</Text>
+                <Text style={styles.followText}>following</Text>
+            </TouchableOpacity>
+        )
         return(
             <View style={styles.container}>
                 <View style={styles.userContainer}>
-                    <PickAvatar currentUser={this.props.currentUserData} updateAvatar={(updateAvat) => {
+                    <PickAvatar avatarUri={this.props.currentUserData.avatarUri} updateAvatar={(updateAvat) => {
                         this.updateAvatar(updateAvat)
                         .then(updatedUserData => this.props.onUpdatedUserData(updatedUserData))}} />
                     {displayName}
                     <View style={styles.followContainer}>
-                        <TouchableOpacity style={styles.followTouchBtn}>
-                            <Text style={styles.followNum}>1000</Text>
-                            <Text style={styles.followText}>followers</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.followTouchBtn}>
-                            <Text style={styles.followNum}>0</Text>
-                            <Text style={styles.followText}>following</Text>
-                        </TouchableOpacity>
+                        {followerDisplay}
+                        {followingDisplay}
                     </View>
                 </View>
     

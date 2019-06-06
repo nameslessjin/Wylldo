@@ -11,7 +11,7 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER,
 //Will move get_CurrentUser, Signout and update_user to a userdata reducer
 const initialState = {
     Events: [],
-    currentUser: null,
+    currentUser: {},
     mapEvents: [],
     mapEventIdList: [],
     createdEvents: [],

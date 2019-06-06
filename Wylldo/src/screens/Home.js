@@ -82,7 +82,7 @@ class Home extends React.Component{
     componentDidMount(){
  
         if (Fire.uid){
-            this.getCurrentUserData().then( currentUserData => {
+            this.getCurrentUserData().then(currentUserData => {
                 this.props.onGetCurrentUser(currentUserData);
                 this.getMapEventData().then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
