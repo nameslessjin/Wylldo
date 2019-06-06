@@ -7,7 +7,8 @@ export default class JoinBtn extends React.Component{
 
     state ={
         joinBtn: 'JOIN',
-        joinedNum: this.props.joinedNum
+        joinedNum: this.props.joinedNum,
+        join_userIDs: this.props.join_userIDs
     }
 
     componentDidMount(){
@@ -23,10 +24,10 @@ export default class JoinBtn extends React.Component{
     }
 
     checkUserOnEvent = () => {
-        if (this.props.joinedNum == this.props.inviteCount){
+        if (this.state.joinedNum == this.props.inviteCount){
             this.setState({joinBtn: 'FULL'})
         }
-        if (this.props.join_userIDs.find(userId => userId === Fire.uid)){
+        if (this.state.join_userIDs.find(userId => userId === Fire.uid)){
             this.setState({joinBtn: 'VIEW'})
         }
         if (this.props.hostUserId === Fire.uid){
@@ -37,11 +38,11 @@ export default class JoinBtn extends React.Component{
     onJoinBtnPressed = () => {
         if (this.checkJoinTime()){
             if (this.state.joinBtn == 'JOIN'){
-                this.onJoinEvent(this.props.eventId).then(joinResult => {
-                    if (joinResult <= this.props.inviteCount){
-                        this.setState({joinedNum: joinResult, joinBtn: 'VIEW'})
+                this.onJoinEvent(this.props.eventId).then(joinedResult => {
+                    if (joinedResult.joinNum <= this.props.inviteCount){
+                        this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'VIEW', join_userIDs: joinedResult.joinUserIds})
                     } else {
-                        this.setState({joinedNum: joinResult, joinBtn: 'FULL'})
+                        this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'FULL', join_userIDs: joinedResult.joinUserIds})
                     }
                 })
             }
@@ -54,13 +55,14 @@ export default class JoinBtn extends React.Component{
     }
 
     onViewBtnPressed = () => {
-        console.log(this.props.componentId)
         Navigation.push(this.props.componentId, {
             component:{
                 name: 'JoinedUserList',
                 passProps:{
                     eventId: this.props.eventId,
-                    join_userIDs: this.props.join_userIDs
+                    join_userIDs: this.state.join_userIDs,
+                    hostUserId: this.props.hostUserId,
+                    onCancel: (res) => {this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs, joinBtn: 'JOIN'})}
                 }
             }
         })

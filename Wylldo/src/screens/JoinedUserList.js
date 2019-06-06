@@ -3,10 +3,13 @@ import {View, Text, StyleSheet, Alert} from 'react-native'
 import Fire from '../firebase/Fire'
 import {Navigation} from 'react-native-navigation'
 import ListUsers from '../Components/ListUsers'
+import {deleteEvent} from '../store/actions/action.index'
+import {connect} from 'react-redux'
+import UserDisplay from '../Components/UserDisplay'
 
-SIZE = 5
+SIZE = 7
 
-export default class JoinedUserList extends React.Component{
+class JoinedUserList extends React.Component{
 
     static get options(){
         return{
@@ -39,12 +42,17 @@ export default class JoinedUserList extends React.Component{
             refreshing: false,
             loading: false,
             join_userIDs: this.props.join_userIDs,
-            userList: []
+            userList: [],
+            hostData: null
         }
     }
 
     componentDidMount(){
         this._onRefresh('JOINED')
+        this.getHostData(this.props.hostUserId).then(hostData => {
+            this.setState({hostData: hostData})
+        })
+
     }
 
     navigationButtonPressed({buttonId}){
@@ -74,6 +82,11 @@ export default class JoinedUserList extends React.Component{
         this.setState({userList: userList})
     })
 
+    getHostData = async (userId) => {
+        const hostData = await Fire.getUserData(userId)
+        return hostData
+    }
+
     getJoinedUsers = async(type, startPosition) => {
         this.setState({refreshing: true})
         const {userList, start} = await Fire.getUsers({size: SIZE, start: startPosition, userIdList: this.state.join_userIDs, type: type})
@@ -97,11 +110,39 @@ export default class JoinedUserList extends React.Component{
     }
 
     confirmCancel = () => {
+
+        this.updatedJoin_userIDs = this.state.join_userIDs
+        this.updatedJoinedNum = this.updatedJoin_userIDs.length
+        if (this.props.hostUserId == Fire.uid){
+            this.onDeleteEvent().then(deleteEventId => {
+                this.props.onDeleteEvent(deleteEventId)
+                this.updatedJoin_userIDs = []
+                this.updatedJoinedNum = 0
+            })
+        } else {
+            this.onCancelEvent().then(res => {
+                this.updatedJoin_userIDs = res.joinUserIds
+                this.updatedJoinedNum = res.joinNum
+            })
+        }
+
+        const updatedJoin_userIDs = this.updatedJoin_userIDs
+        const updatedJoinedNum = this.updatedJoinedNum
+        this.props.onCancel({joinedNum: updatedJoinedNum, join_userIDs: updatedJoin_userIDs})
         Navigation.pop(this.props.componentId)
     }
 
-    render(){
+    onDeleteEvent = async() => {
+        const deleteEventId = await Fire.deleteEvent(this.props.eventId)
+        return deleteEventId
+    }
 
+    onCancelEvent = async() => {
+        const cancelResult = await Fire.onCancelEvent(this.props.eventId)
+        return cancelResult
+    }
+
+    render(){
         const showList = (this.state.userList.length > 0) ?
                     <ListUsers
                     componentId={this.props.componentId}
@@ -114,15 +155,38 @@ export default class JoinedUserList extends React.Component{
                         <Text style={styles.text}>No one has joined yet</Text>
                     </View>
 
+        const showHost = (
+                    <View>
+                        <Text style={styles.hostText}>Host</Text>
+                        <UserDisplay  {...this.state.hostData}/>
+                    </View>
+        )
+
         return(
             <View style={styles.container}>
                 <View style={styles.userListContainer}>
+                    {showHost}
+                    <View style={styles.breakLine}/>
                     {showList}
                 </View>
             </View>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.events.currentUser
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return{
+        onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(JoinedUserList)
 
 const styles = StyleSheet.create({
     container: {
@@ -145,5 +209,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: -30
+    },
+    hostText:{
+        color: 'grey',
+        fontSize: 18,
+        fontFamily: 'ArialRoundedMTBold',
+    },
+    breakLine:{
+        borderBottomColor: "#DDDED1",
+        borderBottomWidth: 2,
+        width: '100%',
+        marginBottom: 10
     }
 })

@@ -7,7 +7,7 @@ export default class UserDisplay extends React.Component{
 
 
     render(){
-        console.log(this.props)
+        // console.log(this.props)
 
         const userProfilePic = (
             <TouchableOpacity style={styles.row}>

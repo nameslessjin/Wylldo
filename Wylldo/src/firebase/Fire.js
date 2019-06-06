@@ -225,14 +225,38 @@ class Fire {
                     joinedNum: newJoinedNum,
                     join_userIDs: newJoin_userIDs
                 })
-                this.joinResult = newJoinedNum
+                this.joinNum = newJoinedNum
+                this.joinUserIds = newJoin_userIDs
             } else {
-                this.joinResult = doc.data().inviteCount
+                this.joinNum = doc.data().inviteCount
+                this.joinUserIds = doc.data().join_userIDs
             }
         })
 
-        const joinResult = this.joinResult
-        return joinResult
+        const joinNum = this.joinNum
+        const joinUserIds = this.joinUserIds
+        return {joinNum: joinNum, joinUserIds: joinUserIds}
+    }
+
+    onCancelEvent = async(eventId) => {
+        const eventRef = this.eventsCollection.doc(eventId)
+        await this.db.runTransaction(async transaction => {
+            const doc = await transaction.get(eventRef)
+            let newJoin_userIDs = doc.data().join_userIDs.filter(userId => userId !== this.uid)
+            const newJoinedNum = newJoin_userIDs.length + 1
+            transaction.update(eventRef, {
+                joinedNum: newJoinedNum,
+                join_userIDs: newJoin_userIDs
+            })
+            this.joinNum = newJoinedNum
+            this.joinUserIds = newJoin_userIDs
+        })
+        .catch(error => console.log(error))
+        
+        const joinNum = this.joinNum
+        const joinUserIds = this.joinUserIds
+        return {joinNum: joinNum, joinUserIds: joinUserIds}
+
     }
 
 
@@ -293,17 +317,19 @@ class Fire {
             name: name,
             email: email,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            followerNum: 0,
+            followingNum: 0
         }
 
         this.usersCollection.doc(this.uid).set(signUpUserInfo)
         .catch((error) => {console.log(error.message)})
     }
 
-    getUserData = async() => {
-        const ref = this.usersCollection.doc(this.uid)
-        const currentUserData = await ref.get().catch(error => console.log(error))
-        return currentUserData.data()
+    getUserData = async(userId) => {
+        const ref = this.usersCollection.doc(userId)
+        const userData = await ref.get().catch(error => console.log(error))
+        return userData.data()
     }
 
 

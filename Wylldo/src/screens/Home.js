@@ -105,7 +105,7 @@ class Home extends React.Component{
     // }
 
     getCurrentUserData = async () => {
-        const currentUserData = await Fire.getUserData()
+        const currentUserData = await Fire.getUserData(Fire.uid)
         return currentUserData
     }
 
