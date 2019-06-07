@@ -154,6 +154,7 @@ class JoinedUserList extends React.Component{
                     onEndReached = {this._loadMore}
                     onEndReachedThreshold = {0.5}
                     userList = {this.state.userList}
+                    hostUserId={this.props.hostUserId}
                     />
                     :
                     <View style={styles.textContainer}>
@@ -163,7 +164,7 @@ class JoinedUserList extends React.Component{
         const showHost = (
                     <View>
                         <Text style={styles.hostText}>Host</Text>
-                        <UserDisplay  {...this.state.hostData}/>
+                        <UserDisplay  {...this.state.hostData} userId={this.props.hostUserId} componentId={this.props.componentId}/>
                     </View>
         )
 

@@ -6,7 +6,7 @@ import ProfileEventDisplay from './ProfileEventDisplay'
 export default class ProfileListEvents extends React.Component{
 
     _keyExtractor = (item, index) => (item.key + index).toString()
-    renderItem = ({item}) => <ProfileEventDisplay {...item} componentId={this.props.componentId} />
+    renderItem = ({item}) => <ProfileEventDisplay {...item} componentId={this.props.componentId} type={this.props.type} />
 
     render(){
         const {...props} = this.props

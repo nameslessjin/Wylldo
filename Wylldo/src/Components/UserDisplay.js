@@ -1,31 +1,35 @@
 import React from 'react'
 import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
+import FollowButton from './FollowButton'
+import {Navigation} from 'react-native-navigation'
 
 export default class UserDisplay extends React.Component{
 
+    onUserPress = () => {
+        Navigation.push(this.props.componentId, {
+            component:{
+                name: 'OtherProfile',
+                passProps:{
+                    ...this.props
+                }
+            }
+        })
+    }
 
 
 
     render(){
-        // console.log(this.props)
-
         const userProfilePic = (
-            <TouchableOpacity style={styles.row}>
+            <TouchableOpacity style={styles.row} onPress={this.onUserPress}>
                 <Image source={this.props.avatarUri} style={styles.imageStyle}/>
                 <Text style={styles.usernameStyle}>{this.props.name}</Text>
             </TouchableOpacity>
         )
-
-        const followBtn = (
-            <TouchableOpacity style={styles.followBtnStyle}>
-                <Text style={styles.followText}>Follow</Text>
-            </TouchableOpacity>
-        )
-
+        
         return(
             <View style={styles.container}>
                 {userProfilePic}
-                {followBtn}
+                <FollowButton userId = {this.props.userId}/>
             </View>
         )
     }
@@ -38,7 +42,8 @@ const styles = StyleSheet.create({
         height: 80,
         width: "100%",
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: 10
     },
     imageStyle:{
         width: 70,

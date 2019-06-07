@@ -20,6 +20,7 @@ export function registerScreens(){
     Navigation.registerComponent('AddEvent', () => require('./screens/AddEvent').default)
     Navigation.registerComponent('ShowMap', () => require('./screens/ShowMap').default)
     Navigation.registerComponent('Auth', () => require('./screens/Auth').default)
+    Navigation.registerComponent('OtherProfile', () => require('./screens/OtherProfile').default)
 
 
     //this is not a screen

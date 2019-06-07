@@ -88,7 +88,7 @@ class Fire {
         } else if (type == 'Liked'){
             ref = this.eventsCollection.where('like_userIDs', 'array-contains', this.uid).orderBy('timestamp', 'DESC').limit(size)
         } else if (type == 'Joined'){
-            ref = this.eventsCollection.where('join_userIDs', 'array-contains', this.uid).orderBy('timestamp', 'DESC').limit(size)
+            ref = this.eventsCollection.where('join_userIDs', 'array-contains', this.uid).orderBy('startTime', 'DESC').limit(size)
         }
 
         try{
@@ -243,6 +243,83 @@ class Fire {
         return {joinNum: joinNum, joinUserIds: joinUserIds}
     }
 
+    onFollowUser = async (followingUserId) => {
+        const followRef = this.db.collection('Follow')
+        const followerUserRef = this.usersCollection.doc(this.uid)
+        const followingUserRef = this.usersCollection.doc(followingUserId)
+        const followData = {
+            followerUserId: this.uid,
+            followingUserId: followingUserId,
+            createdTime: firebase.firestore.FieldValue.serverTimestamp(),
+        }
+
+        const onFollow = await followRef.add(followData)
+                        .catch(error => console.log('follow failed:', error))
+        
+        if (onFollow.id){
+            await this.db.runTransaction(async transaction => {
+                const followerDoc = await transaction.get(followerUserRef)
+                const followingDoc = await transaction.get(followingUserRef)
+                const newFollowingNum = followerDoc.data().followingNum + 1
+                const newFollowerNum = followingDoc.data().followerNum + 1
+                transaction.update(followerUserRef, {
+                    followingNum: newFollowingNum,
+                })
+                transaction.update(followingUserRef, {
+                    followerNum: newFollowerNum
+                })
+
+            })
+        }
+        
+        const followDataWithKey = {
+            ...followData,
+            followId: onFollow.id
+        }
+
+        return followDataWithKey
+
+    }
+
+    onUnfollowUser = async(followingUserId, followId) => {
+        const followRef = this.db.collection('Follow').doc(followId)
+        const followerUserRef = this.usersCollection.doc(this.uid)
+        const followingUserRef = this.usersCollection.doc(followingUserId)
+        await followRef.delete().then(res => {
+            this.db.runTransaction(async transaction => {
+                const followerDoc = await transaction.get(followerUserRef)
+                const followingDoc = await transaction.get(followingUserRef)
+                const newFollowingNum = followerDoc.data().followingNum - 1
+                const newFollowerNum = followingDoc.data().followerNum - 1
+                transaction.update(followerUserRef, {
+                    followingNum: newFollowingNum,
+                })
+                transaction.update(followingUserRef, {
+                    followerNum: newFollowerNum
+                })
+            })
+        })
+        .catch(error => console.log('Unfollow failed: ', error))
+    }
+
+    checkFollow = async(followingUserId) => {
+        const followRef = this.db.collection('Follow').where('followerUserId', '==', this.uid).where('followingUserId', '==', followingUserId)
+        const querySnapshot = await followRef.get().catch(error => console.log(error))
+        const follow = []
+        querySnapshot.forEach(doc => {
+            if (doc.exists){
+                const followData = doc.data() || {}
+                const followDataWithKey = {
+                    ...followData,
+                    key: doc.id,
+                    followId: doc.id
+                }
+                follow.push(followDataWithKey)
+            }
+        })
+        return follow[0]
+    }
+
     onCancelEvent = async(eventId) => {
         const eventRef = this.eventsCollection.doc(eventId)
         await this.db.runTransaction(async transaction => {
@@ -293,17 +370,17 @@ class Fire {
     }
 
     uploadAvatarAsync = async uri => {
-        const path = `${'Users'}/${this.uid}/${'Profile_Pic'}/${uuid.v4()}.jpg`
+        const path = `${'Users'}/${this.uid}/${'Profile_Pic'}/${'profilePic'}.jpg`
         return uploadPhoto(uri, path)
     }
 
     uploadImageAsync = async uri => {
-        const path = `${'Events'}/${this.uid}/${uuid.v4()}.jpg`
+        const path = `${'Users'}/${this.uid}/${'Events'}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path)
     }
 
     uploadresizedImageAsync = async uri => {
-        const path = `${'Events'}/${this.uid}/${'resizedImage'}/${uuid.v4()}.jpg`
+        const path = `${'Users'}/${this.uid}/${'Events'}/${'resizedImage'}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path).catch(error => console.log(error))
     }
 

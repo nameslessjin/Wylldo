@@ -139,9 +139,17 @@ export default reducer = (state = initialState, action) => {
             }
 
         case LOAD_MORE_JOINEDEVENTS:
+
+            let newJoinedEvents = [...state.joinedEvents]
+            if(action.joinedEvents.length == 1){
+                const repeatEvent = action.joinedEvents[0]
+                newJoinedEvents = newJoinedEvents.filter(event => event.eventId !== repeatEvent.eventId)
+            }
+            newJoinedEvents = newJoinedEvents.concat(action.joinedEvents)
+
             return{
                 ...state,
-                joinedEvents: state.joinedEvents.concat(action.joinedEvents)
+                joinedEvents: newJoinedEvents
             }
 
         //store retrieved currently login user and store to state so it can be used with redux connected screen
@@ -155,7 +163,7 @@ export default reducer = (state = initialState, action) => {
         case SIGN_OUT:
             return{
                 Events: [],
-                currentUser: null,
+                currentUser: {},
                 mapEvents: [],
                 mapEventIdList: [],
                 createdEvents: [],

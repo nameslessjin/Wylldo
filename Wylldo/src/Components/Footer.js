@@ -16,9 +16,9 @@ export default class Footer extends React.Component{
 
     componentDidMount(){
         if (this.props.popUpWndLikes != null){
+            this.checkUserOnEvent()
             this.setState({likes: this.props.popUpWndLikes, heartPressed: this.props.popUpWndHeartPressed})
         }
-        this.checkUserOnEvent()
     }
 
     componentDidUpdate(prevProps, prevState){

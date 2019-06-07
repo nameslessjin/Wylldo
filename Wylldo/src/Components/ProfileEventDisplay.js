@@ -63,6 +63,30 @@ export default class ProfileEventDisplay extends React.Component{
         }
     }
 
+    eventStartTime = () => {
+        let startTime = null
+        if (this.props.startTime.seconds){
+            startTime = new Date(this.props.startTime.seconds * 1000)
+        }
+        const monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        const date = startTime.getDate().toString()
+        const month = monthList[startTime.getMonth()]
+        let startHours = startTime.getHours()
+        let startMinutes = startTime.getMinutes()
+        let startAM = "AM"
+        if (startMinutes < 10) {
+            startMinutes = "0" + startMinutes
+        }
+        if (startHours > 12){
+            startHours = startHours -12
+            startAM = "PM"
+        }
+        const time = month + ' ' + date + ' ' + startHours + ':' + startMinutes + startAM
+
+        return time
+    }
+
+
     onEventPressed = () => {
         console.log(this.props.componentId)
         Navigation.push(this.props.componentId, {
@@ -78,10 +102,16 @@ export default class ProfileEventDisplay extends React.Component{
     
 
     render(){
-        let createdTime = 'Now'
-        if (this.differenceOnTime(this.props.timestamp)){
-            createdTime = this.differenceOnTime(this.props.timestamp)
+
+        
+        let displayTime = 'Now'
+        if (this.props.type == 'Joined'){
+            displayTime = this.eventStartTime()
+        } else {
+            displayTime = this.differenceOnTime(this.props.timestamp)
         }
+
+        
         
         const displayImage = (this.props.resizedImage) ? 
             <View style={styles.imageContainer}>
@@ -99,7 +129,7 @@ export default class ProfileEventDisplay extends React.Component{
                             <Text style={styles.row}>{this.props.hostUsername}</Text>
                             <Icon style={styles.row} name={this.props.tag} size= {20} />
                         </View>
-                        <Text style={styles.dateText}>{createdTime}</Text>
+                        <Text style={styles.dateText}>{displayTime}</Text>
                     </View>
                     <Text ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
                 </View>

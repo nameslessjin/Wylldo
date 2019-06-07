@@ -9,7 +9,7 @@ import {getCreatedEvents, loadMoreCreatedEvents,
 import ProfileListEvents from '../Components/ProfileListEvents'
 import {Navigation} from 'react-native-navigation'
 
-const SIZE = 7
+const SIZE = 8
 
 class ProfileHistory extends React.Component{
 
@@ -26,7 +26,8 @@ class ProfileHistory extends React.Component{
 
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
         if (selectedTabIndex == 2 && unselectedTabIndex != 2){
-            this.onLikedPressed()
+            this.setState({selectedOption: 'Liked'})
+            this._onRefresh('Liked')
         }
     }
 
@@ -105,6 +106,9 @@ class ProfileHistory extends React.Component{
         } else if (this.state.selectedOption == 'Joined'){
             displayEvents = this.props.joinedEvents
         }
+
+        const type = this.state.selectedOption
+
         return(
             <View style={styles.historyContainer}>
                 <View style={styles.optionContainer}>
@@ -133,6 +137,7 @@ class ProfileHistory extends React.Component{
                     <ProfileListEvents
                         events = {displayEvents}
                         componentId={this.props.componentId} 
+                        type={type}
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.refreshing}
