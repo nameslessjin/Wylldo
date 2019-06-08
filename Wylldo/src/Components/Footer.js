@@ -15,8 +15,8 @@ export default class Footer extends React.Component{
     }
 
     componentDidMount(){
+        this.checkUserOnEvent()
         if (this.props.popUpWndLikes != null){
-            this.checkUserOnEvent()
             this.setState({likes: this.props.popUpWndLikes, heartPressed: this.props.popUpWndHeartPressed})
         }
     }
@@ -27,6 +27,7 @@ export default class Footer extends React.Component{
             this.checkUserOnEvent()
         }
     }
+
 
     checkUserOnEvent = () => {
         if (this.props.like_userIDs.find(userId => userId === Fire.uid)){

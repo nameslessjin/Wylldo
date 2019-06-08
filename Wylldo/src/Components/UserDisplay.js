@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
 import FollowButton from './FollowButton'
 import {Navigation} from 'react-native-navigation'
+import Fire from '../firebase/Fire'
 
 export default class UserDisplay extends React.Component{
 
@@ -19,7 +20,16 @@ export default class UserDisplay extends React.Component{
 
 
     render(){
-        const userProfilePic = (
+
+        const userProfilePic = (this.props.userId == Fire.uid) ?  
+        (
+            <View style={styles.row} onPress={this.onUserPress}>
+                <Image source={this.props.avatarUri} style={styles.imageStyle}/>
+                <Text style={styles.usernameStyle}>{this.props.name}</Text>
+            </View>
+        )
+        :
+        (
             <TouchableOpacity style={styles.row} onPress={this.onUserPress}>
                 <Image source={this.props.avatarUri} style={styles.imageStyle}/>
                 <Text style={styles.usernameStyle}>{this.props.name}</Text>

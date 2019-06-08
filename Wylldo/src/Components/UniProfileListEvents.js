@@ -1,12 +1,12 @@
 import {FlatList, StyleSheet} from 'react-native'
 import React from 'react'
-import ProfileEventDisplay from './ProfileEventDisplay'
+import UniProfileEventDisplay from './UniProfileEventDisplay'
 
 
-export default class ProfileListEvents extends React.Component{
+export default class UniProfileListEvents extends React.Component{
 
     _keyExtractor = (item, index) => (item.key + index).toString()
-    renderItem = ({item}) => <ProfileEventDisplay {...item} componentId={this.props.componentId} type={this.props.type} />
+    renderItem = ({item}) => <UniProfileEventDisplay {...item} componentId={this.props.componentId} type={this.props.type} />
 
     render(){
         const {...props} = this.props

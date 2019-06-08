@@ -56,7 +56,7 @@ export const goHome = () =>  {
                                 children:[
                                     {
                                         component:{
-                                            name: 'Profile',
+                                            name: 'MainProfile',
                                             options:{
                                                 bottomTab:{
                                                     icon: sources[1],

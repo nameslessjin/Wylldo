@@ -81,14 +81,14 @@ class Fire {
         
     }
     
-    getProfileEvents = async({size, start, type}) => {
+    getProfileEvents = async({size, start, type, userId}) => {
         let ref = null
         if(type == 'Created'){
-            ref = this.eventsCollection.where('hostUserId', '==', this.uid).orderBy('timestamp', 'DESC').limit(size)
+            ref = this.eventsCollection.where('hostUserId', '==', userId).orderBy('timestamp', 'DESC').limit(size)
         } else if (type == 'Liked'){
-            ref = this.eventsCollection.where('like_userIDs', 'array-contains', this.uid).orderBy('timestamp', 'DESC').limit(size)
+            ref = this.eventsCollection.where('like_userIDs', 'array-contains', userId).orderBy('timestamp', 'DESC').limit(size)
         } else if (type == 'Joined'){
-            ref = this.eventsCollection.where('join_userIDs', 'array-contains', this.uid).orderBy('startTime', 'DESC').limit(size)
+            ref = this.eventsCollection.where('join_userIDs', 'array-contains', userId).orderBy('startTime', 'DESC').limit(size)
         }
 
         try{
@@ -370,7 +370,7 @@ class Fire {
     }
 
     uploadAvatarAsync = async uri => {
-        const path = `${'Users'}/${this.uid}/${'Profile_Pic'}/${'profilePic'}.jpg`
+        const path = `${'Users'}/${this.uid}/${'Profile_Pic'}/${'avatar'}.jpg`
         return uploadPhoto(uri, path)
     }
 
@@ -414,7 +414,12 @@ class Fire {
     getUserData = async(userId) => {
         const ref = this.usersCollection.doc(userId)
         const userData = await ref.get().catch(error => console.log(error))
-        return userData.data()
+        const returnUserData = {
+            ...userData.data(),
+            userId: userData.id
+        }
+
+        return returnUserData
     }
 
 

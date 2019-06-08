@@ -48,9 +48,9 @@ export default class PickAvatar extends React.Component{
 
 const styles = StyleSheet.create({
     avatar:{
-        height: '45%',
-        width: '23%',
-        borderRadius: 50,
+        height: 85,
+        width: 85,
+        borderRadius: 43,
         marginBottom: 10,
         marginTop: 20
     },

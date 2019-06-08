@@ -1,29 +1,26 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
-import {Navigation} from 'react-native-navigation'
-import ProfileHistory from '../Components/ProfileHistory'
+import UniProfile from '../Components/UniProfile'
 
-
-export default class OtherProfile extends React.Component {
+export default class OtherProfile extends React.Component{
     static get options(){
         return{
-            topBar:{
+            topbar: {
                 title:{
                     text: 'Profile',
                     alignment: 'center'
                 }
+            },
+            bottomTabs: {
+                visible: false,
+                drawBehind: true
             }
+
         }
     }
 
     render(){
-        console.log(this.props)
-
         return(
-            <View>
-                <Text>Nothing here</Text>
-            </View>
+            <UniProfile {...this.props}/>
         )
     }
 }
-
