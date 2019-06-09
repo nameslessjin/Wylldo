@@ -1,10 +1,9 @@
 import firebase from 'react-native-firebase'
 import uuid from 'uuid'
 import uploadPhoto from '../firebase/uploadPhoto'
-import {GeoCollectionReference, GeoFirestore, GeoQuery, GeoDocumentReference} from 'geofirestore'
+import {GeoFirestore} from 'geofirestore'
 import geohash from 'ngeohash'
-
-
+import ImageResizer from 'react-native-image-resizer'
 
 class Fire {
     constructor(){
@@ -29,10 +28,14 @@ class Fire {
             const querySnapshot = await docRef.get()
             if (querySnapshot.exists){
                 const event = querySnapshot.data() || {}
+                const hostAvatarUri =  await this.getAvatarUri(event.hostAvatar)
                 const eventWithKey = {
                     key: querySnapshot.id,
                     eventId: querySnapshot.id,
-                    ...event
+                    ...event,
+                    hostAvatar: {
+                        uri: hostAvatarUri
+                    }
                 }
                 eventData.push(eventWithKey)
             }
@@ -119,20 +122,22 @@ class Fire {
     getMapEvents = async() => {
         const mapRef = this.geoDB.collection('mapEvents')
         const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(40.798699, -77.859954), radius: 8.5})
-        const mapEventsDataTry = await geoQuery.get().then(geoQuerySnapshot => {
-            geoQuerySnapshot.forEach(doc => {
-                    const mapEventsData = []
-                    if (doc.exists){
-                        const mapEvent = doc.data() || {}
-                        const mapEventsWithKey = {
-                            key: doc.id,
-                            ...mapEvent,
-                            eventId: doc.id
-                        }
-                        this.mapEventData.push(mapEventsWithKey)
+        const querySnapshot = await geoQuery.get()
+        for (const doc of querySnapshot.docs){
+            if (doc.exists){
+                const mapEvent = doc.data() || {}
+                const hostAvatarUri = await this.getAvatarUri(mapEvent.hostAvatar)
+                const mapEventsWithKey = {
+                    key: doc.id,
+                    ...mapEvent,
+                    eventId: doc.id,
+                    hostAvatar:{
+                        uri: hostAvatarUri
                     }
-            })
-        })
+                }
+                this.mapEventData.push(mapEventsWithKey)
+            }
+        }
         const mapEventData = this.mapEventData
         this.mapEventData = []
         return mapEventData
@@ -143,12 +148,12 @@ class Fire {
         const imgStorageUri = !(image === null) ? await this.uploadImageAsync(image.uri) : null
         const uploadedImag =  !(image === null) ? {
             ...image,
-            uri: imgStorageUri
+            uri: imgStorageUri.url
         } : null
 
         const resImgStorageUri = !(resizedImage === null) ? await this.uploadresizedImageAsync(resizedImage.uri) : null
         const uploadedResImag = !(resizedImage === null) ? {
-            uri : resImgStorageUri,
+            uri : resImgStorageUri.url,
         } : null
 
 
@@ -165,14 +170,17 @@ class Fire {
         }
 
         const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
-        
-
+        const hostAvatarUri = await this.getAvatarUri(uploadEventInfo.hostAvatar)
         const updateEventInfo = [{
             ...uploadEventInfo,
             key: createdEvent.id,
-            eventId: createdEvent.id
-        }]
+            eventId: createdEvent.id,
+            hostAvatar:{
+                uri: hostAvatarUri
+            }
 
+        }]
+        console.log(updateEventInfo)
         return updateEventInfo
     }
 
@@ -348,7 +356,8 @@ class Fire {
     updateUserInformation = async(currentData, avatar) => {
         const avatStorageUri = !(avatar === null) ? await this.uploadAvatarAsync(avatar.uri) : null
         const uploadedAvatar = !(avatar === null) ? {
-            uri: avatStorageUri
+            uri: avatStorageUri.url,
+            storageLocation: avatStorageUri.storageLocation
         } : null
         const updateUserdata ={
             ...currentData,
@@ -375,12 +384,12 @@ class Fire {
     }
 
     uploadImageAsync = async uri => {
-        const path = `${'Users'}/${this.uid}/${'Events'}/${uuid.v4()}.jpg`
+        const path = `${'Events'}/${this.uid}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path)
     }
 
     uploadresizedImageAsync = async uri => {
-        const path = `${'Users'}/${this.uid}/${'Events'}/${'resizedImage'}/${uuid.v4()}.jpg`
+        const path = `${'Events'}/${this.uid}/${'resizedImage'}/${uuid.v4()}.jpg`
         return uploadPhoto(uri, path).catch(error => console.log(error))
     }
 
@@ -398,7 +407,16 @@ class Fire {
     }
 
     createUserInFireStore = async (name, email) => {
+
+        const defaultProfilePic = await this.defaultProfilePic()
+        const defaultAvatarUri = await this.uploadAvatarAsync(defaultProfilePic.uri)
+        const uploadedAvatar = {
+            uri: defaultAvatarUri.url,
+            storageLocation: defaultAvatarUri.storageLocation
+        }
+        console.log(uploadedAvatar)
         const signUpUserInfo ={
+            avatarUri: uploadedAvatar,
             name: name,
             email: email,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
@@ -424,6 +442,22 @@ class Fire {
 
 
     //Helpers
+    defaultProfilePic = async() => {
+        const path = '/Users/jinsenwu/Desktop/StartUp/Wylldo_app/Wylldo/src/assets/defaultProfilePic.png'
+        const defaultAvatarUri =  await ImageResizer.createResizedImage(path, 200, 200, 'JPEG', 100, 0, null).then(res => {
+            const resizedImage = {
+                uri: res.uri
+            }
+            return resizedImage
+        })
+        return defaultAvatarUri
+    }
+
+    getAvatarUri = async (storageLocation) => {
+        const avatarUri = await firebase.storage().ref(storageLocation).getDownloadURL()
+        return avatarUri
+    }
+
     get eventsCollection(){
         return firebase.firestore().collection('Events')
     }

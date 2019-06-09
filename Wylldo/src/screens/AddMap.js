@@ -59,7 +59,7 @@ class AddMap extends React.Component{
                 timestamp: Date.now(),
                 hostUserId: Fire.uid,
                 hostUsername: this.props.currentUserData.name,
-                hostAvatar: this.props.currentUserData.avatarUri,
+                hostAvatar: this.props.currentUserData.avatarUri.storageLocation,
                 startTime: this.props.startTime,
                 endTime: this.props.endTime,
                 inviteCount: this.props.inviteCount

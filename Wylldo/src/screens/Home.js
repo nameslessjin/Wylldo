@@ -145,7 +145,6 @@ class Home extends React.Component{
 
     render(){
         const Markers = this.props.mapEvents.map(mapEvent => {
-            // const coordinate = {latitude: mapEvent.l.latitude, longitude: mapEvent.l.longitude}
             if (mapEvent.coords){
                 const coords = {latitude: mapEvent.coords._latitude, longitude: mapEvent.coords._longitude}
                 return(
