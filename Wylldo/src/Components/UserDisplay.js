@@ -20,7 +20,10 @@ export default class UserDisplay extends React.Component{
 
 
     render(){
-
+        let otherUserAvatar = null
+        if(this.props.avatarUri){
+            otherUserAvatar = this.props.avatarUri.storageLocation
+        }
         const userProfilePic = (this.props.userId == Fire.uid) ?  
         (
             <View style={styles.row} onPress={this.onUserPress}>
@@ -39,7 +42,11 @@ export default class UserDisplay extends React.Component{
         return(
             <View style={styles.container}>
                 {userProfilePic}
-                <FollowButton userId = {this.props.userId}/>
+                <FollowButton 
+                    userId={this.props.userId} 
+                    currentUserAvatar={this.props.currentUserAvatar} 
+                    otherUserAvatar={otherUserAvatar}
+                    />
             </View>
         )
     }

@@ -88,7 +88,6 @@ export default class ProfileEventDisplay extends React.Component{
 
 
     onEventPressed = () => {
-        console.log(this.props.componentId)
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'SingleEvent',

@@ -42,8 +42,12 @@ export default class FollowButton extends React.Component{
     }
 
     onFollow = async() => {
-        const followData = await Fire.onFollowUser(this.props.userId)
+        const followData = await Fire.onFollowUser(this.props.userId, this.props.currentUserAvatar, this.props.otherUserAvatar)
         return followData
+    }
+
+    onUnFollow = () => {
+        Fire.onUnfollowUser(this.props.userId, this.state.followData.followId)
     }
 
     onFollowBtnPressed = () => {
@@ -53,7 +57,7 @@ export default class FollowButton extends React.Component{
                 this.setState({followButton: 'Followed'})
             })
         } else {
-            Fire.onUnfollowUser(this.props.userId, this.state.followData.followId)
+            this.onUnFollow()
             this.setState({followButton: 'Follow'})
         }
 
@@ -62,7 +66,6 @@ export default class FollowButton extends React.Component{
 
 
     render(){
-
         followBtn = (this.checkSelf()) ? (
                         <View style={[styles.btnStyle, styles.selfBtnStyle]}>
                             <Text style={[styles.textStyle, styles.selfText]}>Me</Text>

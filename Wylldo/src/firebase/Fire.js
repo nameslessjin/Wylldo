@@ -251,13 +251,15 @@ class Fire {
         return {joinNum: joinNum, joinUserIds: joinUserIds}
     }
 
-    onFollowUser = async (followingUserId) => {
+    onFollowUser = async (followingUserId, currentUserAvatar, otherUserAvatar) => {
         const followRef = this.db.collection('Follow')
         const followerUserRef = this.usersCollection.doc(this.uid)
         const followingUserRef = this.usersCollection.doc(followingUserId)
         const followData = {
             followerUserId: this.uid,
             followingUserId: followingUserId,
+            followerUserAvatar: currentUserAvatar,
+            otherUserAvatar: otherUserAvatar,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
         }
 
@@ -443,7 +445,7 @@ class Fire {
 
     //Helpers
     defaultProfilePic = async() => {
-        const path = '/Users/jinsenwu/Desktop/StartUp/Wylldo_app/Wylldo/src/assets/defaultProfilePic.png'
+        const path = 'src/assets/defaultProfilePic.png'
         const defaultAvatarUri =  await ImageResizer.createResizedImage(path, 200, 200, 'JPEG', 100, 0, null).then(res => {
             const resizedImage = {
                 uri: res.uri
