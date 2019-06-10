@@ -140,7 +140,12 @@ export default class PopUpWnd extends React.Component{
                         <TouchableOpacity style={{height: '80%'}} onPress={() => this.onWindowPressed()}>
                             <Text style={styles.timeStyle}>{this.timeFormat()}</Text>
                             <Text style={styles.name}>{this.props.hostUsername}</Text>
-                            <Text ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
+                            <Text 
+                                ellipsizeMode={"tail"} 
+                                numberOfLines={2} 
+                                style={styles.comment}>
+                                {this.props.description}
+                            </Text>
                             <Text style={styles.name}>Shawn</Text>
                             <Text style={styles.comment} ellipsizeMode={"tail"} numberOfLines={2} >Jinsen is the best person in the world, no in the whole universe.  He is a god.</Text>
                             <Text style={styles.name}>Wei</Text>
