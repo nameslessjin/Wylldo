@@ -22,7 +22,8 @@ exports.onEventCreated = functions.firestore
                     coords: snap.data().geoCoordinates,
                     createdTime: snap.data().timestamp,
                     joinedNum: snap.data().joinedNum,
-                    inviteCount: snap.data().inviteCount
+                    inviteCount: snap.data().inviteCount,
+                    viewType: snap.data().viewType
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates

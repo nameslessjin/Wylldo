@@ -62,7 +62,8 @@ class AddMap extends React.Component{
                 hostAvatar: this.props.currentUserData.avatarUri.storageLocation,
                 startTime: this.props.startTime,
                 endTime: this.props.endTime,
-                inviteCount: this.props.inviteCount
+                inviteCount: this.props.inviteCount,
+                viewType: this.props.viewType
             }
             const image = this.props.image
             const resizedImage = this.props.resizedImage
