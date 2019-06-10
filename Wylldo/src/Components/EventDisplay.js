@@ -3,6 +3,7 @@ import {View, Text, Image, StyleSheet} from 'react-native'
 import Header from './Header'
 import Footer from './Footer'
 
+
 export default class EventDispaly extends React.Component{
  
 

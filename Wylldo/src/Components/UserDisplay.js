@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     },
     usernameStyle:{
         fontWeight: 'bold',
-        fontSize: 18
+        fontSize: 15
     },
     row:{
         flexDirection: 'row',

@@ -1,6 +1,5 @@
 import React from 'react'
 import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native'
-import firebase from 'react-native-firebase'
 import { goHome } from '../navigation';
 import Fire from '../firebase/Fire'
 

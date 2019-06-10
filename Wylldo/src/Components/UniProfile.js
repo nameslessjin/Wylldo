@@ -36,7 +36,7 @@ export default class UniProfile extends React.Component {
                         {followingDisplay}
                     </View>
                 </View>
-                <UniProfileHistory componentId={this.props.componentId} userId = {this.props.userId}/>
+                <UniProfileHistory componentId={this.props.componentId} userId = {this.props.userId} />
             </View>
         )
     }
@@ -58,14 +58,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     avatar:{
-        height: 85,
-        width: 85,
-        borderRadius: 43,
+        height: 80,
+        width: 80,
+        borderRadius: 40,
         marginBottom: 10,
-        marginTop: 20
+        marginTop: 15,
     },
     usernameText: {
-        fontSize: 16
+        fontSize: 14
     },
     followTouchBtn:{
         width: '50%',
@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
     },
     followText:{
         color: '#bdc3c7',
-        fontSize: 15
+        fontSize: 14
     },
     followNum:{
-        fontSize: 18,
+        fontSize: 17,
     }, 
     followContainer:{
         width: '60%',

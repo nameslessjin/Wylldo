@@ -3,7 +3,6 @@ import uuid from 'uuid'
 import uploadPhoto from '../firebase/uploadPhoto'
 import {GeoFirestore} from 'geofirestore'
 import geohash from 'ngeohash'
-import ImageResizer from 'react-native-image-resizer'
 
 class Fire {
     constructor(){
@@ -168,7 +167,7 @@ class Fire {
             geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
             geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }
-
+        console.log(uploadEventInfo.hostAvatar)
         const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
         const hostAvatarUri = await this.getAvatarUri(uploadEventInfo.hostAvatar)
         const updateEventInfo = [{
@@ -410,13 +409,12 @@ class Fire {
 
     createUserInFireStore = async (name, email) => {
 
-        const defaultProfilePic = await this.defaultProfilePic()
-        const defaultAvatarUri = await this.uploadAvatarAsync(defaultProfilePic.uri)
+        const defaultAvatarUri = 'https://firebasestorage.googleapis.com/v0/b/wylldo-2c98c.appspot.com/o/defaultImgs%2FdefaultAvatar.jpg?alt=media&token=3c9b8ca1-6c89-4fc3-817a-6fdba46ac043'
+        const defaultAvatarLocation = 'defaultImgs/defaultAvatar.jpg'
         const uploadedAvatar = {
-            uri: defaultAvatarUri.url,
-            storageLocation: defaultAvatarUri.storageLocation
+            uri: defaultAvatarUri,
+            storageLocation: defaultAvatarLocation
         }
-        console.log(uploadedAvatar)
         const signUpUserInfo ={
             avatarUri: uploadedAvatar,
             name: name,
@@ -444,16 +442,6 @@ class Fire {
 
 
     //Helpers
-    defaultProfilePic = async() => {
-        const path = 'src/assets/defaultProfilePic.png'
-        const defaultAvatarUri =  await ImageResizer.createResizedImage(path, 200, 200, 'JPEG', 100, 0, null).then(res => {
-            const resizedImage = {
-                uri: res.uri
-            }
-            return resizedImage
-        })
-        return defaultAvatarUri
-    }
 
     getAvatarUri = async (storageLocation) => {
         const avatarUri = await firebase.storage().ref(storageLocation).getDownloadURL()

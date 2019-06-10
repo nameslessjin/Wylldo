@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     optionContainer:{
-        width: '90%',
+        width: '95%',
         height: '10%',
         backgroundColor: 'white',
         borderRadius: 10,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     historyDisplay:{
-        width: '90%',
+        width: '95%',
         height: '85%',
         alignItems: 'center',
         backgroundColor: 'white'

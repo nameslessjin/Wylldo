@@ -1,7 +1,6 @@
 import React from 'react'
 import {StyleSheet, View, Text, TouchableOpacity} from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
-import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
 import JoinBtn from './JoinBtn'
 import TimeNLocation from './TimeNLocation'
@@ -108,6 +107,7 @@ const styles = StyleSheet.create({
     },
     comment:{
         fontSize: 14,
+        marginBottom: 5
     },
     buttonsContainer:{
         height: '30%',

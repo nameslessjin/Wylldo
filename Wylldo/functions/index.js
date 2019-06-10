@@ -21,7 +21,8 @@ exports.onEventCreated = functions.firestore
                     endTime: snap.data().endTime,
                     coords: snap.data().geoCoordinates,
                     createdTime: snap.data().timestamp,
-                    joinedNum: snap.data().joinedNum
+                    joinedNum: snap.data().joinedNum,
+                    inviteCount: snap.data().inviteCount
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates
@@ -31,6 +32,28 @@ exports.onEventCreated = functions.firestore
         }
 
         return mapEventCreated
+    })
+
+exports.onInteractiveBtnPressed = functions.firestore
+    .document('Events/{eventId}')
+    .onUpdate((snap, context) => {
+        const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
+        return db.runTransaction(transaction => {
+            return transaction.get(mapEventRef).then(eventDoc => {
+                const mapEventData = eventDoc.data().d
+                const newLikesNum = snap.after.data().likes
+                const newJoinedNum = snap.after.data().joinedNum
+
+                return transaction.update(mapEventRef, {
+                    d:{
+                        ...mapEventData,
+                        likes: newLikesNum,
+                        joinedNum: newJoinedNum
+                    }
+                })
+            })
+        })
+
     })
 
 exports.onEventDeleted = functions.firestore

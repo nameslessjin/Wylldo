@@ -8,7 +8,7 @@ export default class ProfileEventDisplay extends React.Component{
     differenceOnTime = (timestamp) => {
         const nowTime = Date.now()
         const differenceInSec = Math.round((nowTime - timestamp) / 1000)
-        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         const initDate = new Date(timestamp)
         const createdDate = initDate.getDate()
         const createdMonth = months[initDate.getMonth()]
@@ -46,18 +46,18 @@ export default class ProfileEventDisplay extends React.Component{
         //if greater then 1 minute put minutes on it
         else if (differenceInSec > 60){
             const minutes = Math.floor((differenceInSec / 60))
-            let minutesAgo = minutes.toString() + " minutes ago"
+            let minutesAgo = minutes.toString() + " mins ago"
             if (minutes == 1){
-                minutesAgo = "1 minute ago"
+                minutesAgo = "1 min ago"
             }
             return minutesAgo
         }
 
         //if grater then 1 second put seconds on it
         else if (differenceInSec >= 1){
-            let secondsAgo = differenceInSec.toString() + " seconds ago"
+            let secondsAgo = differenceInSec.toString() + " secs ago"
             if (differenceInSec == 1){
-                secondsAgo = "1 second ago "
+                secondsAgo = "1 sec ago "
             }
             return secondsAgo
         }
@@ -125,8 +125,8 @@ export default class ProfileEventDisplay extends React.Component{
                 <View style={{flex: 1}}>
                     <View style={styles.header}>
                         <View style={{flexDirection:'row'}}>
-                            <Text style={styles.row}>{this.props.hostUsername}</Text>
-                            <Icon style={styles.row} name={this.props.tag} size= {20} />
+                            <Text style={[styles.row, styles.nameText]}>{this.props.hostUsername}</Text>
+                            <Icon style={styles.row} name={this.props.tag} size= {13} />
                         </View>
                         <Text style={styles.dateText}>{displayTime}</Text>
                     </View>
@@ -155,7 +155,11 @@ const styles = StyleSheet.create({
     },
     dateText:{
         color: 'grey',
-        marginHorizontal: 15
+        marginRight: 5,
+        fontSize: 13
+    },
+    nameText:{
+        fontSize: 13
     },
     image:{
         width: '100%',

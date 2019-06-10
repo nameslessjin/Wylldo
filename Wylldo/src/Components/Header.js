@@ -51,18 +51,18 @@ export default class Header extends React.Component{
         //if greater then 1 minute put minutes on it
         else if (differenceInSec > 60){
             const minutes = Math.floor((differenceInSec / 60))
-            let minutesAgo = minutes.toString() + " minutes ago"
+            let minutesAgo = minutes.toString() + " mins ago"
             if (minutes == 1){
-                minutesAgo = "1 minute ago"
+                minutesAgo = "1 min ago"
             }
             return minutesAgo
         }
 
         //if grater then 1 second put seconds on it
         else if (differenceInSec >= 1){
-            let secondsAgo = differenceInSec.toString() + " seconds ago"
+            let secondsAgo = differenceInSec.toString() + " secs ago"
             if (differenceInSec == 1){
-                secondsAgo = "1 second ago "
+                secondsAgo = "1 sec ago "
             }
             return secondsAgo
         }
@@ -89,7 +89,7 @@ export default class Header extends React.Component{
                         source={this.props.hostAvatar}
                     />
                     <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
-                    <Icon name={this.props.tag} size={20} style={{marginLeft: 5}}/>
+                    <Icon name={this.props.tag} size={18} style={{marginLeft: 5}}/>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.dateText}>{createdTime}</Text>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     },
     usernameStyle:{
         fontWeight: 'bold',
-        fontSize: 16
+        fontSize: 14
     },
     userProfilePic:{
         width: 42,
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     },
     dateText:{
         color: 'grey',
-        marginRight: 12
+        marginRight: 12,
+        fontSize: 14
     },
 })
