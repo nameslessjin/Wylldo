@@ -92,7 +92,6 @@ class Fire {
         } else if (type == 'Joined'){
             ref = this.eventsCollection.where('join_userIDs', 'array-contains', userId).orderBy('startTime', 'DESC').limit(size)
         }
-
         try{
             if(start) {
                 ref = ref.startAfter(start)
@@ -113,7 +112,7 @@ class Fire {
             const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
             return {eventData: eventData, cursor: startPosition}
         } catch ({error}) {
-            console.log('getCreatedEvennts error')
+            console.log('getCreatedEvennts error:', error)
         }
     }
 
