@@ -1,39 +1,44 @@
 {
   "project_info": {
-    "project_number": "340999346078",
-    "firebase_url": "https://wylldo-2c98c.firebaseio.com",
-    "project_id": "wylldo-2c98c",
-    "storage_bucket": "wylldo-2c98c.appspot.com"
+    "project_number": "165584595264",
+    "firebase_url": "https://wylldo-b5c47.firebaseio.com",
+    "project_id": "wylldo-b5c47",
+    "storage_bucket": "wylldo-b5c47.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:340999346078:android:f3d495ec6fcf6998",
+        "mobilesdk_app_id": "1:165584595264:android:7997054b21a1c082",
         "android_client_info": {
-          "package_name": "com.wylldo"
+          "package_name": "com.wylldo.android.wylldo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "340999346078-4qhgkb8ts3hge521mf6rce3p8i4m96qs.apps.googleusercontent.com",
+          "client_id": "165584595264-v4u0jbgm4sb3jq370b4l22f3uam2pkg9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCib7Hn5-li27LhEwiv5tqOGG_6UyQEVc0"
+          "current_key": "AIzaSyDgeYeOZLf7ivRrHnyAqIhthVY7YYFKJuU"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165584595264-v4u0jbgm4sb3jq370b4l22f3uam2pkg9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "165584595264-fsqbgsk9pt2e1eoc115sudffjruk7jnl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Wylldo.ios.Wylldo"
+              }
+            }
+          ]
         }
       }
     }
