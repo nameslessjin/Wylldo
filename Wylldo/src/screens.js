@@ -14,7 +14,7 @@ export function registerScreens(){
     Navigation.registerComponentWithRedux('SingleEvent', () => require('./screens/SingleEvent').default, Provider, store)
     Navigation.registerComponentWithRedux('JoinedUserList', () => require('./screens/JoinedUserList').default, Provider, store)
     Navigation.registerComponentWithRedux('MainProfile', () => require('./screens/MainProfile').default, Provider, store)
-    Navigation.registerComponent('Following', () => require('./screens/Following').default)
+    Navigation.registerComponentWithRedux('Following', () => require('./screens/Following').default, Provider, store)
     Navigation.registerComponent('Initializing', () => require('./screens/Initializing').default)
     Navigation.registerComponent('LogIn', () => require('./screens/LogIn').default)
     Navigation.registerComponent('SignUp', () => require('./screens/SignUp').default)
@@ -27,4 +27,5 @@ export function registerScreens(){
     //this is not a screen
     Navigation.registerComponentWithRedux('EventOption', () => require('./Components/EventOption').default, Provider, store)
     Navigation.registerComponentWithRedux('JoinBtn', () => require('./Components/JoinBtn').default, Provider, store)
+    Navigation.registerComponentWithRedux('FollowButton', () => require('./Components/FollowButton').default, Provider. store)
 }

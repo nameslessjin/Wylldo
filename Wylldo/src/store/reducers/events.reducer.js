@@ -2,7 +2,7 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER,
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
         LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
         LOAD_MORE_CREATEDEVENTS, GET_LIKEDEVENTS, LOAD_MORE_LIKEDEVENTS,
-        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS
+        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS, ON_FOLLOW
         } from "../actions/actionTypes"
 
 //This is reducers for events.  Currently support Add_event, Get_Event, Get_CurrentUser, Signout and Update_user
@@ -43,6 +43,12 @@ export default reducer = (state = initialState, action) => {
                 Events: updateEvents,
                 mapEvents: updateMapEvents, 
                 mapEventIdList: updateMapEventIdList 
+            }
+
+        case ON_FOLLOW:
+            return{
+                ...state,
+                currentUser: action.user
             }
         
         case DELETE_EVENT:

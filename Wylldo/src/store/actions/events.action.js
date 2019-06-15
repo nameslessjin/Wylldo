@@ -2,7 +2,7 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER,
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
         LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
         LOAD_MORE_CREATEDEVENTS, GET_LIKEDEVENTS, LOAD_MORE_LIKEDEVENTS,
-        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS
+        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS, ON_FOLLOW
         } from "./actionTypes"
 
 //I want to put connect with firebase here.  However without a state, promise having format trouble to store information
@@ -34,6 +34,13 @@ export const loadMoreEvents = (events) => {
     return {
         type: LOAD_MORE_EVENTS,
         Events: events
+    }
+}
+
+export const onFollow = (user) => {
+    return {
+        type: ON_FOLLOW,
+        user: user
     }
 }
 

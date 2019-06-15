@@ -6,7 +6,6 @@ export default class ListUsers extends React.Component{
     renderItem = ({item}) => <UserDisplay {...item} componentId={this.props.componentId} currentUser_following_list={this.props.currentUser_following_list}/>
     
     render(){
-        console.log(this.props)
         const {...props} = this.props
         return(
             <FlatList

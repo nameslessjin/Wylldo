@@ -1,8 +1,10 @@
 import React from 'react'
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import Fire from '../firebase/Fire'
+import {connect} from 'react-redux'
+import {onFollow} from '../store/actions/action.index'
 
-export default class FollowButton extends React.Component{
+class FollowButton extends React.Component{
 
 
     state = {
@@ -31,11 +33,28 @@ export default class FollowButton extends React.Component{
 
     onFollow = async() => {
         const result = await Fire.onFollowUser(this.props.userId)
+        let update_following_list = [...this.props.currentUser.following_list]
+        update_following_list.push(this.props.userId)
+        const update_currentUser = {
+            ...this.props.currentUser,
+            following_list: update_following_list,
+            followingNum: update_following_list.length
+        }
+        this.props.onFollow(update_currentUser)
         return result
     }
 
     onUnFollow = () => {
         Fire.onUnfollowUser(this.props.userId)
+        let update_following_list = [...this.props.currentUser.following_list]
+        update_following_list = update_following_list.filter(userId => userId != this.props.userId)
+        console.log(update_following_list)
+        const update_currentUser = {
+            ...this.props.currentUser,
+            following_list: update_following_list,
+            followingNum: update_following_list.length
+        }
+        this.props.onFollow(update_currentUser)
     }
 
     onFollowBtnPressed = () => {
@@ -81,6 +100,20 @@ export default class FollowButton extends React.Component{
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return{
+        currentUser: state.events.currentUser
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return{
+        onFollow: (user) => dispatch(onFollow(user))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FollowButton)
 
 const styles = StyleSheet.create({
     btnStyle:{

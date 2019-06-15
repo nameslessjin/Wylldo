@@ -3,10 +3,11 @@ import {View, Text, StyleSheet} from 'react-native'
 import ListUsers from '../Components/ListUsers'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
+import {connect} from 'react-redux'
 
 SIZE = 7
 
-export default class Following extends React.Component{
+class Following extends React.Component{
     static get options(){
         return {
             topbar:{
@@ -25,7 +26,6 @@ export default class Following extends React.Component{
     constructor(props){
         super(props)
         Navigation.events().bindComponent(this)
-
         this.state={
             userList:[],
             refreshing: false,
@@ -67,7 +67,7 @@ export default class Following extends React.Component{
     onShowFollowingUsers(){
         if (this.state.userList.length > 0){
             return (
-                <View styles={styles.userListContainer}>
+                <View style={styles.userListContainer}>
                     <ListUsers
                         componentId = {this.props.componentId}
                         onEndReached = {this._loadMore}
@@ -79,8 +79,8 @@ export default class Following extends React.Component{
             )
         } else{
             return (
-                <View styles={styles.textContainer}>
-                    <Text styles={styles.text}>Check what people will do and follow people you like!</Text>
+                <View style={styles.textContainer}>
+                    <Text style={styles.text}>Check what people will do and follow people you like!</Text>
                 </View>
             )
         }
@@ -88,7 +88,9 @@ export default class Following extends React.Component{
 
     onLoadFollowingUsers = () => {
         if (this.state.loading && this.state.userList.length == 0){
-            <Text>Loading...</Text>
+            <View style={styles.textContainer}>
+                <Text style={styles.text}>Loading...</Text>
+            </View>
         } else {
             this.onShowFollowingUsers()
         }
@@ -109,6 +111,8 @@ export default class Following extends React.Component{
     }
 }
 
+export default connect(null)(Following)
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
     text:{
         fontStyle: 'italic',
         color: 'grey',
-        fontSize: 18,
+        fontSize: 15,
         marginTop: 20
     },
     userListContainer:{
@@ -129,6 +133,7 @@ const styles = StyleSheet.create({
     textContainer:{
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: -30
+        paddingTop: -30,
+        marginHorizontal: 10
     },
 })
