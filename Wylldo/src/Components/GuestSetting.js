@@ -32,7 +32,7 @@ export default class GuestSeeting extends React.Component{
         if (this.state.viewType == 'Custom'){
             Navigation.push(this.props.componentId, {
                 component:{
-                    name: 'followerSelect'
+                    name: 'FollowerSelect'
                 }
             })
         }

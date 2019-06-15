@@ -43,7 +43,7 @@ class JoinedUserList extends React.Component{
             loading: false,
             join_userIDs: this.props.join_userIDs,
             userList: [],
-            hostData: null
+            hostData: null,
         }
     }
 
@@ -52,7 +52,6 @@ class JoinedUserList extends React.Component{
         this.getHostData(this.props.hostUserId).then(hostData => {
             this.setState({hostData: hostData})
         })
-
     }
 
     navigationButtonPressed({buttonId}){
@@ -92,15 +91,14 @@ class JoinedUserList extends React.Component{
         const {userList, start} = await Fire.getUsers({size: SIZE, start: startPosition, userIdList: this.state.join_userIDs, type: type})
         this.joinedUserStartPosition = start
         this.setState({refreshing: false, loading: false})
-        // console.log(userList)
-        // console.log(start)
+
         return userList
     }
 
     _loadMore = () => {
         this.setState({loading: true})
         if (this.joinedUserStartPosition){
-            this.getJoinedUsers('JOINED', this.startPosition).then(userList => {
+            this.getJoinedUsers('JOINED', this.joinedUserStartPosition).then(userList => {
                 const updatedUserList = this.state.userList.concat(userList)
                 this.setState({userList: updatedUserList})
             })
@@ -148,14 +146,13 @@ class JoinedUserList extends React.Component{
     }
 
     render(){
-
         const showList = (this.state.userList.length > 0) ?
                     <ListUsers
-                    componentId={this.props.componentId}
-                    onEndReached = {this._loadMore}
-                    onEndReachedThreshold = {0.5}
-                    userList = {this.state.userList}
-                    currentUserAvatar = {this.props.currentUser.avatarUri.storageLocation}
+                        componentId={this.props.componentId}
+                        onEndReached = {this._loadMore}
+                        onEndReachedThreshold = {0.5}
+                        userList = {this.state.userList}
+                        following_list = {this.props.currentUser.following_list}
                     />
                     :
                     <View style={styles.textContainer}>
@@ -169,7 +166,8 @@ class JoinedUserList extends React.Component{
                             {...this.state.hostData} 
                             userId={this.props.hostUserId} 
                             componentId={this.props.componentId} 
-                            currentUserAvatar = {this.props.currentUser.avatarUri.storageLocation}/>
+                            following_list = {this.props.currentUser.following_list}
+                        />
                     </View>
         )
 

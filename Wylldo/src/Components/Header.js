@@ -75,6 +75,18 @@ export default class Header extends React.Component{
         this.setState({isOptionVisible: false})
     }
 
+    iconColor = () => {
+        switch (this.props.tag) {
+            case 'md-beer':
+                return styles.beerIcon
+
+            case 'md-football':
+                return styles.footBall
+            case 'md-book':
+                return styles.book
+        }
+    }
+
     render(){
         let createdTime = 'Now'
         if (this.differenceOnTime(this.props.timestamp)){
@@ -89,7 +101,14 @@ export default class Header extends React.Component{
                         source={this.props.hostAvatar}
                     />
                     <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
-                    <Icon name={this.props.tag} size={18} style={{marginLeft: 5}}/>
+
+                    <Icon 
+                        name={this.props.tag} 
+                        size={18} 
+                        style={[styles.icon, 
+                            this.iconColor()
+                        ]}
+                    />
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.dateText}>{createdTime}</Text>
@@ -120,6 +139,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
+    },
+    icon:{
+        marginLeft: 5
+    },
+    beerIcon:{
+        color: 'orange'
+    },
+    footBall:{
+        color: 'brown'
+    },
+    book:{
+        color: 'green'
     },
     optionsTouchBar:{
         height: '85%',

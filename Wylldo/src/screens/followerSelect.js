@@ -2,7 +2,7 @@ import React from 'react'
 import {View, Text} from 'react-native'
 
 
-export default class followerSelect extends React.Component{
+export default class FollowerSelect extends React.Component{
 
     static options(){
         return{

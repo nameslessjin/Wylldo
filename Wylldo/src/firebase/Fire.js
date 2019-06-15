@@ -78,10 +78,56 @@ class Fire {
 
     getEventsWithId = async(eventId) => {
         let ref = this.eventsCollection.doc(eventId)
+        let eventWithKey = {}
         const querySnapshot = await ref.get();
-        return querySnapshot.data()
+        if (querySnapshot.exists){
+            const event = querySnapshot.data() || {}
+            const hostAvatarUri = await this.getAvatarUri(event.hostAvatar)
+            eventWithKey = {
+                key: querySnapshot.id,
+                eventId: querySnapshot.id,
+                ...event,
+                hostAvatar:{
+                    uri: hostAvatarUri
+                }
+            }
+        }
+        return eventWithKey
         
     }
+
+    getFollowUsers = async ({size, start, type, userId}) => {
+        let ref = null
+        if (type == 'Following'){
+            ref = this.db.collection('Follow').where('followerUserId', '==', userId).limit(size)
+        } else if (type = 'Follower'){
+            ref = this.db.collection('Follow').where('followingUserId', '==', userId).limit(size)
+        }
+
+        try{
+            if (start){
+                ref = ref.startAfter(start)
+            }
+            const querySnapshot = await ref.get().catch(error => console.log(error))
+            const userList = []
+            for (const doc of querySnapshot.docs){
+                if (doc.exists){
+                    const user = doc.data() || {}
+                    const userWithKey = {
+                        userId: (type=="Following") ? user.followingUserId : user.followerUserId,
+                        key: doc.id,
+                        avatarUri: await this.getAvatarUri( (type=="Following") ? user.followingUserAvatar : user.followerUserAvatar)
+                    }
+                    userList.push(userWithKey)
+                }   
+            }
+            const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
+            return({userList: userList, start: startPosition})
+        } catch {
+            console.log('Follow user list error')
+        }
+    }
+
     
     getProfileEvents = async({size, start, type, userId}) => {
         let ref = null
@@ -249,65 +295,50 @@ class Fire {
         return {joinNum: joinNum, joinUserIds: joinUserIds}
     }
 
-    onFollowUser = async (followingUserId, currentUserAvatar, otherUserAvatar) => {
-        const followRef = this.db.collection('Follow')
-        const followerUserRef = this.usersCollection.doc(this.uid)
+    onFollowUser = async (followingUserId) => {
+        const currentUserRef = this.usersCollection.doc(this.uid)
         const followingUserRef = this.usersCollection.doc(followingUserId)
-        const followData = {
-            followerUserId: this.uid,
-            followingUserId: followingUserId,
-            followerUserAvatar: currentUserAvatar,
-            otherUserAvatar: otherUserAvatar,
-            createdTime: firebase.firestore.FieldValue.serverTimestamp(),
-        }
-
-        const onFollow = await followRef.add(followData)
-                        .catch(error => console.log('follow failed:', error))
-        
-        if (onFollow.id){
-            await this.db.runTransaction(async transaction => {
-                const followerDoc = await transaction.get(followerUserRef)
-                const followingDoc = await transaction.get(followingUserRef)
-                const newFollowingNum = followerDoc.data().followingNum + 1
-                const newFollowerNum = followingDoc.data().followerNum + 1
-                transaction.update(followerUserRef, {
-                    followingNum: newFollowingNum,
-                })
-                transaction.update(followingUserRef, {
-                    followerNum: newFollowerNum
-                })
-
+        await this.db.runTransaction(async transaction => {
+            const currentUserDoc = await transaction.get(currentUserRef)
+            const followingUserDoc = await transaction.get(followingUserRef)
+            let newFollowing_list = currentUserDoc.data().following_list.filter(userId => userId !== followingUserId)
+            newFollowing_list.push(followingUserId)
+            let newFollower_list = followingUserDoc.data().follower_list.filter(userId => userId != this.uid)
+            newFollower_list.push(this.uid)
+            transaction.update(currentUserRef, {
+                followingNum: newFollowing_list.length,
+                following_list: newFollowing_list
             })
-        }
-        
-        const followDataWithKey = {
-            ...followData,
-            followId: onFollow.id
-        }
+            transaction.update(followingUserRef, {
+                followerNum: newFollower_list.length,
+                follower_list: newFollower_list
+            })
+        }).catch(error => console.log(error))
 
-        return followDataWithKey
+        return true
 
     }
 
-    onUnfollowUser = async(followingUserId, followId) => {
-        const followRef = this.db.collection('Follow').doc(followId)
-        const followerUserRef = this.usersCollection.doc(this.uid)
+    onUnfollowUser = async(followingUserId) => {
+
+        const currentUserRef = this.usersCollection.doc(this.uid)
         const followingUserRef = this.usersCollection.doc(followingUserId)
-        await followRef.delete().then(res => {
-            this.db.runTransaction(async transaction => {
-                const followerDoc = await transaction.get(followerUserRef)
-                const followingDoc = await transaction.get(followingUserRef)
-                const newFollowingNum = followerDoc.data().followingNum - 1
-                const newFollowerNum = followingDoc.data().followerNum - 1
-                transaction.update(followerUserRef, {
-                    followingNum: newFollowingNum,
-                })
-                transaction.update(followingUserRef, {
-                    followerNum: newFollowerNum
-                })
+        await this.db.runTransaction(async transaction => {
+            const currentUserDoc = await transaction.get(currentUserRef)
+            const followingUserDoc = await transaction.get(followingUserRef)
+            let newFollowing_list = currentUserDoc.data().following_list.filter(userId => userId !== followingUserId)
+            let newFollower_list = followingUserDoc.data().follower_list.filter(userId => userId != this.uid)
+            transaction.update(currentUserRef, {
+                followingNum: newFollowing_list.length,
+                following_list: newFollowing_list
             })
-        })
-        .catch(error => console.log('Unfollow failed: ', error))
+            transaction.update(followingUserRef, {
+                followerNum: newFollower_list.length,
+                follower_list: newFollower_list
+            })
+        }).catch(error => console.log(error))
+
+        return true
     }
 
     checkFollow = async(followingUserId) => {
@@ -421,7 +452,9 @@ class Fire {
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             timestamp: Date.now(),
             followerNum: 0,
-            followingNum: 0
+            followingNum: 0,
+            following_list: [],
+            follower_list: []
         }
 
         this.usersCollection.doc(this.uid).set(signUpUserInfo)

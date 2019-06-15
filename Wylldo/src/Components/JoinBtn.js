@@ -46,7 +46,6 @@ class JoinBtn extends React.Component{
                         this.props.onDeleteEvent(this.props.eventId)
                     }
                     else if (joinedResult.joinNum <= this.props.inviteCount){
-                        console.log(joinedResult.join_userIDs)
                         this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'VIEW', join_userIDs: joinedResult.joinUserIds})
                     } else {
                         this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'FULL', join_userIDs: joinedResult.joinUserIds})

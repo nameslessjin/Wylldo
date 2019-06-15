@@ -8,25 +8,13 @@ export default class FollowButton extends React.Component{
     state = {
         followButton: 'Follow',
         followData: {},
-        self: false
+        self: false,
     }
 
     componentDidMount(){
-        this.checkFollow().then(data => {
-            this.setState({followData:data})
-        })
-
+        this.checkFollow()
         if (this.props.userId == Fire.uid){
             this.setState({host: true})
-        }
-
-    }
-
-    componentDidUpdate(prevProps, prevState){
-        if (prevState.followData != this.state.followData){
-            if (this.state.followData){
-                this.setState({followButton: 'Followed'})
-            }
         }
     }
 
@@ -36,25 +24,27 @@ export default class FollowButton extends React.Component{
         }
     }
 
-    checkFollow = async() => {
-        const followData = await Fire.checkFollow(this.props.userId)
-        return followData
+    checkFollow = () => {
+        if (this.props.following_list.find(userId => userId === this.props.userId)) {
+            this.setState({followButton: 'Followed'})
+        }
     }
 
     onFollow = async() => {
-        const followData = await Fire.onFollowUser(this.props.userId, this.props.currentUserAvatar, this.props.otherUserAvatar)
-        return followData
+        const result = await Fire.onFollowUser(this.props.userId)
+        return result
     }
 
     onUnFollow = () => {
-        Fire.onUnfollowUser(this.props.userId, this.state.followData.followId)
+        Fire.onUnfollowUser(this.props.userId)
     }
 
     onFollowBtnPressed = () => {
         if (this.state.followButton == 'Follow'){
-            this.onFollow().then(data => {
-                this.setState({followData: data})
-                this.setState({followButton: 'Followed'})
+            this.onFollow().then(result => {
+                if (result == true){
+                    this.setState({followButton: 'Followed'})
+                }
             })
         } else {
             this.onUnFollow()

@@ -2,8 +2,22 @@ import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import UniProfileHistory from './UniProfileHistory';
 import PickAvatar from './PickAvatar'
+import {Navigation} from 'react-native-navigation'
 
 export default class UniProfile extends React.Component {
+
+    onFollowingPressed = () => {
+        Navigation.push(this.props.componentId, {
+            component:{
+                name: 'Following',
+                passProps:{
+                    userId: this.props.userId,
+                    componentId: this.props.componentId
+                }
+            }
+        })
+    }
+
 
 
     render(){
@@ -20,7 +34,7 @@ export default class UniProfile extends React.Component {
             </TouchableOpacity>
         )
         const followingDisplay = (
-            <TouchableOpacity style={styles.followTouchBtn}>
+            <TouchableOpacity style={styles.followTouchBtn} onPress={this.onFollowingPressed}>
                 <Text style={styles.followNum}>{this.props.followingNum}</Text>
                 <Text style={styles.followText}>following</Text>
             </TouchableOpacity>
