@@ -146,13 +146,14 @@ class JoinedUserList extends React.Component{
     }
 
     render(){
+
         const showList = (this.state.userList.length > 0) ?
                     <ListUsers
                         componentId={this.props.componentId}
                         onEndReached = {this._loadMore}
                         onEndReachedThreshold = {0.5}
                         userList = {this.state.userList}
-                        following_list = {this.props.currentUser.following_list}
+                        currentUser_following_list = {this.props.currentUser.following_list}
                     />
                     :
                     <View style={styles.textContainer}>
@@ -166,7 +167,7 @@ class JoinedUserList extends React.Component{
                             {...this.state.hostData} 
                             userId={this.props.hostUserId} 
                             componentId={this.props.componentId} 
-                            following_list = {this.props.currentUser.following_list}
+                            currentUser_following_list = {this.props.currentUser.following_list}
                         />
                     </View>
         )

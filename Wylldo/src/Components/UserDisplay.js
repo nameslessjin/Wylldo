@@ -20,6 +20,7 @@ export default class UserDisplay extends React.Component{
 
 
     render(){
+        console.log(this.props)
         const userProfilePic = (this.props.userId == Fire.uid) ?  
         (
             <View style={styles.row} onPress={this.onUserPress}>
@@ -40,7 +41,7 @@ export default class UserDisplay extends React.Component{
                 {userProfilePic}
                 <FollowButton 
                     userId={this.props.userId} 
-                    following_list={this.props.following_list}
+                    following_list={this.props.currentUser_following_list}
                     />
             </View>
         )

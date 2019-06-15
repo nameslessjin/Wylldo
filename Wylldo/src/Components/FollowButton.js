@@ -7,7 +7,6 @@ export default class FollowButton extends React.Component{
 
     state = {
         followButton: 'Follow',
-        followData: {},
         self: false,
     }
 

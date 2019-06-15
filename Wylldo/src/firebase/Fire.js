@@ -11,6 +11,7 @@ class Fire {
         })
         this.mapEventData = []
         this.joinResult = null
+        this.eventData = []
     }
 
     //Download Data
@@ -95,39 +96,6 @@ class Fire {
         return eventWithKey
         
     }
-
-    getFollowUsers = async ({size, start, type, userId}) => {
-        let ref = null
-        if (type == 'Following'){
-            ref = this.db.collection('Follow').where('followerUserId', '==', userId).limit(size)
-        } else if (type = 'Follower'){
-            ref = this.db.collection('Follow').where('followingUserId', '==', userId).limit(size)
-        }
-
-        try{
-            if (start){
-                ref = ref.startAfter(start)
-            }
-            const querySnapshot = await ref.get().catch(error => console.log(error))
-            const userList = []
-            for (const doc of querySnapshot.docs){
-                if (doc.exists){
-                    const user = doc.data() || {}
-                    const userWithKey = {
-                        userId: (type=="Following") ? user.followingUserId : user.followerUserId,
-                        key: doc.id,
-                        avatarUri: await this.getAvatarUri( (type=="Following") ? user.followingUserAvatar : user.followerUserAvatar)
-                    }
-                    userList.push(userWithKey)
-                }   
-            }
-            const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
-            return({userList: userList, start: startPosition})
-        } catch {
-            console.log('Follow user list error')
-        }
-    }
-
     
     getProfileEvents = async({size, start, type, userId}) => {
         let ref = null
@@ -143,18 +111,25 @@ class Fire {
                 ref = ref.startAfter(start)
             }
             const querySnapshot = await ref.get().catch(error => console.log(error))
-            const eventData = []
-            querySnapshot.forEach(doc => {
+            for (const doc of querySnapshot.docs){
                 if (doc.exists){
                     const event = doc.data() || {}
+                    const hostAvatar = await this.getAvatarUri(event.hostAvatar)
                     const eventWithKey = {
                         key: doc.id,
                         eventId: doc.id,
-                        ...event
+                        ...event,
+                        hostAvatar:{
+                            uri: hostAvatar
+                        }
                     }
-                    eventData.push(eventWithKey)
+                    this.eventData.push(eventWithKey)
                 }
-            })
+            }
+
+            const eventData = this.eventData
+            this.eventData = []
+            console.log(eventData)
             const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
             return {eventData: eventData, cursor: startPosition}
         } catch ({error}) {

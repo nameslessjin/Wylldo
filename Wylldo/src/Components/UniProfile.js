@@ -12,7 +12,8 @@ export default class UniProfile extends React.Component {
                 name: 'Following',
                 passProps:{
                     userId: this.props.userId,
-                    componentId: this.props.componentId
+                    componentId: this.props.componentId,
+                    following_list: this.props.following_list
                 }
             }
         })

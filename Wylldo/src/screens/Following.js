@@ -13,6 +13,10 @@ export default class Following extends React.Component{
                 title:{
                     text: 'Following'
                 }
+            },
+            bottomTabs: {
+                visible: false,
+                drawBehind: true
             }
         }
     }
@@ -26,11 +30,9 @@ export default class Following extends React.Component{
             userList:[],
             refreshing: false,
             loading: false,
-            userId: this.props.userId
+            userId: this.props.userId,
+            following_list: this.props.following_list
         }
-
-
-
     }
 
     componentDidMount(){
@@ -44,8 +46,8 @@ export default class Following extends React.Component{
 
     getFollowingUsers = async(type, startPosition) => {
         this.setState({refreshing: true})
-        // const {userList, start} = await Fire.getFollowUsers({size: SIZE, start: startPosition, type: type, userId: this.state.userId})
-        // this.followingUsersStartPosition = start
+        const {userList, start} = await Fire.getUsers({size: SIZE, start: startPosition, userIdList: this.state.following_list, type: type})
+        this.followingUsersStartPosition = start
         this.setState({refreshing: false, loading: false})
         return userList
     }
@@ -71,6 +73,7 @@ export default class Following extends React.Component{
                         onEndReached = {this._loadMore}
                         onEndReachedThreshold = {0.5}
                         userList = {this.state.userList}
+                        currentUser_following_list={this.props.following_list}
                     />
                 </View>
             )
@@ -93,7 +96,7 @@ export default class Following extends React.Component{
 
 
     render(){
-
+        
 
         return(
             <View style={styles.container}>
