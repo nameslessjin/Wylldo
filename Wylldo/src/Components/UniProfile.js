@@ -19,6 +19,20 @@ export default class UniProfile extends React.Component {
         })
     }
 
+    onFollowerPressed = () => {
+        Navigation.push(this.props.componentId, {
+            component:{
+                name: 'Follower',
+                passProps:{
+                    userId: this.props.userId,
+                    componentId: this.props.componentId,
+                    follower_list: this.props.follower_list,
+                    following_list: this.props.following_list
+                }
+            }
+        })
+    }
+
 
 
     render(){
@@ -29,7 +43,7 @@ export default class UniProfile extends React.Component {
             <Text style={styles.usernameText}>{this.props.name}</Text>
         )
         const followerDisplay = (
-            <TouchableOpacity style={styles.followTouchBtn}>
+            <TouchableOpacity style={styles.followTouchBtn} onPress={this.onFollowerPressed}>
                 <Text style={styles.followNum}>{this.props.followerNum}</Text>
                 <Text style={styles.followText}>followers</Text>
             </TouchableOpacity>

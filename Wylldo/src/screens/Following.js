@@ -12,7 +12,8 @@ class Following extends React.Component{
         return {
             topbar:{
                 title:{
-                    text: 'Following'
+                    text: 'Following',
+                    alignment: 'center'
                 }
             },
             bottomTabs: {

@@ -15,6 +15,7 @@ export function registerScreens(){
     Navigation.registerComponentWithRedux('JoinedUserList', () => require('./screens/JoinedUserList').default, Provider, store)
     Navigation.registerComponentWithRedux('MainProfile', () => require('./screens/MainProfile').default, Provider, store)
     Navigation.registerComponentWithRedux('Following', () => require('./screens/Following').default, Provider, store)
+    Navigation.registerComponentWithRedux('Follower', () => require('./screens/Follower').default, Provider, store)
     Navigation.registerComponent('Initializing', () => require('./screens/Initializing').default)
     Navigation.registerComponent('LogIn', () => require('./screens/LogIn').default)
     Navigation.registerComponent('SignUp', () => require('./screens/SignUp').default)

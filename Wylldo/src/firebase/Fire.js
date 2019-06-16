@@ -129,7 +129,6 @@ class Fire {
 
             const eventData = this.eventData
             this.eventData = []
-            console.log(eventData)
             const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
             return {eventData: eventData, cursor: startPosition}
         } catch ({error}) {
