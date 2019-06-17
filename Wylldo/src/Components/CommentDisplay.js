@@ -73,19 +73,19 @@ export default class CommentDisplay extends React.Component{
     }
 
     displayComment(){
-        const {description, hostUserId, hostUsername, host_display_name, like_num, hostAvatar} = this.props
+        const {comment, user_id, username, display_name, like_num, user_avatar} = this.props
         const userProfilePic = (
-            <View style={[styles.row, {alignItems: 'flex-start', paddingTop: 10}]}>
+            <View style={[styles.row, styles.displayContainer]}>
                 <TouchableWithoutFeedback>
-                        <Image source={hostAvatar} style={styles.imageStyle}/>
+                        <Image source={user_avatar} style={styles.imageStyle}/>
                 </TouchableWithoutFeedback>
                 <View style={ styles.textContainer}>
                     <View style={styles.row}>
-                        <Text style={styles.usernameStyle}>{hostUsername}</Text>
+                        <Text style={styles.usernameStyle}>{username}</Text>
                         <Text style={styles.timeStyle}>{this.displayTime()}</Text>
                     </View>
                     <View style={styles.commentContainer}>
-                        <Text numberOfLines={10} style={styles.commentStyle}>{description}</Text>
+                        <Text numberOfLines={10} style={styles.commentStyle}>{comment}</Text>
                     </View>
                 </View>
             </View>
@@ -110,11 +110,14 @@ export default class CommentDisplay extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flexDirection: 'row',
-        height: 80,
         width: "100%",
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 5
+        marginTop: 5,
+    },
+    displayContainer:{
+        alignItems: 'flex-start', 
+        paddingTop: 10
     },
     row:{
         flexDirection: 'row',

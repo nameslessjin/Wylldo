@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
         marginTop: -10
     },
     commentContainer:{
-        marginTop: 10
+        marginTop: 10,
+        width: '95%'
     }
 })

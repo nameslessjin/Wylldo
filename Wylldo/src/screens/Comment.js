@@ -28,12 +28,12 @@ export default class Comment extends React.Component{
                 <View style={styles.commentContainer}>
                     <CommentDisplay
                         createdTime = {createdTime}
-                        description = {description}
-                        hostUserId = {hostUserId}
-                        hostUsername = {hostUsername}
-                        host_display_name = {host_display_name}
+                        comment = {description}
+                        user_id = {hostUserId}
+                        username = {hostUsername}
+                        display_name = {host_display_name}
                         like_num = {likes}
-                        hostAvatar = {hostAvatar}
+                        user_avatar = {hostAvatar}
                     />
                 </View>
             </View>
