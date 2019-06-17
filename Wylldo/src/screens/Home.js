@@ -81,21 +81,14 @@ class Home extends React.Component{
 
     componentDidMount(){
  
-        if (Fire.uid){
-            this.getCurrentUserData().then(currentUserData => {
-                this.props.onGetCurrentUser(currentUserData);
-                this.getMapEventData().then( mapEvents => {
-                    this.props.onGetMapEvents(mapEvents)
-                })
-                .catch(error => {console.log(error)})
+        this.getCurrentUserData().then(currentUserData => {
+            this.props.onGetCurrentUser(currentUserData);
+            this.getMapEventData().then( mapEvents => {
+                this.props.onGetMapEvents(mapEvents)
             })
-            .catch(error => {
-                console.log(error.message)
-                goToAuth()
-            })
-        } else {
-            goToAuth()
-        }
+            .catch(error => {console.log(error)})
+        })
+
     }
 
 

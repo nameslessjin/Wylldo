@@ -6,9 +6,7 @@ import geohash from 'ngeohash'
 
 class Fire {
     constructor(){
-        this.mapEventData = []
         this.joinResult = null
-        this.eventData = []
     }
 
     //Download Data
@@ -93,6 +91,54 @@ class Fire {
         return eventWithKey
         
     }
+
+    addComments = async({event_id, username, display_name, comment, user_avatar, user_id}) => {
+        let ref = this.db.collection('comment')
+        let uploadComment = {
+            event_id: event_id,
+            username: username,
+            user_id: user_id,
+            user_avatar: user_avatar,
+            comment: comment,
+            display_name: display_name,
+            create_time: firebase.firestore.FieldValue.serverTimestamp()
+        }
+
+        const createComment = await ref.add(uploadComment).catch(error => console.log(error))
+    }
+
+    getComments = async ({eventId, start}) => {
+        const size = 7
+        let ref = this.db.collection('comment').where('event_id', '==', eventId).orderBy('create_time', 'ASC').limit(size)
+
+        try{
+            if(start){
+                ref = ref.startAfter(start)
+            }
+            let comments = []
+            const querySnapshot = await ref.get().catch(error => console.log(error))
+            for (const doc of querySnapshot.docs){
+                if (doc.exists){
+                    const comment = doc.data() || {}
+                    const user_avatar = await this.getAvatarUri(comment.user_avatar)
+                    const commentWithKey = {
+                        key: doc.id,
+                        commentId: doc.id,
+                        ...comment,
+                        user_avatar: {
+                            uri: user_avatar
+                        }
+                    }
+                    comments.push(commentWithKey)
+                }
+            }
+
+            const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
+            return {comments: comments, cursor: startPosition}
+        } catch(error) {
+            console.log('Get Comment error')
+        }
+    }
     
     getProfileEvents = async({size, start, type, userId}) => {
         let ref = null
@@ -107,6 +153,7 @@ class Fire {
             if(start) {
                 ref = ref.startAfter(start)
             }
+            let eventData = []
             const querySnapshot = await ref.get().catch(error => console.log(error))
             for (const doc of querySnapshot.docs){
                 if (doc.exists){
@@ -120,12 +167,9 @@ class Fire {
                             uri: hostAvatar
                         }
                     }
-                    this.eventData.push(eventWithKey)
+                    eventData.push(eventWithKey)
                 }
             }
-
-            const eventData = this.eventData
-            this.eventData = []
             const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
             return {eventData: eventData, cursor: startPosition}
         } catch ({error}) {
@@ -138,6 +182,7 @@ class Fire {
         const mapRef = this.geoDB.collection('mapEvents')
         const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(40.798699, -77.859954), radius: 8.5})
         const querySnapshot = await geoQuery.get()
+        let mapEventData = []
         for (const doc of querySnapshot.docs){
             if (doc.exists){
                 const mapEvent = doc.data() || {}
@@ -150,11 +195,10 @@ class Fire {
                         uri: hostAvatarUri
                     }
                 }
-                this.mapEventData.push(mapEventsWithKey)
+                mapEventData.push(mapEventsWithKey)
             }
         }
-        const mapEventData = this.mapEventData
-        this.mapEventData = []
+        console.log(this.mapEventData)
         return mapEventData
     }
 
@@ -183,7 +227,6 @@ class Fire {
             geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
             geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }
-        console.log(uploadEventInfo.hostAvatar)
         const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
         const hostAvatarUri = await this.getAvatarUri(uploadEventInfo.hostAvatar)
         const updateEventInfo = [{
@@ -195,7 +238,6 @@ class Fire {
             }
 
         }]
-        console.log(updateEventInfo)
         return updateEventInfo
     }
 

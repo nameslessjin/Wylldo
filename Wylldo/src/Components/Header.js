@@ -1,8 +1,9 @@
 import React from 'react'
-import {StyleSheet, View, Text, Image, TouchableOpacity} from "react-native"
+import {StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback} from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 import EventOption from './EventOption'
-
+import Fire from '../firebase/Fire'
+import { Navigation } from 'react-native-navigation';
 
 export default class Header extends React.Component{
 
@@ -87,6 +88,19 @@ export default class Header extends React.Component{
         }
     }
 
+    onUserPressed = async() => {
+        const {componentId, hostUserId} = this.props
+        const userData = await Fire.getUserData(hostUserId)
+        Navigation.push(componentId, {
+            component:{
+                name: 'OtherProfile',
+                passProps:{
+                    ...userData
+                }
+            }
+        })
+    }
+
     render(){
         let createdTime = 'Now'
         if (this.differenceOnTime(this.props.timestamp)){
@@ -95,21 +109,23 @@ export default class Header extends React.Component{
 
         return(
             <View style={styles.container}>
-                <View style={styles.row}>
-                    <Image
-                        style={styles.userProfilePic}
-                        source={this.props.hostAvatar}
-                    />
-                    <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
+                <TouchableWithoutFeedback onPress={this.onUserPressed}>
+                    <View style={styles.row}>
+                        <Image
+                            style={styles.userProfilePic}
+                            source={this.props.hostAvatar}
+                        />
+                        <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
 
-                    <Icon 
-                        name={this.props.tag} 
-                        size={18} 
-                        style={[styles.icon, 
-                            this.iconColor()
-                        ]}
-                    />
-                </View>
+                        <Icon 
+                            name={this.props.tag} 
+                            size={18} 
+                            style={[styles.icon, 
+                                this.iconColor()
+                            ]}
+                        />
+                    </View>
+                </TouchableWithoutFeedback>
                 <View style={styles.row}>
                     <Text style={styles.dateText}>{createdTime}</Text>
 

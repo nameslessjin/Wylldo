@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Fire from '../firebase/Fire'
 import JoinBtn from './JoinBtn'
 import TimeNLocation from './TimeNLocation'
+import { Navigation } from 'react-native-navigation';
 
 export default class Footer extends React.Component{
 
@@ -59,6 +60,18 @@ export default class Footer extends React.Component{
         await Fire.onUnlikeEvent(eventId)
     }
 
+    onCommentPressed = () => {
+        Navigation.push(this.props.componentId, {
+            component:{
+                name: 'Comment',
+                passProps:{
+                    ...this.props
+                }
+            }
+        })
+
+    }
+
     render(){
 
         const heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
@@ -70,7 +83,7 @@ export default class Footer extends React.Component{
 
 
         return(
-            <View style={{backgroundColor: 'white', margin: 10}}>
+            <View style={styles.container}>
 
                 <TimeNLocation {...this.props} componentId = {this.props.componentId} />
 
@@ -86,14 +99,12 @@ export default class Footer extends React.Component{
 
 
 
-                <View>
+                <View style={styles.commentContainer}>
                     <Text style={styles.name}>{this.props.hostUsername}</Text>
                     <Text style={styles.comment}>{this.props.description}</Text>
-                    <Text style={styles.name}>Shawn</Text>
-                    <Text style={styles.comment}>Jinsen is the best</Text>
-                    <Text style={styles.name}>Wei</Text>
-                    <Text style={styles.comment}>Zack is bad dog</Text>
+                    <TouchableOpacity onPress={this.onCommentPressed}>
                     <Text style={{color: 'grey', fontSize: 12}} >See {this.props.commentNum} more comments</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -101,6 +112,10 @@ export default class Footer extends React.Component{
 }
 
 const styles = StyleSheet.create({
+    container:{
+        backgroundColor: 'white', 
+        margin: 10
+    },
     name:{
         fontSize: 13,
         fontWeight: 'bold'
@@ -117,5 +132,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginTop: -10
+    },
+    commentContainer:{
+        marginTop: 10
     }
 })
