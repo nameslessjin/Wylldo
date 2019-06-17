@@ -6,9 +6,6 @@ import geohash from 'ngeohash'
 
 class Fire {
     constructor(){
-        firebase.auth().onAuthStateChanged(user => {
-            // console.log(user)
-        })
         this.mapEventData = []
         this.joinResult = null
         this.eventData = []
@@ -422,6 +419,8 @@ class Fire {
         const signUpUserInfo ={
             avatarUri: uploadedAvatar,
             name: name,
+            display_name: name,
+            username: name,
             email: email,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             timestamp: Date.now(),

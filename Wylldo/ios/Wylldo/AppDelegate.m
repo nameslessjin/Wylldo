@@ -17,7 +17,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [FIRApp configure];
-  [GMSServices provideAPIKey:@"AIzaSyDwt7M1yDBJtAoNbdA5-2PWu19O4zfdXD4"]; // add this line using the api key obtained from Google Console
+  [GMSServices provideAPIKey:@"AIzaSyAMEvJNncm-PBBTNMI-eIDNWrweKrzxD4w"]; // add this line using the api key obtained from Google Console
   
   NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];

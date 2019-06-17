@@ -1,9 +1,9 @@
 // initialize page when app just start.  Authentication page
-
 import React from 'react'
 import { View, Text, StyleSheet, AsyncStorage, TouchableOpacity, YellowBox} from 'react-native'
 import {goToAuth, goHome} from '../navigation'
 import Fire from '../firebase/Fire'
+import firebase from 'react-native-firebase'
 
 //Thinking if should make this a loading screen page.  Not entirely sure if the app is closed and reopen, this page still will be initialization page 
 
@@ -27,11 +27,31 @@ export default class Initializing extends React.Component{
         }
     }
 
-    render(){
+    constructor(){
+        super()
+        this.state = {
+            loggedIn: false
+        }
+    }
 
+    componentDidMount(){
+        this.onAuth = firebase.auth().onAuthStateChanged(user => {
+            if (user){
+                this.setState({loggedIn: true})
+            } else {
+                this.setState({loggedIn: false})
+            }
+        })
+    }
+
+    componentWillUnmount(){
+        this.onAuth()
+    }
+
+    render(){
         //if user is loged in move to home page.  (some concern about user token)
         //else move to authorization page
-        if (Fire.uid){
+        if (this.state.loggedIn){
             goHome()
         } else{
             goToAuth()
