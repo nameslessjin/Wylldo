@@ -32,16 +32,7 @@ class Comment extends React.Component{
     }
 
     componentDidMount(){
-        const {createdTime, description, hostUserId, hostUsername, hostAvatar, eventId} = this.props
-        const comment = [{
-            createdTime: createdTime,
-            comment: description,
-            user_id: hostUserId,
-            username: hostUsername,
-            user_avatar: hostAvatar,
-            key: '1'
-        }]
-        this.setState({comment:comment})
+        const {eventId} = this.props
         this._onRefresh(eventId)
     }
 
@@ -53,7 +44,8 @@ class Comment extends React.Component{
             user_id: hostUserId,
             username: hostUsername,
             user_avatar: hostAvatar,
-            key: '1'
+            commentId: 'description-for-this-wylldo',
+            key: 'description-for-this-wylldo'
         }]
         comment = comment.concat(comments)
         this.setState({comment: comment})

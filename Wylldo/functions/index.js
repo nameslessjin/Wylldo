@@ -12,13 +12,19 @@ exports.onAddComment = functions.firestore
         const event_id = snap.data().event_id
         const username = snap.data().username
         const comment = snap.data().comment
+        const user_id = snap.data().user_id
         const eventRef = db.collection('Events').doc(event_id)
         return db.runTransaction(transaction => {
             return transaction.get(eventRef).then(eventDoc => {
                 let comment_num = eventDoc.data().commentNum
                 let sample_comment = [...eventDoc.data().sample_comment]
+                const sample = {
+                    username: username,
+                    comment: comment,
+                    user_id: user_id
+                }
                 if (comment_num < 2){
-                    sample_comment.push(context.params.commentId)
+                    sample_comment.push(sample)
                 }
                 comment_num = comment_num + 1
                 return transaction.update(eventRef,{

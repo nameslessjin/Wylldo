@@ -111,7 +111,8 @@ class Fire {
             user_avatar: {
                 uri: user_avatar
             },
-            comment_id : createComment.id
+            commentId : createComment.id,
+            key: createComment.id
         }
         return uploadComment
     }
@@ -383,7 +384,8 @@ class Fire {
         const eventRef = this.eventsCollection.doc(eventId)
         await this.db.runTransaction(async transaction => {
             const doc = await transaction.get(eventRef)
-            let newJoin_userIDs = doc.data().join_userIDs.filter(userId => userId !== this.uid)
+            let newJoin_userIDs = [...doc.data().join_userIDs]
+            newJoin_userIDs = newJoin_userIDs.filter(userId => userId !== this.uid)
             const newJoinedNum = newJoin_userIDs.length + 1
             transaction.update(eventRef, {
                 joinedNum: newJoinedNum,

@@ -13,6 +13,10 @@ class Settings extends React.Component{
                     text: 'Settings',
                     alignment: 'center'
                 }
+            },
+            bottomTabs: {
+                visible: false,
+                drawBehind: true
             }
         }
     }
@@ -23,13 +27,29 @@ class Settings extends React.Component{
     }
 
     
+    logOutBtn = () => {
+        return(
+            <TouchableOpacity style={styles.optionBtn} onPress={() => this.onLogOutPressed()} >
+                <Text style={styles.logOutText}>Log Out</Text>
+            </TouchableOpacity>
+        )
+    }
+
+    editProfileBtn = () => {
+        return(
+            <TouchableOpacity style={styles.optionBtn}>
+                <Text style={styles.optionText}>Edit Profile</Text>
+            </TouchableOpacity>
+        )
+    }
 
 
     render(){
         return(
-            <TouchableOpacity style={styles.container} onPress={() => this.onLogOutPressed()} >
-                <Text style={[styles.options, {color: "red"}]}>Log Out</Text>
-            </TouchableOpacity>
+            <View style={styles.container}>
+                {this.logOutBtn()}
+                {this.editProfileBtn()}
+            </View>
         )
     }
 }
@@ -47,13 +67,24 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         backgroundColor: '#eee'
     },
-    options:{
-        width: "100%",
+    optionBtn:{
+        width: '90%',
+        height: 40,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        marginVertical: 10,
         backgroundColor: "#fff",
-        padding: 10,
-        margin: 5
+    },
+    logOutText:{
+        color: 'red',
+        fontSize: 15,
+        marginLeft: 10
+    },
+    optionText:{
+        fontSize: 15,
+        marginLeft: 10
     }
 })

@@ -109,30 +109,27 @@ class JoinedUserList extends React.Component{
 
     confirmCancel = () => {
 
-        this.updatedJoin_userIDs = this.state.join_userIDs
-        this.updatedJoinedNum = this.updatedJoin_userIDs.length
         if (this.props.hostUserId == Fire.uid){
             this.onDeleteEvent().then(deleteEventId => {
                 this.props.onDeleteEvent(deleteEventId)
-                this.updatedJoin_userIDs = []
-                this.updatedJoinedNum = 0
+                const updatedJoin_userIDs = []
+                const updatedJoinedNum = 0
+                this.props.onCancel({joinedNum: updatedJoinedNum, join_userIDs: updatedJoin_userIDs})
+                Navigation.pop(this.props.componentId)
             })
         } else {
             this.onCancelEvent().then(res => {
-                this.updatedJoin_userIDs = res.joinUserIds
-                this.updatedJoinedNum = res.joinNum
+                const updatedJoin_userIDs = res.joinUserIds
+                const updatedJoinedNum = res.joinNum
                 if (res.joinNum == 0){
                     this.onDeleteEvent().then(deleteEvent => {
                         this.props.onDeleteEvent(deleteEvent)
                     })
                 }
+                this.props.onCancel({joinedNum: updatedJoinedNum, join_userIDs: updatedJoin_userIDs})
+                Navigation.pop(this.props.componentId)
             })
         }
-
-        const updatedJoin_userIDs = this.updatedJoin_userIDs
-        const updatedJoinedNum = this.updatedJoinedNum
-        this.props.onCancel({joinedNum: updatedJoinedNum, join_userIDs: updatedJoin_userIDs})
-        Navigation.pop(this.props.componentId)
     }
 
     onDeleteEvent = async() => {
