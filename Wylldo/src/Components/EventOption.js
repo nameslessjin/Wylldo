@@ -70,9 +70,9 @@ class EventOption extends React.Component{
             style={{justifyContent: 'flex-end', alignContent: 'center'}}
             >
                 <View style={styles.container}>
-                    <TouchableOpacity style={styles.optionBtnStyle}>
+                    {/* <TouchableOpacity style={styles.optionBtnStyle}>
                         <Text style={[styles.optionsTextStyle]}>Report</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     {(Fire.uid === this.props.hostUserId) ? <View style={styles.breakLine}/> : null}
                     {deleteBtn}
                 </View>
