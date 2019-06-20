@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import Modal from 'react-native-modal'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
-import {deleteEvent} from '../store/actions/action.index'
+import {deleteEvent, deleteComment} from '../store/actions/action.index'
 import {Navigation} from 'react-native-navigation'
 
 class EventOption extends React.Component{
@@ -25,17 +25,29 @@ class EventOption extends React.Component{
     }
 
     onDeletePress = () => {
-        this.onDeleteEvent().then(deleteEventId => {
-            this.props.onDeleteEvent(deleteEventId)
-            Navigation.popToRoot(this.props.componentId)
+        if (this.props.eventId){
+            this.onDeleteEvent().then(deleteEventId => {
+                this.props.onDeleteEvent(deleteEventId)
+                Navigation.popToRoot(this.props.componentId)
+    
+            })
+        }
 
-        })
-
+        if (this.props.commentId){
+            this.onDeleteComment().then(commentId => {
+                this.props.onDeleteComment(commentId)
+            })
+        }
     }
 
     onDeleteEvent = async() => {
         const deleteEventId = await Fire.deleteEvent(this.props.eventId)
         return deleteEventId
+    }
+
+    onDeleteComment = async() => {
+        const deleteCommentId = await Fire.deleteComment(this.props.commentId)
+        return deleteCommentId
     }
 
     render(){
@@ -73,7 +85,8 @@ class EventOption extends React.Component{
 
 const mapDispatchToProps = dispatch => {
     return{
-        onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId))
+        onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId)),
+        onDeleteComment: (commentId) => dispatch(deleteComment(commentId))
     }
 }
 

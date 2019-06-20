@@ -2,7 +2,8 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER,
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
         LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
         LOAD_MORE_CREATEDEVENTS, GET_LIKEDEVENTS, LOAD_MORE_LIKEDEVENTS,
-        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS, ON_FOLLOW
+        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS, ON_FOLLOW,
+        GET_COMMENT, POST_COMMENT, DELETE_COMMENT
         } from "../actions/actionTypes"
 
 //This is reducers for events.  Currently support Add_event, Get_Event, Get_CurrentUser, Signout and Update_user
@@ -14,9 +15,7 @@ const initialState = {
     currentUser: {},
     mapEvents: [],
     mapEventIdList: [],
-    createdEvents: [],
-    likedEvents: [],
-    joinedEvents: []
+    comment: []
 }
 
 export default reducer = (state = initialState, action) => {
@@ -45,6 +44,33 @@ export default reducer = (state = initialState, action) => {
                 mapEventIdList: updateMapEventIdList 
             }
 
+        case GET_COMMENT:
+            const comment = action.comment
+            return{
+                ...state,
+                comment: comment
+            }
+        
+        case POST_COMMENT:{
+            let comment = [...state.comment]
+            comment.push(action.comment)
+            return{
+                ...state,
+                comment: comment
+            }
+        }
+
+        case DELETE_COMMENT:{
+            let comment = [...state.comment]
+            comment = comment.filter(comment => {
+                return comment.commentId !== action.commentId
+            })
+            return{
+                ...state,
+                comment: comment
+            }
+        }
+
         case ON_FOLLOW:
             return{
                 ...state,
@@ -57,33 +83,16 @@ export default reducer = (state = initialState, action) => {
                 return event.eventId !== action.eventId
             })
 
-            let updatedLikedEvents = [...state.likedEvents]
-            updatedLikedEvents = updatedLikedEvents.filter(event => {
-                return event.eventId !== action.eventId
-            })
-
-            let updatedCreatedEvents = [...state.createdEvents]
-            updatedCreatedEvents = updatedCreatedEvents.filter(event => {
-                return event.eventId !== action.eventId
-            })
-
             let updatedMapEvents = [...state.mapEvents]
             updatedMapEvents = updatedMapEvents.filter(event => {
                 return event.eventId !== action.eventId
             })
 
-            let updatedJoinedEvents = [...state.joinedEvents]
-            updatedJoinedEvents = updatedJoinedEvents.filter(event => {
-                return event.eventId !== action.eventId
-            })
 
         return{
             ...state,
             Events: updatedEvents,
-            likedEvents: updatedLikedEvents,
-            createdEvents: updatedCreatedEvents,
             mapEvents: updatedMapEvents,
-            joinedEvents: updatedJoinedEvents
         }
         
         case GET_MAPEVENTS:
@@ -115,48 +124,7 @@ export default reducer = (state = initialState, action) => {
                     Events: state.Events.concat(action.Events)
                 }
         
-        case GET_CREATEDEVENTS:
-            return{
-                ...state,
-                createdEvents: action.createdEvents
-            }
-        case LOAD_MORE_CREATEDEVENTS:
-            return{
-                ...state,
-                createdEvents: state.createdEvents.concat(action.createdEvents)
-            }
 
-        case GET_LIKEDEVENTS:
-            return{
-                ...state,
-                likedEvents: action.likedEvents
-            }
-
-        case LOAD_MORE_LIKEDEVENTS:
-            return{
-                ...state,
-                likedEvents: state.likedEvents.concat(action.likedEvents)
-            }
-        
-        case GET_JOINEDEVENTS:
-            return{
-                ...state,
-                joinedEvents: action.joinedEvents
-            }
-
-        case LOAD_MORE_JOINEDEVENTS:
-
-            let newJoinedEvents = [...state.joinedEvents]
-            if(action.joinedEvents.length == 1){
-                const repeatEvent = action.joinedEvents[0]
-                newJoinedEvents = newJoinedEvents.filter(event => event.eventId !== repeatEvent.eventId)
-            }
-            newJoinedEvents = newJoinedEvents.concat(action.joinedEvents)
-
-            return{
-                ...state,
-                joinedEvents: newJoinedEvents
-            }
 
         //store retrieved currently login user and store to state so it can be used with redux connected screen
         case GET_CURRENTUSER:

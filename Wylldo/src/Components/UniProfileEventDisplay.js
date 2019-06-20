@@ -130,7 +130,9 @@ export default class ProfileEventDisplay extends React.Component{
                         </View>
                         <Text style={styles.dateText}>{displayTime}</Text>
                     </View>
-                    <Text ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
+                    <View style={styles.descriptionContainer}>
+                        <Text ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
+                    </View>
                 </View>
             </TouchableOpacity>
         )
@@ -149,6 +151,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
+    },
+    descriptionContainer:{
+        marginTop: 5
     },
     row:{
         marginRight: 5

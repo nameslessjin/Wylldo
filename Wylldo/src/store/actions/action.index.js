@@ -1,6 +1,5 @@
 export {getEvents, addEvent, getCurrentUser, 
         signOut, updateUserdata, getMapEvents, 
-        loadMoreEvents, deleteEvent, getCreatedEvents, 
-        loadMoreCreatedEvents, getLikedEvents, loadMoreLikedEvents,
-        getJoinedEvents, loadMoreJoinedEvents, onFollow
+        loadMoreEvents, deleteEvent, onFollow, 
+        postComment, getComment, deleteComment
         } from './events.action'

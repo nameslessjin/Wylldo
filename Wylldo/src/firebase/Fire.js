@@ -92,25 +92,33 @@ class Fire {
         
     }
 
-    addComments = async({event_id, username, display_name, comment, user_avatar, user_id}) => {
+    addComments = async(commentInfo) => {
+        const {event_id, username, comment, avatarUri} = commentInfo
         let ref = this.db.collection('comment')
         let uploadComment = {
             event_id: event_id,
             username: username,
-            user_id: user_id,
-            user_avatar: user_avatar,
+            user_id: this.uid,
+            user_avatar: avatarUri,
             comment: comment,
-            display_name: display_name,
             create_time: firebase.firestore.FieldValue.serverTimestamp()
         }
 
         const createComment = await ref.add(uploadComment).catch(error => console.log(error))
+        const user_avatar = await this.getAvatarUri(commentInfo.avatarUri)
+        uploadComment = {
+            ...uploadComment,
+            user_avatar: {
+                uri: user_avatar
+            },
+            comment_id : createComment.id
+        }
+        return uploadComment
     }
 
-    getComments = async ({eventId, start}) => {
-        const size = 7
+    getComments = async (eventId, start) => {
+        const size = 10
         let ref = this.db.collection('comment').where('event_id', '==', eventId).orderBy('create_time', 'ASC').limit(size)
-
         try{
             if(start){
                 ref = ref.startAfter(start)
@@ -132,9 +140,8 @@ class Fire {
                     comments.push(commentWithKey)
                 }
             }
-
             const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
-            return {comments: comments, cursor: startPosition}
+            return {comments: comments, start: startPosition}
         } catch(error) {
             console.log('Get Comment error')
         }
@@ -198,7 +205,6 @@ class Fire {
                 mapEventData.push(mapEventsWithKey)
             }
         }
-        console.log(this.mapEventData)
         return mapEventData
     }
 
@@ -224,6 +230,7 @@ class Fire {
             like_userIDs: [],
             joinedNum: 1,
             join_userIDs: [],
+            sample_comment: [],
             geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
             geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }
@@ -420,6 +427,12 @@ class Fire {
         const ref = this.eventsCollection.doc(eventId)
         const deleteEvent = await ref.delete().catch(error => {console.log(error)})
         return eventId
+    }
+
+    deleteComment = async (commentId) => {
+        const ref = this.db.collection('comment').doc(commentId)
+        const deleteComment = await ref.delete().catch(error => {console.log(error)})
+        return commentId
     }
 
     uploadAvatarAsync = async uri => {

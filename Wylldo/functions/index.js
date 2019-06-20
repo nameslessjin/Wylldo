@@ -5,6 +5,33 @@ admin.initializeApp(functions.config().firebase);
 var db = admin.firestore()
 
 
+exports.onAddComment = functions.firestore
+    .document('comment/{commentId}')
+    .onCreate((snap, context) => {
+
+        const event_id = snap.data().event_id
+        const username = snap.data().username
+        const comment = snap.data().comment
+        const eventRef = db.collection('Events').doc(event_id)
+        return db.runTransaction(transaction => {
+            return transaction.get(eventRef).then(eventDoc => {
+                let comment_num = eventDoc.data().commentNum
+                let sample_comment = [...eventDoc.data().sample_comment]
+                if (comment_num < 2){
+                    sample_comment.push(context.params.commentId)
+                }
+                comment_num = comment_num + 1
+                return transaction.update(eventRef,{
+                    ...eventDoc.data(),
+                    commentNum: comment_num,
+                    sample_comment: sample_comment
+                })
+
+                
+            })
+        })
+    })
+
 exports.onEventCreated = functions.firestore
     .document('Events/{eventId}')
     .onCreate((snap, context) => {
@@ -23,7 +50,7 @@ exports.onEventCreated = functions.firestore
                     createdTime: snap.data().timestamp,
                     joinedNum: snap.data().joinedNum,
                     inviteCount: snap.data().inviteCount,
-                    viewType: snap.data().viewType
+                    viewType: snap.data().viewType,
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates

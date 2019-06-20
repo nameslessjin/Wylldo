@@ -1,13 +1,29 @@
 import React from 'react'
 import {View, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback} from 'react-native'
 import {Navigation} from 'react-native-navigation'
+import Icon from 'react-native-vector-icons/Ionicons'
+import Fire from '../firebase/Fire'
+import EventOption from './EventOption'
 
 export default class CommentDisplay extends React.Component{
 
+    state={
+        isOptionVisible: false
+    }
+
+
+    setEventOption = () => {
+        this.setState({isOptionVisible: true})
+    }
+    hideEventOption = () => {
+        this.setState({isOptionVisible: false})
+    }
+
+    
     displayTime(){
         const {createdTime} = this.props
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
+        try{
         const timestamp = new Date(createdTime.seconds * 1000)
         const now = Date.now()
         const differenceInSec = Math.round(now / 1000 - createdTime.seconds) 
@@ -19,13 +35,11 @@ export default class CommentDisplay extends React.Component{
         //if it is not the same year
         if (currentYear > createYear){
             const returnDate = createMonth + " " + createDate + " " + createYear
-            console.log(returnDate)
             return returnDate
         }
         //if greater then 7 days put date on it
         if (differenceInSec > 604800){
             const returnDate = createMonth + " " + createDate
-            console.log(returnDate)
             return returnDate
         } 
         // if greater then 1 days put how many days on it
@@ -35,7 +49,6 @@ export default class CommentDisplay extends React.Component{
             if (days == 1){
                 daysAgo = "1 day ago"
             }
-            console.log(daysAgo)
             return daysAgo
         }
         // if greater then 1 hour put hours on it
@@ -45,7 +58,6 @@ export default class CommentDisplay extends React.Component{
             if (hours == 1){
                 hoursAgo = "1 hour ago"
             }
-            console.log(hoursAgo)
             return hoursAgo
         }
 
@@ -56,7 +68,6 @@ export default class CommentDisplay extends React.Component{
             if (minutes == 1){
                 minutesAgo = "1 min ago"
             }
-            console.log(minutesAgo)
             return minutesAgo
         }
 
@@ -66,39 +77,61 @@ export default class CommentDisplay extends React.Component{
             if (differenceInSec == 1){
                 secondsAgo = "1 sec ago "
             }
-            console.log(secondsAgo)
             return secondsAgo
         }
+     } catch{}
         
     }
 
-    displayComment(){
-        const {comment, user_id, username, display_name, like_num, user_avatar} = this.props
-        const userProfilePic = (
-            <View style={[styles.row, styles.displayContainer]}>
-                <TouchableWithoutFeedback>
-                        <Image source={user_avatar} style={styles.imageStyle}/>
-                </TouchableWithoutFeedback>
-                <View style={ styles.textContainer}>
-                    <View style={styles.row}>
-                        <Text style={styles.usernameStyle}>{username}</Text>
-                        <Text style={styles.timeStyle}>{this.displayTime()}</Text>
-                    </View>
-                    <View style={styles.commentContainer}>
-                        <Text numberOfLines={10} style={styles.commentStyle}>{comment}</Text>
-                    </View>
-                </View>
-            </View>
-        )
+    
 
-        return userProfilePic
+    onUserPressed = async() => {
+        const {componentId, user_id} = this.props
+        const userData = await Fire.getUserData(user_id)
+        Navigation.push(componentId, {
+            component:{
+                name: 'OtherProfile',
+                passProps:{
+                    ...userData
+                }
+            }
+        })
     }
 
-
     render(){
+        const {comment, user_id, username, user_avatar, componentId, commentId} = this.props
+        let optionButton = null
+        if (Fire.uid == user_id) {
+            optionButton = (
+                <TouchableOpacity  onPress={this.setEventOption}>
+                    <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
+                </TouchableOpacity>
+            )
+        }
         return(
             <View style={styles.container}>
-                {this.displayComment()}
+                <View style={[styles.row, styles.displayContainer]}>
+                    <TouchableWithoutFeedback onPress={this.onUserPressed}>
+                            <Image source={user_avatar} style={styles.imageStyle}/>
+                    </TouchableWithoutFeedback>
+                    <View style={ styles.textContainer}>
+                        <View style={styles.row}>
+                            <Text style={styles.usernameStyle}>{username}</Text>
+                            <Text style={styles.timeStyle}>{this.displayTime()}</Text>
+                        </View>
+                        <View style={styles.commentContainer}>
+                            <Text numberOfLines={10} style={styles.commentStyle}>{comment}</Text>
+                        </View>
+                    </View>
+                    {optionButton}
+                    <EventOption
+                        isOptionVisible={this.state.isOptionVisible}
+                        hostUserId= {this.props.user_id}
+                        componentId = {this.props.componentId}
+                        commentId = {commentId}
+                        onBackdropPress={() => this.hideEventOption()}
+                    />
+                </View>
             </View>
         )
     }
@@ -143,7 +176,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     textContainer:{
-        flex: 1
+        flex: 1,
+        paddingTop: 5
     },
     commentContainer:{
         width: '85%'

@@ -1,8 +1,7 @@
 import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, 
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
-        LOAD_MORE_EVENTS, DELETE_EVENT, GET_CREATEDEVENTS, 
-        LOAD_MORE_CREATEDEVENTS, GET_LIKEDEVENTS, LOAD_MORE_LIKEDEVENTS,
-        GET_JOINEDEVENTS, LOAD_MORE_JOINEDEVENTS, ON_FOLLOW
+        LOAD_MORE_EVENTS, DELETE_EVENT, ON_FOLLOW, 
+        POST_COMMENT, DELETE_COMMENT, GET_COMMENT
         } from "./actionTypes"
 
 //I want to put connect with firebase here.  However without a state, promise having format trouble to store information
@@ -19,6 +18,27 @@ export const deleteEvent = (eventId) => {
     return {
         type: DELETE_EVENT,
         eventId: eventId
+    }
+}
+
+export const postComment = (comment) => {
+    return {
+        type: POST_COMMENT,
+        comment: comment
+    }
+}
+
+export const deleteComment = (commentId) => {
+    return {
+        type: DELETE_COMMENT,
+        commentId: commentId
+    }
+}
+
+export const getComment = (comment) => {
+    return {
+        type: GET_COMMENT,
+        comment: comment
     }
 }
 
@@ -44,47 +64,6 @@ export const onFollow = (user) => {
     }
 }
 
-export const getCreatedEvents = (createdEvents) => {
-    return {
-        type: GET_CREATEDEVENTS,
-        createdEvents: createdEvents
-    }
-}
-
-export const loadMoreCreatedEvents = (createdEvents) => {
-    return{
-        type: LOAD_MORE_CREATEDEVENTS,
-        createdEvents: createdEvents
-    }
-}
-
-export const getJoinedEvents = (joinedEvents) => {
-    return{
-        type: GET_JOINEDEVENTS,
-        joinedEvents: joinedEvents
-    }
-}
-
-export const loadMoreJoinedEvents = (joinedEvents) => {
-    return{
-        type: LOAD_MORE_JOINEDEVENTS,
-        joinedEvents: joinedEvents
-    }
-}
-
-export const getLikedEvents = (likedEvents) => {
-    return {
-        type: GET_LIKEDEVENTS,
-        likedEvents: likedEvents
-    }
-}
-
-export const loadMoreLikedEvents = (likedEvents) => {
-    return{
-        type: LOAD_MORE_LIKEDEVENTS,
-        likedEvents: likedEvents
-    }
-}
 
 export const getMapEvents = (mapEvents) => {
     return{
