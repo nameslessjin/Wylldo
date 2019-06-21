@@ -20,6 +20,11 @@ class FollowButton extends React.Component{
         }
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if(prevProps != this.props){
+            this.checkFollow()
+        }
+    }
 
     checkSelf = () => {
         if (this.props.userId == Fire.uid){

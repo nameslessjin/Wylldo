@@ -25,6 +25,10 @@ class JoinBtn extends React.Component{
         }
     }
 
+    componentWillMount(){
+        
+    }
+
     checkUserOnEvent = () => {
         if (this.state.joinedNum == this.props.inviteCount){
             this.setState({joinBtn: 'FULL'})
@@ -66,9 +70,13 @@ class JoinBtn extends React.Component{
                 name: 'JoinedUserList',
                 passProps:{
                     eventId: this.props.eventId,
-                    join_userIDs: this.state.join_userIDs,
+                    join_userIDs: this.props.join_userIDs,
                     hostUserId: this.props.hostUserId,
-                    onCancel: (res) => {this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs, joinBtn: 'JOIN'})}
+                    onCancel: (res) => {
+                        if (res.joinedNum != 0){
+                            this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs, joinBtn: 'JOIN'})
+                        }
+                    }
                 }
             }
         })
