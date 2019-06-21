@@ -38,8 +38,14 @@ class EditProfile extends React.Component{
         Navigation.events().bindComponent(this)
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if (prevState.avatarUri != this.state.avatarUri){
+            this.setState({avatarChange: true})
+        }
+    }
+
     navigationButtonPressed({buttonId}){
-        const {username, gender, email, phone_num, birth_date, avatarUri} = this.state
+        const {username, gender, email, phone_num, birth_date, avatarUri, avatarChange} = this.state
         if (buttonId == "Done"){
             const currentUser = {
                 ...this.props.currentUser,
@@ -49,7 +55,8 @@ class EditProfile extends React.Component{
                 phone_num: phone_num,
                 birth_date: birth_date
             }
-            this.updateUserData(currentUser, avatarUri).then(() => {
+
+            this.updateUserData(currentUser, (avatarChange) ? avatarUri : null).then(() => {
                 this.getCurrentUserData().then(currentUserData => {
                     this.props.onGetCurrentUser(currentUserData)
                     Navigation.popToRoot(this.props.componentId)
@@ -74,7 +81,8 @@ class EditProfile extends React.Component{
         birth_date: this.props.currentUser.birth_date,
         gender: this.props.currentUser.gender,
         email: this.props.currentUser.email,
-        avatarUri: this.props.currentUser.avatarUri
+        avatarUri: this.props.currentUser.avatarUri,
+        avatarChange: false
     }
 
 
@@ -119,6 +127,8 @@ class EditProfile extends React.Component{
                     defaultValue={this.state.phone_num}
                     style={styles.userInputTextInput}
                     maxLength={10}
+                    onChangeText={(phone_num) => this.setState({phone_num: phone_num})}
+                    keyboardType={'phone-pad'}
                 />
             </View>
         )

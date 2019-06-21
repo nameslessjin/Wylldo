@@ -407,6 +407,7 @@ class Fire {
 
 
     updateUserInformation = async(currentData, avatar) => {
+        console.log(currentData, avatar)
         const avatStorageUri = !(avatar === null) ? await this.uploadAvatarAsync(avatar.uri) : null
         const uploadedAvatar = !(avatar === null) ? {
             uri: avatStorageUri.url,
@@ -414,7 +415,7 @@ class Fire {
         } : null
         const updateUserdata ={
             ...currentData,
-            avatarUri: uploadedAvatar
+            avatarUri: (avatar) ? uploadedAvatar : currentData.avatarUri
         }
 
         console.log(updateUserdata)
