@@ -29,7 +29,7 @@ class Settings extends React.Component{
     
     logOutBtn = () => {
         return(
-            <TouchableOpacity style={styles.optionBtn} onPress={() => this.onLogOutPressed()} >
+            <TouchableOpacity style={[styles.optionBtn]} onPress={() => this.onLogOutPressed()} >
                 <Text style={styles.logOutText}>Log Out</Text>
             </TouchableOpacity>
         )
@@ -37,7 +37,7 @@ class Settings extends React.Component{
 
     editProfileBtn = () => {
         return(
-            <TouchableOpacity style={styles.optionBtn}>
+            <TouchableOpacity style={[styles.optionBtn, {marginTop: 10}]}>
                 <Text style={styles.optionText}>Edit Profile</Text>
             </TouchableOpacity>
         )
@@ -47,8 +47,10 @@ class Settings extends React.Component{
     render(){
         return(
             <View style={styles.container}>
-                {this.logOutBtn()}
-                {this.editProfileBtn()}
+                <View style={styles.optionContainer}> 
+                    {this.editProfileBtn()}
+                    {this.logOutBtn()}
+                </View>
             </View>
         )
     }
@@ -70,12 +72,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#eee'
     },
+    optionContainer:{
+        backgroundColor: 'white',
+        width: '100%'
+    },
     optionBtn:{
-        width: '90%',
+        width: '100%',
         height: 40,
         alignItems: 'flex-start',
         justifyContent: 'center',
-        marginVertical: 10,
         backgroundColor: "#fff",
     },
     logOutText:{

@@ -66,11 +66,17 @@ class FollowButton extends React.Component{
             this.onFollow().then(result => {
                 if (result == true){
                     this.setState({followButton: 'Followed'})
+                    if(this.props.updateFollowBtn){
+                        this.props.updateFollowBtn()
+                    }
                 }
             })
         } else {
             this.onUnFollow()
             this.setState({followButton: 'Follow'})
+            if(this.props.updateFollowBtn){
+                this.props.updateFollowBtn()
+            }
         }
 
     }
@@ -121,29 +127,29 @@ export default connect(mapStateToProps, mapDispatchToProps)(FollowButton)
 
 const styles = StyleSheet.create({
     btnStyle:{
-        width: 80,
-        borderRadius: 25,
+        width: 70,
+        borderRadius: 20,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     followBtnStyle:{
-        height: 45,
+        height: 40,
         backgroundColor: '#FE4C4C',
     },
     followedBtnStyle:{
-        height: 50,
+        height: 40,
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: '#FE4C4C'
     },
     selfBtnStyle:{
-        height: 45,
+        height: 40,
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: 'black'
     },
     textStyle:{
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: 'ArialRoundedMTBold',
     },
     followText:{

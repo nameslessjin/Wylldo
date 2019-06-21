@@ -3,31 +3,34 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import UniProfileHistory from './UniProfileHistory';
 import PickAvatar from './PickAvatar'
 import {Navigation} from 'react-native-navigation'
+import ProfileFollowBtn from './ProfileFollowBtn'
 
 export default class UniProfile extends React.Component {
 
     onFollowingPressed = () => {
-        Navigation.push(this.props.componentId, {
+        const {componentId, userId, following_list} = this.props
+        Navigation.push(componentId, {
             component:{
                 name: 'Following',
                 passProps:{
-                    userId: this.props.userId,
-                    componentId: this.props.componentId,
-                    following_list: this.props.following_list
+                    userId: userId,
+                    componentId: componentId,
+                    following_list: following_list
                 }
             }
         })
     }
 
     onFollowerPressed = () => {
-        Navigation.push(this.props.componentId, {
+        const {componentId, userId, following_list, follower_list} = this.props
+        Navigation.push(componentId, {
             component:{
                 name: 'Follower',
                 passProps:{
-                    userId: this.props.userId,
-                    componentId: this.props.componentId,
-                    follower_list: this.props.follower_list,
-                    following_list: this.props.following_list
+                    userId: userId,
+                    componentId: componentId,
+                    follower_list: follower_list,
+                    following_list: following_list
                 }
             }
         })
@@ -36,28 +39,34 @@ export default class UniProfile extends React.Component {
 
 
     render(){
+        const {avatarUri, username, followerNum, followingNum, componentId, userId, following_list} = this.props
         const displayAvatar = (
-            <Image source={this.props.avatarUri}  style={styles.avatar} />
+            <Image source={avatarUri}  style={styles.avatar} />
         )
         const displayName = (
-            <Text style={styles.usernameText}>{this.props.name}</Text>
+            <Text style={styles.usernameText}>{username}</Text>
         )
         const followerDisplay = (
             <TouchableOpacity style={styles.followTouchBtn} onPress={this.onFollowerPressed}>
-                <Text style={styles.followNum}>{this.props.followerNum}</Text>
+                <Text style={styles.followNum}>{followerNum}</Text>
                 <Text style={styles.followText}>followers</Text>
             </TouchableOpacity>
         )
         const followingDisplay = (
             <TouchableOpacity style={styles.followTouchBtn} onPress={this.onFollowingPressed}>
-                <Text style={styles.followNum}>{this.props.followingNum}</Text>
+                <Text style={styles.followNum}>{followingNum}</Text>
                 <Text style={styles.followText}>following</Text>
             </TouchableOpacity>
         )
-
         return(
             <View style={styles.container}>
                 <View style={styles.userContainer}>
+                    <View style={styles.followBtn}>
+                        <ProfileFollowBtn
+                            userId = {userId}
+                            following_list = {following_list}
+                        />
+                    </View>
                     {displayAvatar}
                     {displayName}
                     <View style={styles.followContainer}>
@@ -65,7 +74,7 @@ export default class UniProfile extends React.Component {
                         {followingDisplay}
                     </View>
                 </View>
-                <UniProfileHistory componentId={this.props.componentId} userId = {this.props.userId} />
+                <UniProfileHistory componentId={componentId} userId = {userId} />
             </View>
         )
     }
@@ -79,6 +88,13 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         backgroundColor: '#eee'
     },
+    
+    followBtn:{
+        position: 'absolute',
+        top: 10,
+        right: 5
+        
+    },  
     userContainer:{
         width: '100%',
         height: '30%',

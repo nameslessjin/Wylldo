@@ -3,15 +3,16 @@ import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
 import FollowButton from './FollowButton'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
+import {connect} from 'react-redux'
 
-export default class UserDisplay extends React.Component{
+class UserDisplay extends React.Component{
 
     onUserPress = () => {
         Navigation.push(this.props.componentId, {
             component:{
                 name: 'OtherProfile',
                 passProps:{
-                    ...this.props
+                    ...this.props,
                 }
             }
         })
@@ -40,12 +41,20 @@ export default class UserDisplay extends React.Component{
                 {userProfilePic}
                 <FollowButton 
                     userId={this.props.userId} 
-                    following_list={this.props.currentUser_following_list}
-                    />
+                    following_list={this.props.currentUser.following_list}
+                />
             </View>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return{
+        currentUser: state.events.currentUser
+    }
+}
+
+export default connect(mapStateToProps)(UserDisplay)
 
 
 const styles = StyleSheet.create({

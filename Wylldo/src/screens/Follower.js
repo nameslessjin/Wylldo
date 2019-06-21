@@ -50,7 +50,6 @@ class Follower extends React.Component{
         const {userList, start} = await Fire.getUsers({size: SIZE, start: startPosition, userIdList: this.state.follower_list, type: type})
         this.followingUsersStartPosition = start
         this.setState({refreshing: false, loading: false})
-        console.log(userList)
         return userList
     }
 
