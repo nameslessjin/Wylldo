@@ -4,6 +4,7 @@ import {goToAuth} from '../navigation'
 import firebase from 'react-native-firebase'
 import {connect} from 'react-redux'
 import {signOut} from '../store/actions/action.index'
+import {Navigation} from 'react-native-navigation'
 
 class Settings extends React.Component{
     static get options(){
@@ -26,10 +27,18 @@ class Settings extends React.Component{
         firebase.auth().signOut().then(() => goToAuth())
     }
 
+    onEditProfilePressed = () => {
+        Navigation.push(this.props.componentId, {
+            component:{
+                name: 'EditProfile'
+            }
+        })
+    }
+
     
     logOutBtn = () => {
         return(
-            <TouchableOpacity style={[styles.optionBtn]} onPress={() => this.onLogOutPressed()} >
+            <TouchableOpacity style={[styles.optionBtn]} onPress={this.onLogOutPressed} >
                 <Text style={styles.logOutText}>Log Out</Text>
             </TouchableOpacity>
         )
@@ -37,7 +46,7 @@ class Settings extends React.Component{
 
     editProfileBtn = () => {
         return(
-            <TouchableOpacity style={[styles.optionBtn, {marginTop: 10}]}>
+            <TouchableOpacity style={[styles.optionBtn, {marginTop: 10}]} onPress={this.onEditProfilePressed}>
                 <Text style={styles.optionText}>Edit Profile</Text>
             </TouchableOpacity>
         )

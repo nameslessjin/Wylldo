@@ -417,6 +417,8 @@ class Fire {
             avatarUri: uploadedAvatar
         }
 
+        console.log(updateUserdata)
+
         await this.usersCollection.doc(this.uid).update(updateUserdata)
         .catch(() => {console.log('rejected')})
         
@@ -475,7 +477,6 @@ class Fire {
         }
         const signUpUserInfo ={
             avatarUri: uploadedAvatar,
-            name: name,
             display_name: name,
             username: name,
             email: email,
@@ -484,7 +485,11 @@ class Fire {
             followerNum: 0,
             followingNum: 0,
             following_list: [],
-            follower_list: []
+            follower_list: [],
+            last_post_create_time: null,
+            phone_num: '',
+            birth_date: null,
+            gender: '',
         }
 
         this.usersCollection.doc(this.uid).set(signUpUserInfo)

@@ -25,14 +25,14 @@ class UserDisplay extends React.Component{
         (
             <View style={styles.row} onPress={this.onUserPress}>
                 <Image source={this.props.avatarUri} style={styles.imageStyle}/>
-                <Text style={styles.usernameStyle}>{this.props.name}</Text>
+                <Text style={styles.usernameStyle}>{this.props.username}</Text>
             </View>
         )
         :
         (
             <TouchableOpacity style={styles.row} onPress={this.onUserPress}>
                 <Image source={this.props.avatarUri} style={styles.imageStyle}/>
-                <Text style={styles.usernameStyle}>{this.props.name}</Text>
+                <Text style={styles.usernameStyle}>{this.props.username}</Text>
             </TouchableOpacity>
         )
 

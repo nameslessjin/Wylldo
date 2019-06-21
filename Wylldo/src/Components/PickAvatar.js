@@ -7,8 +7,8 @@ import ImagePicker from "react-native-image-picker";
 export default class PickAvatar extends React.Component{
     state = {
         pickedAvatar: null,
-        Clicked: false
     }
+
 
     pickImageHandler = () => {
         ImagePicker.showImagePicker({title: "Pick a Profile Picture", maxWidth: 200, maxHeight: 200}, res => {
@@ -19,7 +19,6 @@ export default class PickAvatar extends React.Component{
             } else {
                 this.setState({
                     pickedAvatar: {uri : res.uri},
-                    Clicked: true
                 })
                 this.props.updateAvatar(this.state.pickedAvatar)
             }
@@ -29,14 +28,12 @@ export default class PickAvatar extends React.Component{
 
     render(){
 
-        let displayImage = null
-        if (this.props.avatarUri){
-            if (!this.state.Clicked){
-                displayImage = <Image source={this.props.avatarUri} style={styles.image} />
-            } else {
-                displayImage = <Image source={this.state.pickedAvatar} style={styles.image} />
-            }
-        }
+
+        displayImage = (
+            <Image 
+                source={(!this.state.pickedAvatar) ? this.props.avatarUri : this.state.pickedAvatar} 
+                style={styles.image} />
+        )
 
         return(
             <TouchableOpacity style={styles.avatar} onPress={this.pickImageHandler}>
