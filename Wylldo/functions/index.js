@@ -16,17 +16,17 @@ exports.onAddComment = functions.firestore
         const eventRef = db.collection('Events').doc(event_id)
         return db.runTransaction(transaction => {
             return transaction.get(eventRef).then(eventDoc => {
-                let comment_num = eventDoc.data().commentNum
+                const comment_num = eventDoc.data().commentNum + 1
                 let sample_comment = [...eventDoc.data().sample_comment]
                 const sample = {
                     username: username,
                     comment: comment,
                     user_id: user_id
                 }
-                if (comment_num < 2){
+                if (sample_comment.length < 2){
                     sample_comment.push(sample)
                 }
-                comment_num = comment_num + 1
+                
                 return transaction.update(eventRef,{
                     ...eventDoc.data(),
                     commentNum: comment_num,
@@ -36,6 +36,36 @@ exports.onAddComment = functions.firestore
                 
             })
         })
+    })
+
+exports.onDeleteComment = functions.firestore
+    .document('comment/{commentId}')
+    .onDelete((snap, context) => {
+        const event_id = snap.data().event_id
+        const comment = snap.data().comment
+        const user_id = snap.data().user_id
+        const eventRef = db.collection('Events').doc(event_id)
+        return db.runTransaction(transaction => {
+            return transaction.get(eventRef).then(eventDoc => {
+                const comment_num = eventDoc.data().commentNum - 1
+                let sample_comment = [...eventDoc.data().sample_comment]
+                sample_comment = sample_comment.filter(sample => {
+                    if (sample.user_id == user_id && sample.comment == comment){
+                        return false
+                    }
+                    return true
+                })
+
+                return transaction.update(eventRef, {
+                    ...eventDoc.data(),
+                    commentNum: comment_num,
+                    sample_comment: sample_comment
+                })
+
+            })
+        })
+
+
     })
 
 exports.onEventCreated = functions.firestore
