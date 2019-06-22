@@ -1,6 +1,6 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {View, TouchableOpacity, StyleSheet} from 'react-native'
+import {View, TouchableOpacity, StyleSheet, Keyboard} from 'react-native'
 
 export default class PickTag extends React.Component{
 
@@ -13,6 +13,7 @@ export default class PickTag extends React.Component{
     }
 
     pressTagHandler = (index) => {
+        Keyboard.dismiss()
         let newIcons = this.state.icons.filter(() => {
             return true
         })

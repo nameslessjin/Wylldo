@@ -146,11 +146,7 @@ export default class PopUpWnd extends React.Component{
                                 style={styles.comment}>
                                 {this.props.description}
                             </Text>
-                            <Text style={styles.name}>Shawn</Text>
-                            <Text style={styles.comment} ellipsizeMode={"tail"} numberOfLines={2} >Jinsen is the best person in the world, no in the whole universe.  He is a god.</Text>
-                            <Text style={styles.name}>Wei</Text>
-                            <Text style={styles.comment} ellipsizeMode={"tail"} numberOfLines={2}>Zack is bad dog.  I have never seen a dog as bad as zack is.  He is just terrible</Text>
-                            <Text style={{color: 'grey', fontSize: 12}} >See {this.props.commentNum} more comments</Text>
+                            <Text style={{color: 'grey', fontSize: 12}} >See all {this.props.commentNum} comments</Text>
                         </TouchableOpacity>
                         <View style={styles.buttonContainer}>
                             {heartBtn}

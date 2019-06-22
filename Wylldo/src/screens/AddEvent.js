@@ -38,19 +38,27 @@ export default class addEvent extends React.Component{
 
     navigationButtonPressed({buttonId}){
         if (buttonId == "addMap"){
-            if (this.state.endTime > this.state.startTime){
+            const {description, image, tag, startTime, endTime, viewType,
+                inviteCount, resizedImage, invite_userId
+            } = this.state
+            if (description.trim() == ''){
+                alert('Description cannot be empty')
+                return
+            }
+            if (endTime > startTime){
                 Navigation.push(this.props.componentId, {
                     component:{
                         name: 'AddMap',
                         passProps:{
-                            description: this.state.description.trim(),
-                            image: this.state.image,
-                            tag: this.state.tag,
-                            startTime: this.state.startTime,
-                            endTime: this.state.endTime,
-                            viewType: this.state.viewType,
-                            inviteCount: this.state.inviteCount,
-                            resizedImage: this.state.resizedImage
+                            description: description.trim(),
+                            image: image,
+                            tag: tag,
+                            startTime: startTime,
+                            endTime: endTime,
+                            viewType: viewType,
+                            inviteCount: inviteCount,
+                            resizedImage: resizedImage,
+                            invite_userId: invite_userId
                         }
                     }
                 })
@@ -67,7 +75,8 @@ export default class addEvent extends React.Component{
         tag: 'md-beer',
         viewType: 'Public',
         inviteCount: 5,
-        resizedImage: null
+        resizedImage: null,
+        invite_userId: []
     }
 
 
@@ -85,7 +94,6 @@ export default class addEvent extends React.Component{
                             placeholder="I wylldo..."
                             multiline={true}
                             onChangeText={(text) => this.setState({description:text})}
-                            onSubmitEditing={Keyboard.dismiss}
                             maxLength={250}
                         />
                     </View>

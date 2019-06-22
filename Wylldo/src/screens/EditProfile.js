@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, StyleSheet, LayoutAnimation, TextInput} from 'react-native'
+import {Text, View, StyleSheet, LayoutAnimation, TextInput, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {connect} from 'react-redux'
 import PickAvatar from '../Components/PickAvatar'
 import Fire from '../firebase/Fire'
@@ -85,6 +85,9 @@ class EditProfile extends React.Component{
         avatarChange: false
     }
 
+    onBlur = () => {
+        console.log('onBlue')
+    }
 
 
     updateAvatar = (avatarUri) =>{
@@ -104,6 +107,7 @@ class EditProfile extends React.Component{
                     style={[styles.userInputTextInput, {backgroundColor: '#bdc3c7'}]}
                     maxLength={22}
                     editable={false}
+                    onSubmitEditing={Keyboard.dismiss}
                 />
             </View>
         )
@@ -116,6 +120,7 @@ class EditProfile extends React.Component{
                     style={[styles.userInputTextInput, {backgroundColor: '#bdc3c7'}]}
                     maxLength={30}
                     editable={false}
+                    onSubmitEditing={Keyboard.dismiss}
                 />
             </View>
         )
@@ -129,23 +134,27 @@ class EditProfile extends React.Component{
                     maxLength={10}
                     onChangeText={(phone_num) => this.setState({phone_num: phone_num})}
                     keyboardType={'phone-pad'}
+                    onSubmitEditing={Keyboard.dismiss}
+                    onBlur={this.onBlur}
                 />
             </View>
         )
 
         return(
-            <View style={styles.container}>
-                <PickAvatar  
-                    avatarUri={avatarUri}
-                    updateAvatar={(avatarUri) => this.updateAvatar(avatarUri)}
-                />
-                <View/>
-                <View style={styles.userInfoContainer}>
-                    {usernameDisplay}
-                    {emailDisplay}
-                    {phoneDisplay}
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <PickAvatar  
+                        avatarUri={avatarUri}
+                        updateAvatar={(avatarUri) => this.updateAvatar(avatarUri)}
+                    />
+                    <View/>
+                    <View style={styles.userInfoContainer}>
+                        {usernameDisplay}
+                        {emailDisplay}
+                        {phoneDisplay}
+                    </View>
                 </View>
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 }

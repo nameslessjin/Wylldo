@@ -50,21 +50,28 @@ class AddMap extends React.Component{
 
     navigationButtonPressed({buttonId}){
         if(buttonId == "Post"){
+            const {eventLocation} = this.state
+            const {description, tag, startTime,
+                    endTime, inviteCount, viewType, invite_userId
+            } = this.props
+            const {username, display_name, avatarUri} = this.props.currentUserData
+            
             const eventData={
-                description : this.props.description,
-                tag : this.props.tag,
-                coords : this.state.eventLocation,
+                description : description,
+                tag : tag,
+                coords : eventLocation,
                 likes: 0,
                 commentNum: 0,
                 timestamp: Date.now(),
                 hostUserId: Fire.uid,
-                hostUsername: this.props.currentUserData.username,
-                host_display_name: this.props.currentUserData.display_name,
-                hostAvatar: this.props.currentUserData.avatarUri.storageLocation,
-                startTime: this.props.startTime,
-                endTime: this.props.endTime,
-                inviteCount: this.props.inviteCount,
-                viewType: this.props.viewType
+                hostUsername: username,
+                host_display_name: display_name,
+                hostAvatar: avatarUri.storageLocation,
+                startTime: startTime,
+                endTime: endTime,
+                inviteCount: inviteCount,
+                viewType: viewType,
+                invite_userId: invite_userId
             }
             const image = this.props.image
             const resizedImage = this.props.resizedImage

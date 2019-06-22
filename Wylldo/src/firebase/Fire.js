@@ -465,7 +465,15 @@ class Fire {
                 .catch(error => error.message)
         )
         return firebaseAuth
-        
+    }
+
+    checkUsername = async(username) => {
+        const ref = this.usersCollection.where('username', '==', username)
+        const querySnapshot = await ref.get().catch(error => console.log(error))
+        if (querySnapshot.docs.length == 0){
+            return false
+        }
+        return true
     }
 
     createUserInFireStore = async (name, email) => {

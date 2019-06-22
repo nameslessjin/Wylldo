@@ -1,9 +1,8 @@
 import React from 'react'
-import {View, StyleSheet, Text, TextInput, TouchableOpacity, Keyboard} from 'react-native'
+import {View, StyleSheet, Text, TextInput, TouchableOpacity, Keyboard, Platform} from 'react-native'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
 import {postComment} from '../store/actions/action.index'
-import KeyboardShift from './KeyboardShift'
 
 
 class CommentInput extends React.Component{
@@ -27,7 +26,9 @@ class CommentInput extends React.Component{
 
     handleKeyboardDidShow = (event) => {
         const keyboardHeight = event.endCoordinates.height;
-        this.setState({inputHeight: keyboardHeight - styles.textInputContainer.height})
+        if (Platform.OS == 'ios'){
+            this.setState({inputHeight: keyboardHeight - styles.textInputContainer.height})
+        }
     }
 
     handleKeyboardDidHide = () => {
@@ -36,13 +37,14 @@ class CommentInput extends React.Component{
 
     onPostPressed  = () => {
         const {eventId, username, avatarUri} = this.props
+        const {comment} = this.state
         const commentInfo = {
-            comment: this.state.comment,
+            comment: comment.trim(),
             event_id: eventId,
             username: username,
             avatarUri: avatarUri
         }
-
+        Keyboard.dismiss()
         this.postComment(commentInfo)
         .then(comment => {
             this.setState({comment: '', Focus: false})
@@ -66,6 +68,17 @@ class CommentInput extends React.Component{
 
 
     render(){
+        const {comment} = this.state
+        let postButton = (comment.trim() == '') ? (
+            <View style={styles.postButton}>
+                <Text style={[styles.postButtonText, {color: 'grey'}]}>Post</Text>
+            </View>
+        ) : (
+            <TouchableOpacity style={styles.postButton} onPress={this.onPostPressed}>
+                <Text style={styles.postButtonText}>Post</Text>
+            </TouchableOpacity>
+        )
+
         return(
             <View style={styles.container}>
                 <View style={[styles.textInputContainer, 
@@ -79,14 +92,11 @@ class CommentInput extends React.Component{
                         onChangeText={(comment) => this.setState({comment: comment})}
                         value={this.state.comment}
                         maxLength = {200}
-                        onSubmitEditing={Keyboard.dismiss}
                         onFocus={this.onFocus}
                         onBlur={this.onBlur}
                         
                     />
-                    <TouchableOpacity style={styles.postButton} onPress={this.onPostPressed}>
-                        <Text style={styles.postButtonText}>Post</Text>
-                    </TouchableOpacity>
+                    {postButton}
                 </View>
             </View>
         )

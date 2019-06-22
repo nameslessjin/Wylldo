@@ -101,7 +101,7 @@ export default class Footer extends React.Component{
 
                 <View style={styles.commentContainer}>
                     <Text style={styles.name}>{this.props.hostUsername}</Text>
-                    <Text style={styles.comment}>{this.props.description}</Text>
+                    <Text style={styles.comment} numberOfLines={5} >{this.props.description}</Text>
                     <TouchableOpacity onPress={this.onCommentPressed}>
                     <Text style={{color: 'grey', fontSize: 12}} >See {this.props.commentNum} more comments</Text>
                     </TouchableOpacity>

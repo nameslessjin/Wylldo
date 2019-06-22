@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Image, TouchableOpacity, StyleSheet, Text} from "react-native"
+import {Image, TouchableOpacity, StyleSheet, Text, Keyboard} from "react-native"
 import ImagePicker from "react-native-image-picker"
 import ImageResizer from "react-native-image-resizer"
 
@@ -17,6 +17,7 @@ export default class PickImage extends React.Component{
     }
 
     pickImageHandler = () => {
+        Keyboard.dismiss()
         ImagePicker.showImagePicker({title:"Pick a photo", maxWidth: 800, maxHeight: 800}, res => {
             if (res.didCancel){
                 console.log("Image cancelled")

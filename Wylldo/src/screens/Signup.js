@@ -23,24 +23,38 @@ export default class SignIn extends React.Component{
         errorMessage: null
     }
 
-    onSignUpPressed = async (email, password, name) => {
-
-        const signUptResult = await Fire.signUpUser(email, password)
-        if(Fire.uid){
-            await Fire.createUserInFireStore(name, email)
-            goHome()
-        } else{
-            this.setState({errorMessage: signUptResult})
+    onSignUpPressed = async () => {
+        const {email, password, name} = this.state
+        const checkUsername = await Fire.checkUsername(name)
+        if (checkUsername){
+            this.setState({errorMessage: 'username already exists'})
+        } else {
+            const signUptResult = await Fire.signUpUser(email, password)
+            console.log(signUptResult)
+            if(Fire.uid){
+                await Fire.createUserInFireStore(name, email)
+                goHome()
+            } else{
+                this.setState({errorMessage: signUptResult})
+            }
         }
+
         
     }
+
+    userSignUp = async (email, password, name) => {
+        const signUptResult = await Fire.signUpUser(email, password, name)
+        console.log(signUptResult)
+        return signUptResult
+    }
+
 
 
     render(){
 
         errorMessageDisplay = null
         if (this.state.errorMessage){
-            errorMessageDisplay = <Text style={{color:'red'}}>{this.state.errorMessage}</Text>
+            errorMessageDisplay = <Text style={{color:'red'}} numberOfLines={2} >{this.state.errorMessage}</Text>
         }
         
         return(
@@ -77,7 +91,7 @@ export default class SignIn extends React.Component{
                             onChangeText={password => this.setState({password})}
                             >
                         </TextInput>
-                        <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onSignUpPressed(this.state.email, this.state.password, this.state.name)}>
+                        <TouchableOpacity style={styles.buttonStyle} onPress={this.onSignUpPressed}>
                             <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
