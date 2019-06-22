@@ -48,6 +48,7 @@ export default class SignIn extends React.Component{
                             textContentType={"emailAddress"} 
                             placeholder={'Emaill'} 
                             autoCapitalize='none'
+                            maxLength={30}
                             onChangeText={email => this.setState({email})}></TextInput>
                         <TextInput 
                             style={styles.inputStyle} 
@@ -55,6 +56,7 @@ export default class SignIn extends React.Component{
                             placeholder={'Password'}
                             autoCapitalize='none'
                             secureTextEntry={true}
+                            maxLength={30}
                             onChangeText={password => this.setState({password})}></TextInput>
                         <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onLogInPressed()}>
                             <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>

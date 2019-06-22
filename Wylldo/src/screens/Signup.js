@@ -55,6 +55,7 @@ export default class SignIn extends React.Component{
                             placeholder='Full name'
                             autoCapitalize='none'
                             autoCorrect={false}
+                            maxLength={22}
                             onChangeText={name => this.setState({name})}
                             >
                         </TextInput>
@@ -63,6 +64,7 @@ export default class SignIn extends React.Component{
                             textContentType="emailAddress"
                             placeholder='Email'
                             autoCapitalize='none'
+                            maxLength={40}
                             onChangeText={email => this.setState({email})}
                             >
                         </TextInput>
@@ -71,6 +73,7 @@ export default class SignIn extends React.Component{
                             textContentType="password"
                             placeholder='Password'
                             autoCapitalize='none'
+                            maxLength={40}
                             onChangeText={password => this.setState({password})}
                             >
                         </TextInput>

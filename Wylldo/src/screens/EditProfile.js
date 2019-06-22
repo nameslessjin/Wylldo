@@ -102,7 +102,7 @@ class EditProfile extends React.Component{
                 <TextInput 
                     defaultValue={this.state.username}
                     style={[styles.userInputTextInput, {backgroundColor: '#bdc3c7'}]}
-                    maxLength={20}
+                    maxLength={22}
                     editable={false}
                 />
             </View>

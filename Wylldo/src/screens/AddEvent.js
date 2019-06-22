@@ -86,6 +86,7 @@ export default class addEvent extends React.Component{
                             multiline={true}
                             onChangeText={(text) => this.setState({description:text})}
                             onSubmitEditing={Keyboard.dismiss}
+                            maxLength={250}
                         />
                     </View>
                     <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>

@@ -1,8 +1,9 @@
 import React from 'react'
-import {View, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native'
+import {View, StyleSheet, Text, TextInput, TouchableOpacity, Keyboard} from 'react-native'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
 import {postComment} from '../store/actions/action.index'
+import KeyboardShift from './KeyboardShift'
 
 
 class CommentInput extends React.Component{
@@ -10,9 +11,28 @@ class CommentInput extends React.Component{
 
     state={
         comment: '',
-        Focus: false
+        Focus: false,
+        inputHeight: 0
     }
 
+    componentWillMount() {
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
+        this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide);
+    }
+    
+    componentWillUnmount() {
+    this.keyboardDidShowSub.remove();
+    this.keyboardDidHideSub.remove();
+    }
+
+    handleKeyboardDidShow = (event) => {
+        const keyboardHeight = event.endCoordinates.height;
+        this.setState({inputHeight: keyboardHeight - styles.textInputContainer.height})
+    }
+
+    handleKeyboardDidHide = () => {
+
+    }
 
     onPostPressed  = () => {
         const {eventId, username, avatarUri} = this.props
@@ -36,11 +56,22 @@ class CommentInput extends React.Component{
         return comment
     }
 
+    onFocus = () => {
+        this.setState({Focus: true})
+    }
+
+    onBlur = () => {
+        this.setState({Focus: false})
+    }
+
 
     render(){
         return(
             <View style={styles.container}>
-                <View style={[styles.textInputContainer, (this.state.Focus) ? styles.textInputContainerOnFocus : null ]}>
+                <View style={[styles.textInputContainer, 
+                                (this.state.Focus) ? 
+                                [styles.textInputContainerOnFocus, {bottom: this.state.inputHeight}] 
+                                : null ]}>
                     <TextInput 
                         placeholder={"say something"}
                         multiline = {true}
@@ -48,6 +79,9 @@ class CommentInput extends React.Component{
                         onChangeText={(comment) => this.setState({comment: comment})}
                         value={this.state.comment}
                         maxLength = {200}
+                        onSubmitEditing={Keyboard.dismiss}
+                        onFocus={this.onFocus}
+                        onBlur={this.onBlur}
                         
                     />
                     <TouchableOpacity style={styles.postButton} onPress={this.onPostPressed}>
@@ -95,7 +129,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     textInputContainerOnFocus:{
-        borderColor: '#0481fe'
+        borderColor: '#0481fe',
     },  
     textInput:{
         width: '80%',
