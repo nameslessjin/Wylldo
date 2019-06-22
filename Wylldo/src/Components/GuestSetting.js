@@ -71,8 +71,8 @@ export default class GuestSeeting extends React.Component{
                 }}
             >
                 <Picker.Item label="Public" value='Public'/>
-                <Picker.Item label="My Followers" value='My Followers'/>
-                <Picker.Item label="Custom" value='Custom'/>
+                <Picker.Item label="My Followers (coming soon)" value='My Followers'/>
+                {/* <Picker.Item label="Custom" value='Custom'/> */}
             </Picker>
         )
 

@@ -35,6 +35,22 @@ export default class addEvent extends React.Component{
         Navigation.events().bindComponent(this);
     }
 
+    componentWillMount(){
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow)
+    }
+
+    componentWillUnmount(){
+        this.keyboardDidShowSub.remove()
+    }
+
+    handleKeyboardDidShow = (event) => {
+        const keyboardHeight = event.endCoordinates.height
+        const componentHeight = height * 0.08
+        if (Platform.OS == 'ios'){
+            this.setState({inputHeight: componentHeight})
+        }
+    }
+
 
     navigationButtonPressed({buttonId}){
         if (buttonId == "addMap"){
@@ -76,15 +92,26 @@ export default class addEvent extends React.Component{
         viewType: 'Public',
         inviteCount: 5,
         resizedImage: null,
-        invite_userId: []
+        invite_userId: [],
+        inputHeight: 0,
+        Focus: false
     }
 
+    onFocus = () => {
+        this.setState({Focus: true})
+    }
+
+    onBlur = () => {
+        this.setState({Focus: false})
+    }
 
     render(){
-        
+        const {Focus, inputHeight} = this.state
+
         return(
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.container}>
+                <View style={[styles.container, 
+                        (Focus) ? {bottom: inputHeight} : null]}>
                     <View style={styles.ImgView}> 
                         <ImagePicker updateImage= {(updatedImg) => this.setState({image: updatedImg})} resizedImage = {(resizedImage) => this.setState({resizedImage: resizedImage})}/>         
                     </View>
@@ -95,6 +122,8 @@ export default class addEvent extends React.Component{
                             multiline={true}
                             onChangeText={(text) => this.setState({description:text})}
                             maxLength={250}
+                            onFocus={this.onFocus}
+                            onBlur={this.onBlur}
                         />
                     </View>
                     <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
@@ -124,7 +153,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor: "#eee",
-        alignItems: "center"
+        alignItems: "center",
     },
     ImgView:{
         height: '40%',
@@ -140,7 +169,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomWidth: 0.5,
         borderColor: "#DDDED1",
-        padding: 10
+        padding: 15
     },
     IconTagViewAndroid:{
         width: "100%",

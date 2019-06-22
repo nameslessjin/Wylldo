@@ -16,7 +16,6 @@ class CommentInput extends React.Component{
 
     componentWillMount() {
         this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
-        this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide);
     }
     
     componentWillUnmount() {
@@ -31,9 +30,6 @@ class CommentInput extends React.Component{
         }
     }
 
-    handleKeyboardDidHide = () => {
-
-    }
 
     onPostPressed  = () => {
         const {eventId, username, avatarUri} = this.props
@@ -42,7 +38,9 @@ class CommentInput extends React.Component{
             comment: comment.trim(),
             event_id: eventId,
             username: username,
-            avatarUri: avatarUri
+            avatarUri: avatarUri,
+            like_num: 0,
+            like_userId: []
         }
         Keyboard.dismiss()
         this.postComment(commentInfo)
@@ -68,7 +66,7 @@ class CommentInput extends React.Component{
 
 
     render(){
-        const {comment} = this.state
+        const {comment, inputHeight, Focus} = this.state
         let postButton = (comment.trim() == '') ? (
             <View style={styles.postButton}>
                 <Text style={[styles.postButtonText, {color: 'grey'}]}>Post</Text>
@@ -82,16 +80,16 @@ class CommentInput extends React.Component{
         return(
             <View style={styles.container}>
                 <View style={[styles.textInputContainer, 
-                                (this.state.Focus) ? 
-                                [styles.textInputContainerOnFocus, {bottom: this.state.inputHeight}] 
+                                (Focus) ? 
+                                [styles.textInputContainerOnFocus, {bottom: inputHeight}] 
                                 : null ]}>
                     <TextInput 
                         placeholder={"say something"}
                         multiline = {true}
                         style={styles.textInput}
                         onChangeText={(comment) => this.setState({comment: comment})}
-                        value={this.state.comment}
-                        maxLength = {200}
+                        value={comment}
+                        maxLength = {180}
                         onFocus={this.onFocus}
                         onBlur={this.onBlur}
                         
