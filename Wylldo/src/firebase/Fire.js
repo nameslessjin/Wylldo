@@ -310,7 +310,6 @@ class Fire {
             this.joinNum = 0
             this.joinUserIds = []
         })
-
         const joinNum = this.joinNum
         const joinUserIds = this.joinUserIds
         return {joinNum: joinNum, joinUserIds: joinUserIds}

@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         height: '80%',
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
     },
     inputStyle:{
         width:'90%',

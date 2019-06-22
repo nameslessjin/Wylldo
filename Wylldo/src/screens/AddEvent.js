@@ -49,6 +49,10 @@ export default class addEvent extends React.Component{
         if (Platform.OS == 'ios'){
             this.setState({inputHeight: componentHeight})
         }
+
+        if (Platform.OS == 'android'){
+            this.setState({inputHeight: componentHeight})
+        }
     }
 
 
@@ -84,7 +88,7 @@ export default class addEvent extends React.Component{
         }
     }
 
-    state ={
+    state = {
         description: "",
         image: null,
         android: false,

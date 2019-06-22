@@ -20,7 +20,6 @@ class CommentInput extends React.Component{
     
     componentWillUnmount() {
     this.keyboardDidShowSub.remove();
-    this.keyboardDidHideSub.remove();
     }
 
     handleKeyboardDidShow = (event) => {
