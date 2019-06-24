@@ -37,6 +37,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* WylldoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* WylldoTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		4A1F894D223528260011B76D /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1F894A223528180011B76D /* libReactNativeNavigation.a */; };
+		4A3095F722C0EBA200A5B77F /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A3095CD22C0EBA200A5B77F /* UserNotifications.framework */; };
 		4A9968332236087D003C5B83 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9968322236086D003C5B83 /* libRNImagePicker.a */; };
 		4A9CB5F9223C1AB600FDB162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A9CB5D0223C1AB600FDB162 /* GoogleService-Info.plist */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -376,6 +377,8 @@
 		2D02E4901E0B4A5D006451C7 /* Wylldo-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Wylldo-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A1F8917223528180011B76D /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../node_modules/react-native-navigation/lib/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
+		4A3095CD22C0EBA200A5B77F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		4A3095F822C0EF3500A5B77F /* Wylldo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Wylldo.entitlements; path = Wylldo/Wylldo.entitlements; sourceTree = "<group>"; };
 		4A9968062236086D003C5B83 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		4A9CB5D0223C1AB600FDB162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Wylldo/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		543B4F4C95AC49E58DACBA26 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
@@ -403,6 +406,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A3095F722C0EBA200A5B77F /* UserNotifications.framework in Frameworks */,
 				4A9968332236087D003C5B83 /* libRNImagePicker.a in Frameworks */,
 				4A1F894D223528260011B76D /* libReactNativeNavigation.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
@@ -532,6 +536,7 @@
 		13B07FAE1A68108700A75B9A /* Wylldo */ = {
 			isa = PBXGroup;
 			children = (
+				4A3095F822C0EF3500A5B77F /* Wylldo.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				4A9CB5D0223C1AB600FDB162 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -579,6 +584,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4A3095CD22C0EBA200A5B77F /* UserNotifications.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
@@ -797,6 +803,14 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = TK8SRD6J57;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -814,6 +828,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1447,6 +1462,7 @@
 			baseConfigurationReference = 8BA100A27778DE42E5662375 /* Pods-Wylldo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Wylldo/Wylldo.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TK8SRD6J57;
@@ -1461,7 +1477,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Wylldo.ios.Wylldo;
 				PRODUCT_NAME = Wylldo;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1472,6 +1488,7 @@
 			baseConfigurationReference = C0A3F6EB60E46B5817FD1E53 /* Pods-Wylldo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Wylldo/Wylldo.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TK8SRD6J57;
 				HEADER_SEARCH_PATHS = (
@@ -1485,7 +1502,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Wylldo.ios.Wylldo;
 				PRODUCT_NAME = Wylldo;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

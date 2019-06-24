@@ -2,6 +2,7 @@ import React from 'react'
 import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {goHome} from '../navigation'
 import firebase from 'react-native-firebase'
+import Fire from '../firebase/Fire'
 
 export default class SignIn extends React.Component{
     static get options(){
@@ -25,9 +26,16 @@ export default class SignIn extends React.Component{
         firebase
             .auth()
             .signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => goHome())
+            .then(() => {
+                this.checkNotificationPermission()         
+                goHome()})
             .catch(error => this.setState({errorMessage: error.message}))
-    }  
+        Fire.check
+    } 
+    
+    checkNotificationPermission = async () => {
+        await Fire.checkMessagePermission()
+    }
 
 
 

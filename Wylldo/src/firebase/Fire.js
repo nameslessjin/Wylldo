@@ -3,6 +3,7 @@ import uuid from 'uuid'
 import uploadPhoto from '../firebase/uploadPhoto'
 import {GeoFirestore} from 'geofirestore'
 import geohash from 'ngeohash'
+import {AsyncStorage} from 'react-native';
 
 class Fire {
     constructor(){
@@ -287,6 +288,45 @@ class Fire {
         })
     }
 
+    // requestFCMToken = (uid) => {
+    //     const FCM = firebase.messaging();
+    //     const ref = this.usersCollection
+    //     FCM.requestPermission()
+    //     FCM.getToken().then(token => {
+    //     ref.doc(uid).update({pushToken: token})
+    //     })
+    // }
+
+    getToken = async(uid) => {
+        const ref = this.usersCollection
+        firebase.messaging().getToken().then(token => {
+            ref.doc(uid).update({fcm_token: token})
+        })
+    }
+
+    requestPermission= async(uid) => {
+        try{
+            await firebase.messaging().requestPermission()
+            this.getToken(uid)
+        } catch (error) {
+            console.log('permission rejected')
+        }
+    }
+
+    checkMessagePermission = async () => {
+        const uid = this.uid
+        const enabled = await firebase.messaging().hasPermission()
+        if (enabled){
+            this.getToken(uid)
+        } else {
+            this.requestPermission(uid)
+        }
+    }
+
+    // messageListener = firebase.messaging().onMessage((message) => {
+    //     alert(message)
+    // })
+
     onJoinEvent = async(eventId) => {
         const eventRef = this.eventsCollection.doc(eventId)
         await this.db.runTransaction(async transaction => {
@@ -463,6 +503,7 @@ class Fire {
                 .createUserWithEmailAndPassword(email, password)
                 .catch(error => error.message)
         )
+        this.checkMessagePermission()
         return firebaseAuth
     }
 

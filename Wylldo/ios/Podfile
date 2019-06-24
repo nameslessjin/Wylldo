@@ -30,6 +30,8 @@ target 'Wylldo' do
   pod 'Firebase/Auth', '~> 5.20.1'
   pod 'Firebase/Messaging', '~> 5.20.1'
 
+  
+
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   # React Native third party dependencies podspecs

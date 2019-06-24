@@ -42,12 +42,6 @@ export default class SignIn extends React.Component{
         
     }
 
-    userSignUp = async (email, password, name) => {
-        const signUptResult = await Fire.signUpUser(email, password, name)
-        console.log(signUptResult)
-        return signUptResult
-    }
-
 
 
     render(){

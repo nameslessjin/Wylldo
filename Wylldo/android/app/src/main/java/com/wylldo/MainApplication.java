@@ -23,6 +23,8 @@ import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.functions.RNFirebaseFunctionsPackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 
 import java.util.Arrays;
@@ -52,7 +54,7 @@ public class MainApplication extends NavigationApplication {
           return Arrays.<ReactPackage>asList(
               // eg. new VectorIconsPackage()
               new MainReactPackage(),
-            new ImageResizerPackage(),
+              new ImageResizerPackage(),
               new RNFirebasePackage(),
               new MapsPackage(),
               new VectorIconsPackage(),
@@ -60,7 +62,9 @@ public class MainApplication extends NavigationApplication {
               new RNFirebaseFirestorePackage(),
               new RNFirebaseStoragePackage(),
               new RNFirebaseAuthPackage(),
-              new RNFirebaseFunctionsPackage()
+              new RNFirebaseFunctionsPackage(),
+              new RNFirebaseMessagingPackage(),
+              new RNFirebaseNotificationsPackage()
 
           );
       }
