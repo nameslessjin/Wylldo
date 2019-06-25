@@ -45,7 +45,7 @@ export default class addEvent extends React.Component{
 
     handleKeyboardDidShow = (event) => {
         const keyboardHeight = event.endCoordinates.height
-        const componentHeight = height * 0.08
+        const componentHeight = height * 0.085
         if (Platform.OS == 'ios'){
             this.setState({inputHeight: componentHeight})
         }
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     },
     IconTagViewAndroid:{
         width: "100%",
-        height: "6%",
+        height: "8%",
         backgroundColor: "white",
         borderBottomWidth: 0.5,
         borderColor: "#DDDED1",
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     },
     IconTagViewIOS:{
         width: "100%",
-        height: "6%",
+        height: "7.5%",
         backgroundColor: "white",
         borderBottomWidth: 0.5,
         borderColor: "#DDDED1",

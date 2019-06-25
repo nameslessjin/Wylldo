@@ -88,6 +88,18 @@ export default class Header extends React.Component{
         }
     }
 
+    iconText = () => {
+        const {tag} = this.props
+        switch(tag){
+            case 'md-beer':
+                return 'Fun'
+            case 'md-football':
+                return 'Sport'
+            case 'md-book':
+                return 'Study'
+        }
+    }
+
     onUserPressed = async() => {
         const {componentId, hostUserId} = this.props
         const userData = await Fire.getUserData(hostUserId)
@@ -125,14 +137,18 @@ export default class Header extends React.Component{
                             source={this.props.hostAvatar}
                         />
                         <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
-
-                        <Icon 
-                            name={this.props.tag} 
-                            size={18} 
-                            style={[styles.icon, 
-                                this.iconColor()
-                            ]}
-                        />
+                        <View style={styles.icon}>
+                            <Icon 
+                                name={this.props.tag} 
+                                size={18} 
+                                style={[ 
+                                    this.iconColor()
+                                ]}
+                            />
+                            <Text style={[styles.iconText, this.iconColor()]}>
+                                {this.iconText()}
+                            </Text>
+                        </View>
                     </View>
                 </TouchableWithoutFeedback>
                 <View style={styles.row}>
@@ -164,7 +180,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     icon:{
-        marginLeft: 5
+        marginLeft: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    iconText:{
+        fontSize: 9
     },
     beerIcon:{
         color: 'orange'

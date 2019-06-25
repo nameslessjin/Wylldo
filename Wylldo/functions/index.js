@@ -5,6 +5,17 @@ admin.initializeApp(functions.config().firebase);
 var db = admin.firestore()
 
 
+
+exports.onJoinEvent = functions.firestore
+    .document('Events/{eventId}')
+    .onUpdate((snap, context) => {
+
+        console.log(snap)
+        console.log(context)
+
+        return
+    })
+
 exports.onAddComment = functions.firestore
     .document('comment/{commentId}')
     .onCreate((snap, context) => {

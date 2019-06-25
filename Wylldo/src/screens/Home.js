@@ -11,6 +11,7 @@ import Fire from '../firebase/Fire'
 import {getCurrentUser, getMapEvents} from '../store/actions/action.index'
 import {goToAuth} from '../navigation'
 import {Navigation} from 'react-native-navigation'
+import firebase from 'react-native-firebase'
 
 class Home extends React.Component{
     static get options(){
@@ -75,12 +76,8 @@ class Home extends React.Component{
 
     }
 
-    componentWillUnmount(){
-        this.bottomTabEventListener.remove()
-    }
-
     componentDidMount(){
- 
+        this.createNotificationListeners();
         this.getCurrentUserData().then(currentUserData => {
             this.props.onGetCurrentUser(currentUserData);
             this.getMapEventData().then( mapEvents => {
@@ -89,6 +86,54 @@ class Home extends React.Component{
             .catch(error => {console.log(error)})
         })
 
+    }
+
+
+    componentWillUnmount(){
+        this.bottomTabEventListener.remove()
+        this.notificationListener()
+        this.notificationOpenedListener()
+    }
+
+
+    createNotificationListeners = async() => {
+        this.notificationListener = firebase.notifications().onNotification((res) => {
+            const {notificationId, title, body, data} = res
+            const notification = new firebase.notifications.Notification()
+                .setNotificationId(notificationId)
+                .setTitle(title)
+                .setBody(body)
+                .setData({
+                    key: data
+                })
+            firebase.notifications().displayNotification(notification)
+        })
+
+        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+            const {notificationId, title, body, data} = notificationOpen.notification
+            const notification = new firebase.notifications.Notification()
+            .setNotificationId(notificationId)
+            .setTitle(title)
+            .setBody(body)
+            .setData({
+                key: data
+            })
+            firebase.notifications().displayNotification(notification)
+        })
+
+        const notificationOpen = await firebase.notifications().getInitialNotification()
+        if (notificationOpen) {
+            const {notificationId, title, body, data} = notificationOpen.notification
+            console.log(notificationOpen.notification)
+            const notification = new firebase.notifications.Notification()
+            .setNotificationId(notificationId)
+            .setTitle(title)
+            .setBody(body)
+            .setData({
+                key: data
+            })
+            firebase.notifications().displayNotification(notification)
+        }
     }
 
 

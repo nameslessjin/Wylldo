@@ -1,14 +1,14 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {View, TouchableOpacity, StyleSheet, Keyboard} from 'react-native'
+import {View, TouchableOpacity, StyleSheet, Keyboard, Text} from 'react-native'
 
 export default class PickTag extends React.Component{
 
     state={
         icons:[
-            {name: 'md-beer', tagged: true},
-            {name: 'md-american-football', tagged: false},
-            {name: 'md-book', tagged: false},
+            {name: 'md-beer', tagged: true, description: 'Fun'},
+            {name: 'md-american-football', tagged: false, description: 'Sport'},
+            // {name: 'md-book', tagged: false},
         ]
     }
 
@@ -31,7 +31,13 @@ export default class PickTag extends React.Component{
         icons = this.state.icons.map((icon,index) => {
             return(
                 <TouchableOpacity key={icon.name} onPress={() =>this.pressTagHandler(index)} >
-                    <Icon name={icon.name} size={28} style={icon.tagged ? styles.taggedIcon : null} />
+                    <View style={styles.iconContainer}>
+                        <Icon name={icon.name} size={28} style={icon.tagged ? styles.taggedIcon : null} />
+                        <Text 
+                            style={[styles.textStyle,icon.tagged ? styles.taggedText : null]}>
+                            {icon.description}
+                        </Text>
+                    </View>
                 </TouchableOpacity>
             )
         })
@@ -51,7 +57,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
     },
+    iconContainer:{
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     taggedIcon:{
+        color: "#4295E8"
+    },
+    textStyle:{
+        fontSize: 10
+    }, 
+    taggedText:{
         color: "#4295E8"
     }
 })

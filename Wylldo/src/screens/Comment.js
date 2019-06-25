@@ -79,7 +79,8 @@ class Comment extends React.Component{
 
     render(){
         LayoutAnimation.easeInEaseOut()
-        const {eventId} = this.props
+        const {eventId, hostUserId} = this.props
+        const {username, avatarUri} = this.props.currentUser
         return(
             <View style={styles.container}>
                 <View style={styles.commentContainer}>
@@ -100,8 +101,9 @@ class Comment extends React.Component{
                 </View>
                 <CommentInput 
                     eventId={eventId}
-                    username={this.props.currentUser.username}
-                    avatarUri = {this.props.currentUser.avatarUri.storageLocation}
+                    username={username}
+                    avatarUri = {avatarUri.storageLocation}
+                    hostUserId={hostUserId}
                 />
             </View>
         )

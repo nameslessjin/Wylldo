@@ -1,6 +1,6 @@
 // initialize page when app just start.  Authentication page
 import React from 'react'
-import { View, Text, StyleSheet, Alert, YellowBox} from 'react-native'
+import { View, Text, StyleSheet, YellowBox} from 'react-native'
 import {goToAuth, goHome} from '../navigation'
 import Fire from '../firebase/Fire'
 import firebase from 'react-native-firebase'
@@ -34,8 +34,7 @@ export default class Initializing extends React.Component{
         }
     }
 
-    async componentDidMount(){
-        this.createNotificationListeners();
+    componentDidMount(){
         this.onAuth = firebase.auth().onAuthStateChanged(user => {
             if (user){
                 this.setState({loggedIn: true})
@@ -49,39 +48,6 @@ export default class Initializing extends React.Component{
 
     componentWillUnmount(){
         this.onAuth()
-        this.notificationListener()
-        this.notificationOpenedListener()
-
-    }
-
-    createNotificationListeners = async() => {
-       
-        this.notificationListener = firebase.notifications().onNotification((notification ) => {
-            const {title, body} = notification
-            this.showAlert(title, body)
-        })
-
-        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-            const {title, body} = notificationOpen.notification
-            this.showAlert(title, body)
-        })
-
-        const notificationOpen = await firebase.notifications().getInitialNotification()
-        if (notificationOpen) {
-            const {title, body} = notificationOpen.notification
-            this.showAlert(title, body)
-        }
-    }
-
-
-    showAlert = (title, body) => {
-        Alert.alert(
-            title, body,
-            [
-                {text: 'OK', onPress: () => console.log('OK Pressed')}
-            ],
-            {cancelable: false}
-        )
     }
 
     checkNotificationPermission = async () => {

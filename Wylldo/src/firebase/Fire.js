@@ -3,7 +3,6 @@ import uuid from 'uuid'
 import uploadPhoto from '../firebase/uploadPhoto'
 import {GeoFirestore} from 'geofirestore'
 import geohash from 'ngeohash'
-import {AsyncStorage} from 'react-native';
 
 class Fire {
     constructor(){
@@ -94,7 +93,7 @@ class Fire {
     }
 
     addComments = async(commentInfo) => {
-        const {event_id, username, comment, avatarUri} = commentInfo
+        const {event_id, username, comment, avatarUri, hostUserId} = commentInfo
         let ref = this.db.collection('comment')
         let uploadComment = {
             event_id: event_id,
@@ -102,6 +101,7 @@ class Fire {
             user_id: this.uid,
             user_avatar: avatarUri,
             comment: comment,
+            hostUserId: hostUserId,
             create_time: firebase.firestore.FieldValue.serverTimestamp()
         }
 

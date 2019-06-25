@@ -25,6 +25,7 @@ export default class SignIn extends React.Component{
 
     onSignUpPressed = async () => {
         const {email, password, name} = this.state
+        
         const checkUsername = await Fire.checkUsername(name)
         if (checkUsername){
             this.setState({errorMessage: 'username already exists'})

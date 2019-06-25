@@ -31,7 +31,7 @@ class CommentInput extends React.Component{
 
 
     onPostPressed  = () => {
-        const {eventId, username, avatarUri} = this.props
+        const {eventId, username, avatarUri, hostUserId} = this.props
         const {comment} = this.state
         const commentInfo = {
             comment: comment.trim(),
@@ -39,7 +39,8 @@ class CommentInput extends React.Component{
             username: username,
             avatarUri: avatarUri,
             like_num: 0,
-            like_userId: []
+            like_userId: [],
+            hostUserId: hostUserId
         }
         Keyboard.dismiss()
         this.postComment(commentInfo)
