@@ -2,7 +2,6 @@ import React from 'react'
 import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import { goHome } from '../navigation';
 import Fire from '../firebase/Fire'
-
 export default class SignIn extends React.Component{
 
     static get options(){
@@ -25,24 +24,37 @@ export default class SignIn extends React.Component{
 
     onSignUpPressed = async () => {
         const {email, password, name} = this.state
-        
-        const checkUsername = await Fire.checkUsername(name)
-        if (checkUsername){
-            this.setState({errorMessage: 'username already exists'})
-        } else {
-            const signUptResult = await Fire.signUpUser(email, password)
-            console.log(signUptResult)
-            if(Fire.uid){
-                await Fire.createUserInFireStore(name, email)
-                goHome()
-            } else{
-                this.setState({errorMessage: signUptResult})
-            }
-        }
 
-        
+        if (this.isUsernameValid(name)){
+
+            const checkUsername = await Fire.checkUsername(name)
+            if (checkUsername){
+                this.setState({errorMessage: 'username already exists'})
+            } else {
+                const signUptResult = await Fire.signUpUser(email, password)
+                console.log(signUptResult)
+                if(Fire.uid){
+                    await Fire.createUserInFireStore(name, email)
+                    goHome()
+                } else{
+                    this.setState({errorMessage: signUptResult})
+                }
+            }
+        } else {
+            console.log(name)
+            this.setState({errorMessage: 'Invalid username.  Username must be at least 6 characters and can include a-z, A-Z, 0-9 and \'-\''})
+        }
     }
 
+    isUsernameValid = (username) => {
+        if (username.length < 6 || username > 22){
+            return false
+        }
+        const validUsername = /^[a-zA-Z0-9\_]+$/
+        const isValid = validUsername.test(username)
+        console.log(isValid)
+        return isValid
+    }
 
 
     render(){
