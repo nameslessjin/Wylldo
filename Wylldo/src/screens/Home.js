@@ -92,7 +92,7 @@ class Home extends React.Component{
     componentWillUnmount(){
         this.bottomTabEventListener.remove()
         this.notificationListener()
-        this.notificationOpenedListener()
+        // this.notificationOpenedListener()
     }
 
 
@@ -109,32 +109,32 @@ class Home extends React.Component{
             firebase.notifications().displayNotification(notification)
         })
 
-        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-            const {notificationId, title, body, data} = notificationOpen.notification
-            const notification = new firebase.notifications.Notification()
-            .setNotificationId(notificationId)
-            .setTitle(title)
-            .setBody(body)
-            .setData({
-                key: data
-            })
-            firebase.notifications().displayNotification(notification)
-        })
+        // this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+        //     const {notificationId, title, body, data} = notificationOpen.notification
+        //     const notification = new firebase.notifications.Notification()
+        //     .setNotificationId(notificationId)
+        //     .setTitle(title)
+        //     .setBody(body)
+        //     .setData({
+        //         key: data
+        //     })
+        //     firebase.notifications().displayNotification(notification)
+        // })
 
-        const notificationOpen = await firebase.notifications().getInitialNotification()
-        if (notificationOpen) {
-            const {notificationId, title, body, data} = notificationOpen.notification
-            console.log(notificationOpen.notification)
-            const notification = new firebase.notifications.Notification()
-            .setNotificationId(notificationId)
-            .setTitle(title)
-            .setBody(body)
-            .setData({
-                key: data
-            })
-            firebase.notifications().displayNotification(notification)
-        }
-    }
+    //     const notificationOpen = await firebase.notifications().getInitialNotification()
+    //     if (notificationOpen) {
+    //         const {notificationId, title, body, data} = notificationOpen.notification
+    //         console.log(notificationOpen.notification)
+    //         const notification = new firebase.notifications.Notification()
+    //         .setNotificationId(notificationId)
+    //         .setTitle(title)
+    //         .setBody(body)
+    //         .setData({
+    //             key: data
+    //         })
+    //         firebase.notifications().displayNotification(notification)
+    //     }
+    // }
 
 
     // When mark is pressed.  This part it rendered twice.

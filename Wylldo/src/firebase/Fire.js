@@ -93,7 +93,7 @@ class Fire {
     }
 
     addComments = async(commentInfo) => {
-        const {event_id, username, comment, avatarUri, hostUserId} = commentInfo
+        const {event_id, username, comment, avatarUri, host_user_id} = commentInfo
         let ref = this.db.collection('comment')
         let uploadComment = {
             event_id: event_id,
@@ -101,7 +101,7 @@ class Fire {
             user_id: this.uid,
             user_avatar: avatarUri,
             comment: comment,
-            hostUserId: hostUserId,
+            host_user_id: host_user_id,
             create_time: firebase.firestore.FieldValue.serverTimestamp()
         }
 

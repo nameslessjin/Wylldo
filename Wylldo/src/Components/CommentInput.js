@@ -40,7 +40,7 @@ class CommentInput extends React.Component{
             avatarUri: avatarUri,
             like_num: 0,
             like_userId: [],
-            hostUserId: hostUserId
+            host_user_id: hostUserId
         }
         Keyboard.dismiss()
         this.postComment(commentInfo)

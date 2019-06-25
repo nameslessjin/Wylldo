@@ -6,15 +6,58 @@ var db = admin.firestore()
 
 
 
-exports.onJoinEvent = functions.firestore
+exports.onJoinLikeEvent = functions.firestore
     .document('Events/{eventId}')
     .onUpdate((snap, context) => {
-
-        console.log(snap)
-        console.log(context)
-
-        return
+        const receiverId = snap.after.data().hostUserId
+        const old_joinedNum = snap.before.data().joinedNum
+        const new_joinedNum = snap.after.data().joinedNum
+        const new_joined_group = snap.after.data().join_userIDs
+        const old_likes = snap.before.data().likes
+        const new_likes = snap.after.data().likes
+        const new_like_userIDs = snap.after.data().like_userIDs
+        if (old_joinedNum < new_joinedNum){
+            const senderId = [...new_joined_group][new_joined_group.length-1]
+            if (senderId){
+                return db.collection('Users').doc(receiverId).get().then(res => {
+                    const receiverFCMToken = res.data().fcm_token
+                    return db.collection('Users').doc(senderId).get().then(res => {
+                        const sender_username = res.data().username
+                        let payload = {
+                            notification:{
+                                title: 'Joined',
+                                body: sender_username + ' has just joined you.  Check out who in your list.'
+                            }
+                        }
+                        admin.messaging().sendToTopic("pushNotifications", payload)
+                        return admin.messaging().sendToDevice(receiverFCMToken, payload)
+                    })
+                })
+            }
+        }
+        if (old_likes < new_likes){
+            const senderId = [...new_like_userIDs][new_like_userIDs.length-1]
+            if (senderId){
+                if (receiverId != senderId){
+                    return db.collection('Users').doc(receiverId).get().then(res => {
+                        const receiverFCMToken = res.data().fcm_token
+                        return db.collection('Users').doc(senderId).get().then(res => {
+                            const sender_username = res.data().username
+                            let payload = {
+                                notification:{
+                                    title: 'Liked',
+                                    body: sender_username + ' just liked your post.  Check it out'
+                                }
+                            }
+                            admin.messaging().sendToTopic("pushNotifications", payload)
+                            return admin.messaging().sendToDevice(receiverFCMToken, payload)
+                        })
+                    })
+                }
+            }
+        }
     })
+
 
 exports.onAddComment = functions.firestore
     .document('comment/{commentId}')
@@ -24,7 +67,23 @@ exports.onAddComment = functions.firestore
         const username = snap.data().username
         const comment = snap.data().comment
         const user_id = snap.data().user_id
+        const receiverId = snap.data().host_user_id
         const eventRef = db.collection('Events').doc(event_id)
+
+        if (user_id != receiverId){
+            db.collection('Users').doc(receiverId).get().then(res => {
+                const receiverFCMToken = res.data().fcm_token
+                let payload = {
+                    notification:{
+                        title: 'Comment',
+                        body: username + ' just commented your post.  Check it out'
+                    }
+                }
+                admin.messaging().sendToTopic("pushNotifications", payload)
+                admin.messaging().sendToDevice(receiverFCMToken, payload)
+            })
+        }
+
         return db.runTransaction(transaction => {
             return transaction.get(eventRef).then(eventDoc => {
                 const comment_num = eventDoc.data().commentNum + 1
@@ -109,7 +168,7 @@ exports.onEventCreated = functions.firestore
         return mapEventCreated
     })
 
-exports.onInteractiveBtnPressed = functions.firestore
+exports.onInteractiveBtnPressedMapEventUpdate = functions.firestore
     .document('Events/{eventId}')
     .onUpdate((snap, context) => {
         const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)

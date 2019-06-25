@@ -32,7 +32,6 @@ export default class SignIn extends React.Component{
                 this.setState({errorMessage: 'username already exists'})
             } else {
                 const signUptResult = await Fire.signUpUser(email, password)
-                console.log(signUptResult)
                 if(Fire.uid){
                     await Fire.createUserInFireStore(name, email)
                     goHome()
@@ -41,7 +40,6 @@ export default class SignIn extends React.Component{
                 }
             }
         } else {
-            console.log(name)
             this.setState({errorMessage: 'Invalid username.  Username must be at least 6 characters and can include a-z, A-Z, 0-9 and \'-\''})
         }
     }
@@ -73,7 +71,7 @@ export default class SignIn extends React.Component{
                         <TextInput 
                             style={styles.inputStyle} 
                             textContentType="name"
-                            placeholder='Full name'
+                            placeholder='Username'
                             autoCapitalize='none'
                             autoCorrect={false}
                             maxLength={22}
