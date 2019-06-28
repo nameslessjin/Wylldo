@@ -323,9 +323,6 @@ class Fire {
         }
     }
 
-    // messageListener = firebase.messaging().onMessage((message) => {
-    //     alert(message)
-    // })
 
     onJoinEvent = async(eventId) => {
         const eventRef = this.eventsCollection.doc(eventId)
@@ -417,6 +414,12 @@ class Fire {
             }
         })
         return follow[0]
+    }
+
+    createChannel = () => {
+        const channel = new firebase.notifications.Android.Channel('test-channel', 'Test Channel', firebase.notifications.Android.Importance.Max)
+                        .setDescription('Test Channel')
+        firebase.notifications().android.createChannel(channel)
     }
 
     onCancelEvent = async(eventId) => {
@@ -514,6 +517,15 @@ class Fire {
             return false
         }
         return true
+    }
+
+
+    requestEmailVerification = async() => {
+        await firebase.auth().currentUser.sendEmailVerification()
+    }
+
+    checkEmailVerification = () => {
+
     }
 
     createUserInFireStore = async (name, email) => {

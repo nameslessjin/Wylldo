@@ -26,7 +26,8 @@ exports.onJoinLikeEvent = functions.firestore
                         let payload = {
                             notification:{
                                 title: 'Joined',
-                                body: sender_username + ' has just joined you.  Check out who in your list.'
+                                body: sender_username + ' has just joined you.  Check out who in your list.',
+                                sound: 'default'
                             }
                         }
                         admin.messaging().sendToTopic("pushNotifications", payload)
@@ -46,7 +47,8 @@ exports.onJoinLikeEvent = functions.firestore
                             let payload = {
                                 notification:{
                                     title: 'Liked',
-                                    body: sender_username + ' just liked your post.  Check it out'
+                                    body: sender_username + ' just liked your post.  Check it out',
+                                    sound: 'default'
                                 }
                             }
                             admin.messaging().sendToTopic("pushNotifications", payload)
@@ -76,7 +78,8 @@ exports.onAddComment = functions.firestore
                 let payload = {
                     notification:{
                         title: 'Comment',
-                        body: username + ' just commented your post.  Check it out'
+                        body: username + ' just commented your post.  Check it out',
+                        sound: 'default'
                     }
                 }
                 admin.messaging().sendToTopic("pushNotifications", payload)

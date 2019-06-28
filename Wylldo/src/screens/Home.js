@@ -1,5 +1,4 @@
 //Home page
-
 import React from 'react'
 import {View, StyleSheet, Platform, PermissionsAndroid} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
@@ -25,9 +24,6 @@ class Home extends React.Component{
             }
         }
     }
-
-//In initial AppLaunch, retrieve all locations and all events and put to state reducer
-
 
 
     constructor(props){
@@ -77,6 +73,9 @@ class Home extends React.Component{
     }
 
     componentDidMount(){
+        if (Platform.OS == 'android'){
+            Fire.createChannel()
+        }
         this.createNotificationListeners();
         this.getCurrentUserData().then(currentUserData => {
             this.props.onGetCurrentUser(currentUserData);
@@ -121,20 +120,20 @@ class Home extends React.Component{
         //     firebase.notifications().displayNotification(notification)
         // })
 
-    //     const notificationOpen = await firebase.notifications().getInitialNotification()
-    //     if (notificationOpen) {
-    //         const {notificationId, title, body, data} = notificationOpen.notification
-    //         console.log(notificationOpen.notification)
-    //         const notification = new firebase.notifications.Notification()
-    //         .setNotificationId(notificationId)
-    //         .setTitle(title)
-    //         .setBody(body)
-    //         .setData({
-    //             key: data
-    //         })
-    //         firebase.notifications().displayNotification(notification)
-    //     }
-    // }
+        // const notificationOpen = await firebase.notifications().getInitialNotification()
+        // if (notificationOpen) {
+        //     const {notificationId, title, body, data} = notificationOpen.notification
+        //     console.log(notificationOpen.notification)
+        //     const notification = new firebase.notifications.Notification()
+        //     .setNotificationId(notificationId)
+        //     .setTitle(title)
+        //     .setBody(body)
+        //     .setData({
+        //         key: data
+        //     })
+        //     firebase.notifications().displayNotification(notification)
+        // }
+    }
 
 
     // When mark is pressed.  This part it rendered twice.
