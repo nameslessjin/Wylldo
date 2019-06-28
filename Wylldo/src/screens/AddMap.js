@@ -118,7 +118,7 @@ class AddMap extends React.Component{
                     provider={PROVIDER_GOOGLE}
                     customMapStyle={mapStyle}
                     style={styles.Map}
-                    onLongPress={this.mapViewPressedHandler}
+                    onPress={this.mapViewPressedHandler}
                     >
 
                     {marker}

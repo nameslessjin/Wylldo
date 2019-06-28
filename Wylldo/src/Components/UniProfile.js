@@ -1,7 +1,6 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator} from 'react-native'
 import UniProfileHistory from './UniProfileHistory';
-import PickAvatar from './PickAvatar'
 import {Navigation} from 'react-native-navigation'
 import ProfileFollowBtn from './ProfileFollowBtn'
 

@@ -143,7 +143,8 @@ class JoinedUserList extends React.Component{
     }
 
     render(){
-
+        // console.log('JoinedUserList: props', this.props)
+        // console.log('JoinedUserList: state ', this.state)
         const showList = (this.state.userList.length > 0) ?
                     <ListUsers
                         componentId={this.props.componentId}

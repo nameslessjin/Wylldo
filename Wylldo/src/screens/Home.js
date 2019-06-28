@@ -1,6 +1,6 @@
 //Home page
 import React from 'react'
-import {View, StyleSheet, Platform, PermissionsAndroid} from 'react-native'
+import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
@@ -11,6 +11,7 @@ import {getCurrentUser, getMapEvents} from '../store/actions/action.index'
 import {goToAuth} from '../navigation'
 import {Navigation} from 'react-native-navigation'
 import firebase from 'react-native-firebase'
+
 
 class Home extends React.Component{
     static get options(){
@@ -30,19 +31,18 @@ class Home extends React.Component{
         super(props)
         this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(this.tabChanged)
         this.state = {
-            userLocation:{
-                latitude: 40.798699,
-                longitude: -77.859954,
-                latitudeDelta: 0.0122,
-                longitudeDelta: 0.0122
-            },
             paddingTop: 1,
             markPressed: false,
             mapPressed: false,
             eventKey: null,
             pressedEvent: null,
-            mapEventKey: null
+            mapEventKey: null,
+            refreshing: false
         }
+    }
+
+    state = {
+        userLocation:{}
     }
 
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
@@ -76,7 +76,9 @@ class Home extends React.Component{
         if (Platform.OS == 'android'){
             Fire.createChannel()
         }
+        this.findCoordinates()
         this.createNotificationListeners();
+        this.setState({refreshing: true})
         this.getCurrentUserData().then(currentUserData => {
             this.props.onGetCurrentUser(currentUserData);
             this.getMapEventData().then( mapEvents => {
@@ -84,6 +86,7 @@ class Home extends React.Component{
             })
             .catch(error => {console.log(error)})
         })
+        this.setState({refreshing: false})
 
     }
 
@@ -91,7 +94,29 @@ class Home extends React.Component{
     componentWillUnmount(){
         this.bottomTabEventListener.remove()
         this.notificationListener()
+        navigator.geolocation.clearWatch(this.watchId)
+        
+        
         // this.notificationOpenedListener()
+    }
+
+    findCoordinates = () => {
+        this.watchId = navigator.geolocation.getCurrentPosition(
+            position => {
+                const userLocation = {
+                    ...userLocation,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: 0.0244,
+                    longitudeDelta: 0.0244,
+                    timestamp: position.coords.timestamp
+                }
+
+                this.setState({userLocation})
+            },
+            error => console.log(error.message),
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        )
     }
 
 
@@ -108,31 +133,6 @@ class Home extends React.Component{
             firebase.notifications().displayNotification(notification)
         })
 
-        // this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-        //     const {notificationId, title, body, data} = notificationOpen.notification
-        //     const notification = new firebase.notifications.Notification()
-        //     .setNotificationId(notificationId)
-        //     .setTitle(title)
-        //     .setBody(body)
-        //     .setData({
-        //         key: data
-        //     })
-        //     firebase.notifications().displayNotification(notification)
-        // })
-
-        // const notificationOpen = await firebase.notifications().getInitialNotification()
-        // if (notificationOpen) {
-        //     const {notificationId, title, body, data} = notificationOpen.notification
-        //     console.log(notificationOpen.notification)
-        //     const notification = new firebase.notifications.Notification()
-        //     .setNotificationId(notificationId)
-        //     .setTitle(title)
-        //     .setBody(body)
-        //     .setData({
-        //         key: data
-        //     })
-        //     firebase.notifications().displayNotification(notification)
-        // }
     }
 
 
@@ -210,18 +210,23 @@ class Home extends React.Component{
         }
 
         return(
-            <View style={{width: "100%", height: "100%", paddingTop: this.state.paddingTop}}>
+            <View style={[styles.container]}>
                 <MapView
                     showsUserLocation={true}
                     showsMyLocationButton={this.state.markPressed ? false : true}
                     initialRegion={this.state.userLocation} 
-                    style={styles.container} 
+                    style={styles.mapStyle} 
                     provider={PROVIDER_GOOGLE} 
                     customMapStyle={mapStyle}
                     onPress={this.mapViewPressedHandler}
                     onMarkerPress={this.markPressedHandler}
                     onMapReady={(Platform.OS==='android') ? this.onMapReady : null} >
                     {Markers}
+                    <ActivityIndicator 
+                        size="large" 
+                        color='black' 
+                        style={styles.IndicatorView}
+                        animating={this.state.refreshing} />
                 </MapView>
                 {popUp}
             </View>
@@ -231,10 +236,23 @@ class Home extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
-        justifyContent: 'flex-end',
+        height: '100%',
+        width: '100%',
         alignItems: 'center',
+        justifyContent: 'center'
     },
+    mapStyle:{
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
+    IndicatorView:{
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 })
 
 const mapStateToProps = state => {

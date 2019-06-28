@@ -73,7 +73,8 @@ export default class Footer extends React.Component{
     }
 
     render(){
-
+        // console.log('Footer: props', this.props)
+        // console.log('Footer: state ', this.state)
         const heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
                             <Icon 
                                 name={(this.state.heartPressed) ? 'md-heart' : 'md-heart-empty'} 
