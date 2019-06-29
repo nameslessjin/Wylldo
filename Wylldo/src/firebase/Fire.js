@@ -528,6 +528,10 @@ class Fire {
 
     }
 
+    resetPassword = async(email) => {
+        await firebase.auth().sendPasswordResetEmail(email)
+    }
+
     createUserInFireStore = async (name, email) => {
 
         const defaultAvatarUri = 'https://firebasestorage.googleapis.com/v0/b/wylldo-b5c47.appspot.com/o/defaultImgs%2FdefaultAvatar.jpg?alt=media&token=4a49bd80-9d7a-4293-a719-de0211cb4a96'

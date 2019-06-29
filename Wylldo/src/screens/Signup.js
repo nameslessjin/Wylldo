@@ -1,7 +1,10 @@
 import React from 'react'
-import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native'
+import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Dimensions} from 'react-native'
 import { goHome } from '../navigation';
 import Fire from '../firebase/Fire'
+
+const {height, width} = Dimensions.get('window')
+
 export default class SignIn extends React.Component{
 
     static get options(){
@@ -19,11 +22,40 @@ export default class SignIn extends React.Component{
         email: '',
         password: '',
         name: '',
-        errorMessage: null
+        password_confirm: '',
+        errorMessage: null,
+        inputHeight: 0,
+        Focus: false
+    }
+
+    onFocus = () => {
+        this.setState({Focus: true})
+    }
+
+    onBlur = () => {
+        this.setState({Focus: false})
+    }
+
+    componentWillMount(){
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidSHow)
+    }
+
+    componentWillUnmount(){
+        this.keyboardDidShowSub.remove()
+    }
+
+    handleKeyboardDidSHow = (event) => {
+        const componentHeight = height * 0.05
+        this.setState({inputHeight: componentHeight})
     }
 
     onSignUpPressed = async () => {
         const {email, password, name} = this.state
+
+        if (!this.isPasswordMatch()){
+            this.setState({errorMessage: 'password is not matched'})
+            return
+        }
 
         if (this.isUsernameValid(name)){
 
@@ -44,6 +76,11 @@ export default class SignIn extends React.Component{
         }
     }
 
+    isPasswordMatch = () => {
+        const {password, password_confirm} = this.state
+        return password === password_confirm
+    }
+
     isUsernameValid = (username) => {
         if (username.length < 6 || username > 22){
             return false
@@ -56,16 +93,16 @@ export default class SignIn extends React.Component{
 
 
     render(){
-
+        const {Focus, errorMessage, inputHeight} = this.state
         errorMessageDisplay = null
-        if (this.state.errorMessage){
-            errorMessageDisplay = <Text style={{color:'red'}} numberOfLines={2} >{this.state.errorMessage}</Text>
+        if (errorMessage){
+            errorMessageDisplay = <Text style={{color:'red'}} numberOfLines={2} >{errorMessage}</Text>
         }
         
         return(
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
-                    <View style={styles.inputContainer}>
+                    <View style={[styles.inputContainer, (Focus) ? {bottom: inputHeight} : null]}>
                         <Text style={styles.wylldoTextStyle}>Wylldo</Text>
                         {errorMessageDisplay}
                         <TextInput 
@@ -92,8 +129,21 @@ export default class SignIn extends React.Component{
                             textContentType="password"
                             placeholder='Password'
                             autoCapitalize='none'
+                            secureTextEntry={true}
                             maxLength={40}
                             onChangeText={password => this.setState({password})}
+                            >
+                        </TextInput>
+                        <TextInput 
+                            style={styles.inputStyle} 
+                            textContentType="password"
+                            placeholder='confirm password'
+                            autoCapitalize='none'
+                            secureTextEntry={true}
+                            maxLength={40}
+                            onChangeText={password_confirm => this.setState({password_confirm})}
+                            onFocus = {this.onFocus}
+                            onBlur = {this.onBlur}
                             >
                         </TextInput>
                         <TouchableOpacity style={styles.buttonStyle} onPress={this.onSignUpPressed}>

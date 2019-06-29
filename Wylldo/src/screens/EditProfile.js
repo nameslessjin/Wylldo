@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, StyleSheet, LayoutAnimation, TextInput, Keyboard, TouchableWithoutFeedback} from 'react-native'
+import {Text, View, StyleSheet, LayoutAnimation, TextInput, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
 import {connect} from 'react-redux'
 import PickAvatar from '../Components/PickAvatar'
 import Fire from '../firebase/Fire'
@@ -85,6 +85,11 @@ class EditProfile extends React.Component{
         avatarChange: false
     }
 
+    onResetPasswordPressed = () => {
+        const {email} = this.state
+        Fire.resetPassword(email)
+    }
+
     onBlur = () => {
         console.log('onBlue')
     }
@@ -96,14 +101,14 @@ class EditProfile extends React.Component{
 
     render(){
         const {avatarUri} = this.props.currentUser
-
+        const {username, email, phone_num} = this.state
         LayoutAnimation.easeInEaseOut()
 
         const usernameDisplay = (
             <View style={styles.userInputContainer}>
                 <Text style={styles.userInputText}>Username</Text>
                 <TextInput 
-                    defaultValue={this.state.username}
+                    defaultValue={username}
                     style={[styles.userInputTextInput, {backgroundColor: '#bdc3c7'}]}
                     maxLength={22}
                     editable={false}
@@ -116,7 +121,7 @@ class EditProfile extends React.Component{
             <View style={styles.userInputContainer}>
                 <Text style={styles.userInputText}>Email</Text>
                 <TextInput
-                    defaultValue={this.state.email}
+                    defaultValue={email}
                     style={[styles.userInputTextInput, {backgroundColor: '#bdc3c7'}]}
                     maxLength={30}
                     editable={false}
@@ -129,7 +134,7 @@ class EditProfile extends React.Component{
             <View style={styles.userInputContainer}>
                 <Text style={styles.userInputText}>Phone</Text>
                 <TextInput
-                    defaultValue={this.state.phone_num}
+                    defaultValue={phone_num}
                     style={styles.userInputTextInput}
                     maxLength={10}
                     onChangeText={(phone_num) => this.setState({phone_num: phone_num})}
@@ -138,6 +143,12 @@ class EditProfile extends React.Component{
                     onBlur={this.onBlur}
                 />
             </View>
+        )
+
+        const resetPassword = (
+            <TouchableOpacity onPress={this.onResetPasswordPressed} style={styles.resetPasswordContainer}>
+                <Text style={styles.resetPasswordText}>Reset Password</Text>
+            </TouchableOpacity>
         )
 
         return(
@@ -152,6 +163,7 @@ class EditProfile extends React.Component{
                         {usernameDisplay}
                         {emailDisplay}
                         {phoneDisplay}
+                        {resetPassword}
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -199,5 +211,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: 'grey',
         width: '70%'
+    },
+    resetPasswordText:{
+        fontSize: 14,
+        color: '#0481fe'
+    },
+    resetPasswordContainer:{
+        alignContent: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        marginTop: 10
     }
 })
