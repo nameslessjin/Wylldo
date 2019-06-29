@@ -92,7 +92,7 @@ export default class Footer extends React.Component{
                     <View style={{flexDirection:'row', alignItems: 'center'}}>
                         {heartBtn}
                         <Text style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
-                        <Icon name={'md-share-alt'} size={30} />
+                        {/* <Icon name={'md-share-alt'} size={30} /> */}
                     </View>
                     <JoinBtn {...this.props} componentId = {this.props.componentId} />
                 </View>
