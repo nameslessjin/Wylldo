@@ -46,9 +46,6 @@ class WylldoList extends React.Component{
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
         if (selectedTabIndex == 1 && unselectedTabIndex != 1){
             if(Fire.uid){
-                this.getMapEventData().then(mapEvents => {
-                    this.props.onGetMapEvents(mapEvents)
-                })
                 this._onRefresh()
             } else {
                 goToAuth()
@@ -78,7 +75,11 @@ class WylldoList extends React.Component{
         return eventData
     }
 
-    _onRefresh = () => this.getEventData().then(events => {this.props.onGetEvents(events)})
+    _onRefresh = () => {
+        this.getMapEventData().then(mapEvents => {
+            this.props.onGetMapEvents(mapEvents)
+        })
+        this.getEventData().then(events => {this.props.onGetEvents(events)})}
 
     //When swipe up, trigger to load more evens
     //this function is triggered twice frequently
