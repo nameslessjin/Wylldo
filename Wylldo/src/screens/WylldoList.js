@@ -1,11 +1,11 @@
 //This page is a convinent instagram like viewing page that lists all correct events
 
 import React from 'react'
-import {View, StyleSheet, RefreshControl, LayoutAnimation} from 'react-native'
+import {View, StyleSheet, RefreshControl, LayoutAnimation, Text} from 'react-native'
 import  {Navigation} from 'react-native-navigation'
 import {connect} from 'react-redux'
 import ListEvents from '../Components/ListEvents'
-import {getEvents, loadMoreEvents} from '../store/actions/action.index'
+import {getEvents, loadMoreEvents, getMapEvents} from '../store/actions/action.index'
 import Fire from '../firebase/Fire'
 import { goToAuth } from '../navigation';
 
@@ -46,6 +46,9 @@ class WylldoList extends React.Component{
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
         if (selectedTabIndex == 1 && unselectedTabIndex != 1){
             if(Fire.uid){
+                this.getMapEventData().then(mapEvents => {
+                    this.props.onGetMapEvents(mapEvents)
+                })
                 this._onRefresh()
             } else {
                 goToAuth()
@@ -55,6 +58,11 @@ class WylldoList extends React.Component{
 
     componentWillUnmount(){
         this.bottomTabEventListener.remove()
+    }
+
+    getMapEventData = async () => {
+        const mapEventData = await Fire.getMapEvents()
+        return mapEventData
     }
 
     //This part actually load when the home page is launched
@@ -99,9 +107,10 @@ class WylldoList extends React.Component{
 
     render(){
         LayoutAnimation.easeInEaseOut()
-        return(
-            <View style={styles.container}>
-                {/* passing all the event data from redux to listevent screen to further process list */}
+
+        const eventDisplay = (this.props.events.length == 0) ? 
+            (<Text style={styles.text} numberOfLines={2}>There is nothing going on currently.  Post your wylldo.  You can be the first!</Text>)
+            : (
                 <ListEvents 
                     events={this.props.events} 
                     componentId={this.props.componentId} 
@@ -115,6 +124,12 @@ class WylldoList extends React.Component{
                     onEndReachedThreshold = {0.5}
 
                 />
+            )
+
+        return(
+            <View style={styles.container}>
+                {/* passing all the event data from redux to listevent screen to further process list */}
+                {eventDisplay}
             </View>
         )
     }
@@ -133,7 +148,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return{
         onGetEvents: (events) => dispatch(getEvents(events)),
-        onLoadMoreEvents: (events) => dispatch(loadMoreEvents(events))
+        onLoadMoreEvents: (events) => dispatch(loadMoreEvents(events)),
+        onGetMapEvents: (mapEvents) => dispatch(getMapEvents(mapEvents))
     }
 }
 
@@ -143,5 +159,12 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor: 'white'
-    }
+    },
+    text:{
+        fontStyle: 'italic',
+        color: 'grey',
+        fontSize: 15,
+        marginTop: 20,
+        marginHorizontal: 10
+    },
 })
