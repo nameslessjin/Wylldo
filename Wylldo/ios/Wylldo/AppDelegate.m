@@ -11,7 +11,7 @@
 #import "RNFirebaseMessaging.h"
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <ReactNativeNavigation/ReactNativeNavigation.h>
+#import "ReactNativeNavigation.h"
 #import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate

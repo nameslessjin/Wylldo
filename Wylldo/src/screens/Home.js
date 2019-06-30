@@ -72,11 +72,24 @@ class Home extends React.Component{
 
     }
 
+    // onPermissionRequest = async () => {
+    //     try{
+    //         const locationPermissionStatus = await Permissions.check("location", {
+    //             type: "always"
+    //         })
+    //         console.log(locationPermissionStatus)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+
     componentDidMount(){
         if (Platform.OS == 'android'){
             Fire.createChannel()
         }
         this.findCoordinates()
+        // this.onPermissionRequest()
         this.createNotificationListeners();
         this.setState({refreshing: true})
         this.getCurrentUserData().then(currentUserData => {
