@@ -235,11 +235,6 @@ class Home extends React.Component{
                     onMarkerPress={this.markPressedHandler}
                     onMapReady={(Platform.OS==='android') ? this.onMapReady : null} >
                     {Markers}
-                    <ActivityIndicator 
-                        size="large" 
-                        color='black' 
-                        style={styles.IndicatorView}
-                        animating={this.state.refreshing} />
                 </MapView>
                 {popUp}
             </View>

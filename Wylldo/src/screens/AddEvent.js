@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     },
     IconTagViewIOS:{
         width: "100%",
-        height: "7.5%",
+        height: "8%",
         backgroundColor: "white",
         borderBottomWidth: 0.5,
         borderColor: "#DDDED1",
