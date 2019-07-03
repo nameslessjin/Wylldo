@@ -92,6 +92,21 @@ class Fire {
         
     }
 
+    onReport = async(reportInfo) => {
+        const {event_id, comment_id, reporter_id, reporter_email} = reportInfo
+        let ref = this.db.collection('report')
+        let uploadReport = {
+            event_id: event_id,
+            comment_id: comment_id,
+            reporter_id: reporter_id,
+            reporter_email: reporter_email
+        }
+
+        const createReport = await ref.add(uploadReport).catch(error => console.log(error))
+
+        return createReport.id
+    }
+
     addComments = async(commentInfo) => {
         const {event_id, username, comment, avatarUri, host_user_id} = commentInfo
         let ref = this.db.collection('comment')
@@ -229,6 +244,7 @@ class Fire {
             resizedImage: uploadedResImag,
             image: uploadedImag,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
+            complete: false,
             like_userIDs: [],
             joinedNum: 1,
             join_userIDs: [],
@@ -351,6 +367,7 @@ class Fire {
         const joinUserIds = this.joinUserIds
         return {joinNum: joinNum, joinUserIds: joinUserIds}
     }
+
 
     onFollowUser = async (followingUserId) => {
         const currentUserRef = this.usersCollection.doc(this.uid)
@@ -555,6 +572,7 @@ class Fire {
             phone_num: '',
             birth_date: null,
             gender: '',
+            closed: false
         }
 
         this.usersCollection.doc(this.uid).set(signUpUserInfo)

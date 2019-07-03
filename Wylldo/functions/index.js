@@ -1,8 +1,20 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin')
+const cors = require('cors')
+const nodemailer = require('nodemailer')
 
 admin.initializeApp(functions.config().firebase);
 var db = admin.firestore()
+
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'wylldo.feedback@gmail.com',
+        pass: 'FFversus13'
+    }
+})
+
 
 
 

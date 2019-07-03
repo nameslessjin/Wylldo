@@ -101,13 +101,16 @@ export default class CommentDisplay extends React.Component{
     render(){
         const {comment, user_id, username, user_avatar, commentId} = this.props
         let optionButton = null
-        if (Fire.uid == user_id && commentId != 'description-for-this-wylldo') {
+        if (commentId != 'description-for-this-wylldo') {
             optionButton = (
                 <TouchableOpacity  onPress={this.setEventOption}>
                     <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
                 </TouchableOpacity>
             )
+        } else {
+            optionButton = null
         }
+        
         return(
             <View style={styles.container}>
                 <View style={[styles.row, styles.displayContainer]}>

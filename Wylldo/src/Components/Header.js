@@ -119,14 +119,20 @@ export default class Header extends React.Component{
             createdTime = this.differenceOnTime(this.props.timestamp)
         }
 
-        let optionButton = null
-        if (Fire.uid == this.props.hostUserId){
-            optionButton = (
+        // let optionButton = null
+        // if (Fire.uid == this.props.hostUserId){
+        //     optionButton = (
+        //         <TouchableOpacity style={styles.optionsTouchBar} onPress={this.setEventOption}>
+        //             <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
+        //         </TouchableOpacity>
+        //     )
+        // }
+
+        const optionButton = (
                 <TouchableOpacity style={styles.optionsTouchBar} onPress={this.setEventOption}>
                     <Icon name={"md-more"} size={20} style={{marginRight: 13}} />
                 </TouchableOpacity>
-            )
-        }
+        )
 
         return(
             <View style={styles.container}>

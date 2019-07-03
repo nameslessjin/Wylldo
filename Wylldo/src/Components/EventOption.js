@@ -50,16 +50,38 @@ class EventOption extends React.Component{
         return deleteCommentId
     }
 
+    onReportPressed = () => {
+        const {eventId, commentId} = this.props
+        const {userId, username, email} = this.props.currentUser
+        console.log(commentId)
+        let reportInfo = null
+        if (eventId){
+
+        } else {
+
+        }
+    }
+
     render(){
 
         let deleteBtn = null
+        let reportBtn = null
         if (Fire.uid === this.props.hostUserId){
             deleteBtn = (
                 <TouchableOpacity style={[styles.optionBtnStyle]} onPress={this.onDeletePress}>
                 <Text style={[styles.optionsTextStyle, {color: 'red'}]}>Delete</Text>
                 </TouchableOpacity>
             )
+            reportBtn = null
+        } else {
+            reportBtn = (
+                <TouchableOpacity style={styles.optionBtnStyle} onPress={this.onReportPressed}>
+                    <Text style={[styles.optionsTextStyle]}>Report</Text>
+                </TouchableOpacity>
+            )
         }
+
+
 
         return(
 
@@ -70,9 +92,7 @@ class EventOption extends React.Component{
             style={{justifyContent: 'flex-end', alignContent: 'center'}}
             >
                 <View style={styles.container}>
-                    {/* <TouchableOpacity style={styles.optionBtnStyle}>
-                        <Text style={[styles.optionsTextStyle]}>Report</Text>
-                    </TouchableOpacity> */}
+                    {reportBtn}
                     {(Fire.uid === this.props.hostUserId) ? <View style={styles.breakLine}/> : null}
                     {deleteBtn}
                 </View>
@@ -81,6 +101,12 @@ class EventOption extends React.Component{
         )
     }
 
+}
+
+const mapStateToProps = state => {
+    return {
+        currentUser: state.events.currentUser
+    }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -117,4 +143,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default connect(null, mapDispatchToProps)(EventOption)
+export default connect(mapStateToProps, mapDispatchToProps)(EventOption)
