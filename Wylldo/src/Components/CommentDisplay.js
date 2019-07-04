@@ -4,6 +4,7 @@ import {Navigation} from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Fire from '../firebase/Fire'
 import EventOption from './EventOption'
+// import {connect} from 'react-redux'
 
 export default class CommentDisplay extends React.Component{
 
@@ -138,10 +139,8 @@ export default class CommentDisplay extends React.Component{
             </View>
         )
     }
-
-
-
 }
+
 
 const styles = StyleSheet.create({
     container:{

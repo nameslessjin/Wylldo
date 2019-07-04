@@ -34,4 +34,5 @@ export function registerScreens(){
     Navigation.registerComponentWithRedux('FollowButton', () => require('./Components/FollowButton').default, Provider. store)
     Navigation.registerComponentWithRedux('CommentInput', () => require('./Components/CommentInput').default, Provider, store)
     Navigation.registerComponentWithRedux('UserDisplay', () => require('./Components/UserDisplay').default, Provider, store)
+    // Navigation.registerComponentWithRedux('CommentDisplay', () => require('./Components/CommentDisplay').default, Provider, store)
 }

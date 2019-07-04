@@ -78,8 +78,9 @@ class WylldoList extends React.Component{
     _onRefresh = () => {
         this.getMapEventData().then(mapEvents => {
             this.props.onGetMapEvents(mapEvents)
+            this.getEventData().then(events => {this.props.onGetEvents(events)})
         })
-        this.getEventData().then(events => {this.props.onGetEvents(events)})}
+    }
 
     //When swipe up, trigger to load more evens
     //this function is triggered twice frequently

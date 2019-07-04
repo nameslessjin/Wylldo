@@ -93,17 +93,17 @@ class Fire {
     }
 
     onReport = async(reportInfo) => {
-        const {event_id, comment_id, reporter_id, reporter_email} = reportInfo
+        const {event_id, comment_id, user_id, email, username} = reportInfo
         let ref = this.db.collection('report')
         let uploadReport = {
             event_id: event_id,
             comment_id: comment_id,
-            reporter_id: reporter_id,
-            reporter_email: reporter_email
+            reporter_id: user_id,
+            reporter_email: email,
+            reporter_username: username,
+            create_time: firebase.firestore.FieldValue.serverTimestamp()
         }
-
         const createReport = await ref.add(uploadReport).catch(error => console.log(error))
-
         return createReport.id
     }
 
@@ -542,7 +542,7 @@ class Fire {
     }
 
     checkEmailVerification = () => {
-
+        const isEmailVerified = firebase.auth().currentUser.emailVerified
     }
 
     resetPassword = async(email) => {

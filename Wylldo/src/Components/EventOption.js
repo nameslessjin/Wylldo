@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native'
 import Modal from 'react-native-modal'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
@@ -50,16 +50,39 @@ class EventOption extends React.Component{
         return deleteCommentId
     }
 
-    onReportPressed = () => {
-        const {eventId, commentId} = this.props
+    onReportPressed = async() => {
+        let {eventId, commentId} = this.props
         const {userId, username, email} = this.props.currentUser
-        console.log(commentId)
         let reportInfo = null
         if (eventId){
-
+            commentId = null
         } else {
-
+            eventId = null
         }
+        reportInfo = {
+            event_id: eventId,
+            comment_id: commentId,
+            user_id: userId,
+            username: username,
+            email: email
+        }
+        const reportId = await Fire.onReport(reportInfo)
+        this.reportAlert()
+
+    }
+
+    reportAlert = () => {
+        Alert.alert(
+            'Report',
+            'Report Succeed',
+            [
+                {
+                    text: 'Close',
+                    style: 'cancel',
+                    onPress: () => this.onBackdropPress()
+                }
+            ]
+        )
     }
 
     render(){

@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin')
-const cors = require('cors')
+const cors = require('cors')({origin: true})
 const nodemailer = require('nodemailer')
 
 admin.initializeApp(functions.config().firebase);
@@ -8,15 +8,38 @@ var db = admin.firestore()
 
 
 let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'Gmail',
     auth: {
-        user: 'wylldo.feedback@gmail.com',
+        user: 'wylldo.app@gmail.com',
         pass: 'FFversus13'
     }
 })
 
 
+exports.onReport = functions.firestore
+    .document('report/{report_id}')
+    .onCreate((snap, context) => {
+        
+        const {event_id, comment_id, reporter_email, reporter_username} = snap.data()
 
+        const emailOption = {
+            from: 'wylldo.app@gmail.com',
+            to: 'wylldo.feedback@gmail.com',
+            subject: 'Report',
+            html: ('<p>' + 'event_id: ' + event_id + '<br>' + 
+                    'comment_id: ' + comment_id + '<br>'
+                     + 'reporter_email: ' + reporter_email + '<br>'  +
+                     'reporter_username' + reporter_username +
+                    '</p>')
+        }
+
+        return transporter.sendMail(emailOption, (error, info) => {
+            if (error){
+                console.log(error)
+            }
+            return info
+        })
+    })
 
 exports.onJoinLikeEvent = functions.firestore
     .document('Events/{eventId}')

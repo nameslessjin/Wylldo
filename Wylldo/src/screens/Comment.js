@@ -94,7 +94,7 @@ class Comment extends React.Component{
                             />
                         }
                         onEndReached = {this._loadMore}
-                        onEndReachedThreshold = {0.5}
+                        onEndReachedThreshold = {0}
                     
                     />
 
