@@ -2,6 +2,7 @@ import React from 'react'
 import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Dimensions} from 'react-native'
 import { goHome } from '../navigation';
 import Fire from '../firebase/Fire'
+import {Navigation} from 'react-native-navigation'
 
 const {height, width} = Dimensions.get('window')
 
@@ -51,9 +52,14 @@ export default class SignIn extends React.Component{
 
     onSignUpPressed = async () => {
         const {email, password, name} = this.state
-
+        const {componentId} = this.props
         if (!this.isPasswordMatch()){
             this.setState({errorMessage: 'password is not matched'})
+            return
+        }
+
+        if (!this.checkPSUEmail()){
+            this.setState({errorMessage: 'Currently only PSU email is allowed to sign up new an user'})
             return
         }
 
@@ -66,7 +72,15 @@ export default class SignIn extends React.Component{
                 const signUptResult = await Fire.signUpUser(email, password)
                 if(Fire.uid){
                     await Fire.createUserInFireStore(name, email)
-                    goHome()
+                    Navigation.push(componentId, {
+                        component:{
+                            name: 'LogIn',
+                            passProps: {
+                                email: email,
+                                password: password
+                            }
+                        }
+                    })
                 } else{
                     this.setState({errorMessage: signUptResult})
                 }
@@ -74,6 +88,12 @@ export default class SignIn extends React.Component{
         } else {
             this.setState({errorMessage: 'Invalid username.  Username must be at least 6 characters and can include a-z, A-Z, 0-9 and \'-\''})
         }
+    }
+
+    checkPSUEmail = () => {
+        const {email} = this.state
+        const psuResult = email.search('@psu.edu')
+        return (psuResult != -1) ? true : false
     }
 
     isPasswordMatch = () => {
@@ -87,7 +107,6 @@ export default class SignIn extends React.Component{
         }
         const validUsername = /^[a-zA-Z0-9\_]+$/
         const isValid = validUsername.test(username)
-        console.log(isValid)
         return isValid
     }
 

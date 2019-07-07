@@ -29,7 +29,7 @@ exports.onReport = functions.firestore
             html: ('<p>' + 'event_id: ' + event_id + '<br>' + 
                     'comment_id: ' + comment_id + '<br>'
                      + 'reporter_email: ' + reporter_email + '<br>'  +
-                     'reporter_username' + reporter_username +
+                     'reporter_username: ' + reporter_username +
                     '</p>')
         }
 

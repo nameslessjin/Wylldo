@@ -37,9 +37,10 @@ export default class Initializing extends React.Component{
     componentDidMount(){
         this.onAuth = firebase.auth().onAuthStateChanged(user => {
             if (user){
-                this.setState({loggedIn: true})
-                this.checkNotificationPermission()
-
+                if (user.emailVerified){
+                    this.setState({loggedIn: true})
+                    this.checkNotificationPermission()
+                }
             } else {
                 this.setState({loggedIn: false})
             }

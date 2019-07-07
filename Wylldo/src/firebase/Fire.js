@@ -523,7 +523,6 @@ class Fire {
                 .createUserWithEmailAndPassword(email, password)
                 .catch(error => error.message)
         )
-        this.checkMessagePermission()
         return firebaseAuth
     }
 
@@ -541,8 +540,18 @@ class Fire {
         await firebase.auth().currentUser.sendEmailVerification()
     }
 
-    checkEmailVerification = () => {
-        const isEmailVerified = firebase.auth().currentUser.emailVerified
+    // checkEmailVerification = () => {
+    //     const isEmailVerified = firebase.auth().currentUser.emailVerified
+    // }
+
+    userLogin = async(email, password) => {
+        const firebaseAuth = (
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(email, password)
+                .catch(error => error)
+        )
+        return firebaseAuth
     }
 
     resetPassword = async(email) => {

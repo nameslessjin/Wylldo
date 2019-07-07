@@ -81,7 +81,7 @@ export default class Header extends React.Component{
             case 'md-beer':
                 return styles.beerIcon
 
-            case 'md-football':
+            case 'md-american-football':
                 return styles.footBall
             case 'md-book':
                 return styles.book
@@ -93,7 +93,7 @@ export default class Header extends React.Component{
         switch(tag){
             case 'md-beer':
                 return 'Fun'
-            case 'md-football':
+            case 'md-american-football':
                 return 'Sport'
             case 'md-book':
                 return 'Study'
@@ -159,7 +159,6 @@ export default class Header extends React.Component{
                 </TouchableWithoutFeedback>
                 <View style={styles.row}>
                     <Text style={styles.dateText}>{createdTime}</Text>
-
                     {optionButton}
                     <EventOption
                     isOptionVisible={this.state.isOptionVisible}

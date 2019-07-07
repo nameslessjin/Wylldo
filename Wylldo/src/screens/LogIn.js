@@ -17,21 +17,38 @@ export default class SignIn extends React.Component{
     }
 
     state={
-        email: '',
-        password: '',
-        errorMessage: null
+        email: (this.props.email) ? this.props.email : '',
+        password: (this.props.password) ? this.props.password : '',
+        errorMessage: null,
+        requestEmailVerification: false,
+        verifyBtnPress: false
     }
 
-    onLogInPressed = () => {
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => {
-                this.checkNotificationPermission()         
-                goHome()})
-            .catch(error => this.setState({errorMessage: error.message}))
-        Fire.check
-    } 
+    onLogInPressed = async() => {
+        this.setState({requestEmailVerification: false, verifyBtnPress: false})
+        const {email, password} = this.state
+        const logInResult = await Fire.userLogin(email, password)
+        if (logInResult.message){
+            this.setState({errorMessage: logInResult.message})
+            return
+        } else {
+            firebase.auth().onAuthStateChanged(user => {
+                if (user){
+                    if (user.emailVerified){
+                        this.checkNotificationPermission()
+                        goHome()
+                    } else {
+                        this.setState({errorMessage: 'User email must be verified before login', requestEmailVerification: true})
+                    }
+                }
+            })
+        }  
+    }
+    
+    onVerifyEmailPress = () => {
+        Fire.requestEmailVerification()
+        this.setState({verifyBtnPress: true})
+    }
     
     checkNotificationPermission = async () => {
         await Fire.checkMessagePermission()
@@ -40,17 +57,30 @@ export default class SignIn extends React.Component{
 
 
     render(){
-
+        const {errorMessage, requestEmailVerification, verifyBtnPress} = this.state
         errorMessageDisplay = null
-        if (this.state.errorMessage){
-            errorMessageDisplay = <Text style={{color:'red'}}>{this.state.errorMessage}</Text>
+        requestEmailVerificationBtn = null
+        if (errorMessage){
+            errorMessageDisplay = <Text style={{color:'red'}}>{errorMessage}</Text>
         }
+        if (requestEmailVerification){
+            requestEmailVerificationBtn = (
+                <TouchableOpacity onPress={this.onVerifyEmailPress}>
+                    <Text style={styles.verifyEmailText}>
+                        {!(verifyBtnPress) ?
+                        'Verify email' : 'resend email'}
+                    </Text>
+                </TouchableOpacity>
+            )
+        }
+
         return(
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container} onPress={Keyboard.dismiss}>
                     <View style={styles.inputContainer}>
                         <Text style={styles.wylldoTextStyle}>Wylldo</Text>
                         {errorMessageDisplay}
+                        {requestEmailVerificationBtn}
                         <TextInput 
                             style={styles.inputStyle} 
                             textContentType={"emailAddress"} 
@@ -111,5 +141,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    verifyEmailText:{
+        color: '#0481fe'
     }
 })
