@@ -184,7 +184,7 @@ export default class DatePicker extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         width: "100%",
         height: "6%",
