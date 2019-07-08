@@ -1,9 +1,10 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, Image, Dimensions} from 'react-native'
 import UniProfileHistory from './UniProfileHistory';
 import {Navigation} from 'react-native-navigation'
 import ProfileFollowBtn from './ProfileFollowBtn'
 
+const {height, width} = Dimensions.get('window')
 export default class UniProfile extends React.Component {
 
     onFollowingPressed = () => {
@@ -38,6 +39,7 @@ export default class UniProfile extends React.Component {
 
 
     render(){
+        console.log(height, width)
         const {avatarUri, username, followerNum, followingNum, componentId, userId, following_list} = this.props
         const displayAvatar = (
             <Image source={avatarUri}  style={styles.avatar} />
@@ -102,14 +104,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     avatar:{
-        height: 80,
-        width: 80,
-        borderRadius: 40,
+        height: height*0.11,
+        aspectRatio: 1,
+        borderRadius: height*0.055,
         marginBottom: 10,
         marginTop: 15,
     },
     usernameText: {
-        fontSize: 14
+        fontSize: height * 0.02
     },
     followTouchBtn:{
         width: '50%',
@@ -119,10 +121,10 @@ const styles = StyleSheet.create({
     },
     followText:{
         color: '#bdc3c7',
-        fontSize: 14
+        fontSize: height * 0.018
     },
     followNum:{
-        fontSize: 17,
+        fontSize: height * 0.025,
     }, 
     followContainer:{
         width: '60%',

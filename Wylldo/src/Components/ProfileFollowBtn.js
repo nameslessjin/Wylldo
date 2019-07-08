@@ -1,9 +1,10 @@
 import React from 'react'
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
 import {onFollow} from '../store/actions/action.index'
 
+const {height, width} = Dimensions.get('window')
 class FollowButton extends React.Component{
 
 
@@ -127,29 +128,29 @@ export default connect(mapStateToProps, mapDispatchToProps)(FollowButton)
 
 const styles = StyleSheet.create({
     btnStyle:{
-        width: 70,
-        borderRadius: 20,
+        width: 0.09 * height,
+        borderRadius: 0.027 * height,
         alignItems: 'center',
         justifyContent: 'center',
     },
     followBtnStyle:{
-        height: 40,
+        height: 0.055 * height,
         backgroundColor: '#FE4C4C',
     },
     followedBtnStyle:{
-        height: 40,
+        height: 0.055 * height,
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: '#FE4C4C'
     },
     selfBtnStyle:{
-        height: 40,
+        height: 0.055 * height,
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: 'black'
     },
     textStyle:{
-        fontSize: 14,
+        fontSize: 0.018 * height,
         fontFamily: 'ArialRoundedMTBold',
     },
     followText:{

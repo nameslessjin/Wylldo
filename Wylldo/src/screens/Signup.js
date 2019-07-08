@@ -1,6 +1,6 @@
 import React from 'react'
-import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Dimensions} from 'react-native'
-import { goHome } from '../navigation';
+import {Text, View, StyleSheet,TextInput, TouchableOpacity,
+         Keyboard, TouchableWithoutFeedback, Dimensions, Linking} from 'react-native'
 import Fire from '../firebase/Fire'
 import {Navigation} from 'react-native-navigation'
 
@@ -110,6 +110,24 @@ export default class SignIn extends React.Component{
         return isValid
     }
 
+    onLinkPress = (type) => {
+        if (type === 'policy'){
+            Linking.openURL(
+                'https://www.termsfeed.com/privacy-policy/0c7ef35358c0ec37aac93f605fce9336'
+            ).catch(err => console.error('An error occurred', err))
+        }
+        else if (type === 'terms'){
+            Linking.openURL(
+                'https://www.termsfeed.com/terms-conditions/2e4adbc0c1a7140c89a3deb7fd3093f7'
+            ).catch(err => console.error('An error occurred', err))
+        }
+        else if (type === 'EULA'){
+            Linking.openURL(
+                'https://www.termsfeed.com/eula/c022892bab1e17ff6e6e24f70ee0da59'
+            ).catch(err => console.error('An error occurred', err))
+        }
+    }
+
 
     render(){
         const {Focus, errorMessage, inputHeight} = this.state
@@ -117,6 +135,28 @@ export default class SignIn extends React.Component{
         if (errorMessage){
             errorMessageDisplay = <Text style={{color:'red'}} numberOfLines={2} >{errorMessage}</Text>
         }
+
+        const termNPolicy = (
+            <View style={{marginTop: 15}}>
+                <Text style={styles.hyperLinkText}>By signing up, you aree to our </Text>
+                <View style={{flexDirection:'row'}}>
+                    <Text 
+                        style={[styles.hyperLinkText, {fontWeight: 'bold'}]}
+                        onPress={() => this.onLinkPress('terms')}
+                    >Terms</Text>
+                    <Text style={styles.hyperLinkText}>, </Text>
+                    <Text 
+                        style={[styles.hyperLinkText, {fontWeight: 'bold'}]}
+                        onPress={() => this.onLinkPress('policy')}
+                    >Privacy Policy</Text>
+                    <Text style={styles.hyperLinkText}> and </Text>
+                    <Text
+                        style={[styles.hyperLinkText, {fontWeight: 'bold'}]}
+                        onPress={() => this.onLinkPress('EULA')} 
+                    >EULA</Text>
+                </View>
+            </View>
+        )
         
         return(
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -168,6 +208,7 @@ export default class SignIn extends React.Component{
                         <TouchableOpacity style={styles.buttonStyle} onPress={this.onSignUpPressed}>
                             <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
                         </TouchableOpacity>
+                        {termNPolicy}
                     </View>
                 </View>            
             </TouchableWithoutFeedback>
@@ -211,5 +252,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    hyperLinkText:{
+        color: 'grey',
     }
 })

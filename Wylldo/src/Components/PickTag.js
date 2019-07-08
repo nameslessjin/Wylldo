@@ -1,7 +1,8 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {View, TouchableOpacity, StyleSheet, Keyboard, Text} from 'react-native'
+import {View, TouchableOpacity, StyleSheet, Keyboard, Text, Dimensions} from 'react-native'
 
+const {height, width} = Dimensions.get('window')
 export default class PickTag extends React.Component{
 
     state={
@@ -32,7 +33,7 @@ export default class PickTag extends React.Component{
             return(
                 <TouchableOpacity key={icon.name} onPress={() =>this.pressTagHandler(index)} >
                     <View style={styles.iconContainer}>
-                        <Icon name={icon.name} size={28} style={icon.tagged ? styles.taggedIcon : null} />
+                        <Icon name={icon.name} size={0.04 * height} style={icon.tagged ? styles.taggedIcon : null} />
                         <Text 
                             style={[styles.textStyle,icon.tagged ? styles.taggedText : null]}>
                             {icon.description}
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         color: "#4295E8"
     },
     textStyle:{
-        fontSize: 10
+        fontSize: 0.013 * height
     }, 
     taggedText:{
         color: "#4295E8"

@@ -1,10 +1,11 @@
 import React from 'react'
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Text, TouchableOpacity, Dimensions} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
 import {deleteEvent} from '../store/actions/action.index'
 
+const {height, width} = Dimensions.get('window')
 class JoinBtn extends React.Component{
 
     state ={
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
         fontFamily: 'ArialRoundedMTBold',
     },
     expireTextStyle:{
-        fontSize: 15, 
+        fontSize: 14, 
         color:'white',
         fontFamily: 'ArialRoundedMTBold',
     }

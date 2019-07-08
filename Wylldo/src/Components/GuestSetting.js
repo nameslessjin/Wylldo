@@ -1,9 +1,9 @@
 import React from 'react'
-import {View, StyleSheet, Text, TouchableOpacity, Picker, TouchableWithoutFeedback, Platform} from 'react-native'
+import {View, StyleSheet, Text, TouchableOpacity, Picker, TouchableWithoutFeedback, Platform, Dimensions} from 'react-native'
 import Modal from 'react-native-modal'
 import {Navigation} from 'react-native-navigation'
 
-
+const {height, width} = Dimensions.get('window')
 export default class GuestSeeting extends React.Component{
     
     state={
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontWeight: 'bold', 
-        fontSize: 16, 
+        fontSize: 0.02 * height, 
         marginRight: 10,
         marginLeft: 20,
     },

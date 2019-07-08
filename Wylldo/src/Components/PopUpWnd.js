@@ -1,9 +1,10 @@
 import React from 'react'
-import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
+import {View, Image, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
 
+const {height, width} = Dimensions.get('window')
 export default class PopUpWnd extends React.Component{
 
     state={
@@ -146,12 +147,12 @@ export default class PopUpWnd extends React.Component{
                                 style={styles.comment}>
                                 {this.props.description}
                             </Text>
-                            <Text style={{color: 'grey', fontSize: 12}} >See all {this.props.commentNum} comments</Text>
+                            <Text style={{color: 'grey', fontSize: 0.016 * height}} >See all {this.props.commentNum} comments</Text>
                         </TouchableOpacity>
                         <View style={styles.buttonContainer}>
                             {heartBtn}
                             <Text style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
-                            <Icon name={'md-share-alt'} size={30} />
+                            {/* <Icon name={'md-share-alt'} size={30} /> */}
                         </View>
                     </View>
                 </View>

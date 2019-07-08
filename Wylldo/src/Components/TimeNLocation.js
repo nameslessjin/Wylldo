@@ -1,8 +1,9 @@
 import React from 'react'
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native'
+import {View, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
+const {height, width} = Dimensions.get('window')
 export default class TimeNLocation extends React.Component {
 
     onLocationBtnPressed = () => {
@@ -64,7 +65,7 @@ export default class TimeNLocation extends React.Component {
 
     render(){
 
-        const locationIcon = <Icon name='md-pin' size={25} />
+        const locationIcon = <Icon name='md-pin' size={0.031 * height} />
         let locationBtn = null
         if (this.props.coords.latitude){
             locationBtn = (<TouchableOpacity onPress={() => this.onLocationBtnPressed()}>
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
         marginTop: -13
     },
     timeText:{
-        fontSize: 15, 
+        fontSize: 0.02 * height, 
         fontWeight: 'bold', 
         marginEnd: 5
     },

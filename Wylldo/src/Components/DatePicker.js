@@ -1,8 +1,9 @@
 // a lot of things needed to be checked in this part to avoid potential bug
 import React from 'react'
-import {Platform, View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native'
+import {Platform, View, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native'
 import DateTimePicker from "react-native-modal-datetime-picker"
 
+const {height, width} = Dimensions.get('window')
 export default class DatePicker extends React.Component{
 
     constructor(props){
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     },
     timeText:{
         fontWeight: 'bold', 
-        fontSize: 16, 
+        fontSize: 0.02 * height, 
         marginRight: 10,
         marginLeft: 20,
     },

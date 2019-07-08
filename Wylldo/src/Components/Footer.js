@@ -1,11 +1,12 @@
 import React from 'react'
-import {StyleSheet, View, Text, TouchableOpacity} from "react-native"
+import {StyleSheet, View, Text, TouchableOpacity, Dimensions} from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 import Fire from '../firebase/Fire'
 import JoinBtn from './JoinBtn'
 import TimeNLocation from './TimeNLocation'
 import { Navigation } from 'react-native-navigation';
 
+const {height, width} = Dimensions.get('window')
 export default class Footer extends React.Component{
 
 
@@ -78,7 +79,7 @@ export default class Footer extends React.Component{
         const heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
                             <Icon 
                                 name={(this.state.heartPressed) ? 'md-heart' : 'md-heart-empty'} 
-                                size={30}
+                                size={0.037 * height}
                                 color={(this.state.heartPressed) ? '#E91E63' : null}/>
                         </TouchableOpacity>
 
