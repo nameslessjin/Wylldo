@@ -202,9 +202,11 @@ class Fire {
     }
 
     //used to get location and tag for the map.
-    getMapEvents = async() => {
+    getMapEvents = async(userLocation) => {
+        const {latitude, longitude} = userLocation
+        // console.log(latitude, longitude)
         const mapRef = this.geoDB.collection('mapEvents')
-        const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(40.798699, -77.859954), radius: 8.5})
+        const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(latitude, longitude), radius: 8.5})
         const querySnapshot = await geoQuery.get()
         let mapEventData = []
         for (const doc of querySnapshot.docs){

@@ -82,11 +82,11 @@ class Home extends React.Component{
         this.createNotificationListeners();
         this.setState({refreshing: true})
         this.getCurrentUserData().then(currentUserData => {
-            this.props.onGetCurrentUser(currentUserData);
-            this.getMapEventData().then( mapEvents => {
-                this.props.onGetMapEvents(mapEvents)
-            })
-            .catch(error => {console.log(error)})
+            this.props.onGetCurrentUser(currentUserData)
+            // this.getMapEventData().then( mapEvents => {
+            //     this.props.onGetMapEvents(mapEvents)
+            // })
+            // .catch(error => {console.log(error)})
         })
         this.setState({refreshing: false})
 
@@ -97,9 +97,6 @@ class Home extends React.Component{
         this.bottomTabEventListener.remove()
         this.notificationListener()
         navigator.geolocation.clearWatch(this.watchId)
-        
-        
-        // this.notificationOpenedListener()
     }
 
     findCoordinates = () => {
@@ -115,6 +112,10 @@ class Home extends React.Component{
                 }
 
                 this.setState({userLocation})
+                this.getMapEventData().then( mapEvents => {
+                    this.props.onGetMapEvents(mapEvents)
+                })
+                .catch(error => {console.log(error)})
             },
             error => console.log(error.message),
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
@@ -149,7 +150,9 @@ class Home extends React.Component{
     }
 
     getMapEventData = async () => {
-        const mapEventData = await Fire.getMapEvents()
+        const {latitude, longitude} = this.state.userLocation
+        const userLocation = {latitude: latitude, longitude: longitude}
+        const mapEventData = await Fire.getMapEvents(userLocation)
         return mapEventData
     }
 

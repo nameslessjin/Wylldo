@@ -138,7 +138,7 @@ export default class SignIn extends React.Component{
 
         const termNPolicy = (
             <View style={{marginTop: 15}}>
-                <Text style={styles.hyperLinkText}>By signing up, you aree to our </Text>
+                <Text style={styles.hyperLinkText}>By signing up, you agree to our </Text>
                 <View style={{flexDirection:'row'}}>
                     <Text 
                         style={[styles.hyperLinkText, {fontWeight: 'bold'}]}

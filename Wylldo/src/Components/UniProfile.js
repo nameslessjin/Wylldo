@@ -39,7 +39,6 @@ export default class UniProfile extends React.Component {
 
 
     render(){
-        console.log(height, width)
         const {avatarUri, username, followerNum, followingNum, componentId, userId, following_list} = this.props
         const displayAvatar = (
             <Image source={avatarUri}  style={styles.avatar} />

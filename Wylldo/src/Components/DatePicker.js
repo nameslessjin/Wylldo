@@ -24,9 +24,53 @@ export default class DatePicker extends React.Component{
     }
 
     componentDidMount(){
-        let chosenDate = new Date()
-        this.startDateToString(chosenDate)
+        // let chosenDate = new Date()
+        // this.startDateToString(chosenDate)
+        this.setInitTime()
         this.maxStartDateTime()
+    }
+
+    setInitTime = () => {
+        let today = new Date()
+        let tomorrow = new Date()
+        tomorrow.setDate(today.getDate() + 1)
+        const currentHour = today.getHours()
+
+        if (currentHour < 15){
+            let startTime = new Date(today.setHours(15, 0, 0))
+            this.startDateToString(startTime)
+            let endTime = new Date(today.setHours(17, 0, 0))
+            this.endDateToString(endTime)
+        }
+
+        if ((currentHour < 18 && currentHour > 15) || currentHour == 15){
+            let startTime = new Date(today.setHours(18, 0, 0))
+            this.startDateToString(startTime)
+            let endTime = new Date(today.setHours(20, 0, 0))
+            this.endDateToString(endTime)
+        }
+
+        if ((currentHour < 20 && currentHour > 18) || currentHour == 18){
+            let startTime = new Date(today.setHours(22, 0, 0))
+            this.startDateToString(startTime)
+            let endTime = new Date(today.setHours(23, 0, 0))
+            this.endDateToString(endTime)
+        }
+
+        if ((currentHour > 20 && currentHour < 22) || currentHour == 20){
+            let startTime = new Date(today.setHours(23, 0, 0))
+            this.startDateToString(startTime)
+            let endTime = new Date(today.setHours(23, 59, 0))
+            this.endDateToString(endTime)
+        }
+
+        if (currentHour >= 22){
+            let startTime = new Date(tomorrow.setHours(15, 0, 0))
+            this.startDateToString(startTime)
+            let endTime = new Date(tomorrow.setHours(17, 0, 0))
+            this.endDateToString(endTime)
+        }
+
     }
 
     showDateTimePicker = () => {
@@ -69,6 +113,7 @@ export default class DatePicker extends React.Component{
     }
 
     endDateToString = (chosenDate) => {
+        // console.log(chosenDate)
         let hours = chosenDate.getHours().toString()
         let minutes = chosenDate.getMinutes()
         let AM = "AM"
@@ -85,6 +130,7 @@ export default class DatePicker extends React.Component{
     }
 
     startDateToString = (chosenDate) => {
+        const {endTime} = this.state
         const dateInWeek = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"]
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         const day =  dateInWeek[chosenDate.getDay()]
@@ -103,7 +149,17 @@ export default class DatePicker extends React.Component{
         const startTimeString = hours + ":" + minutes + AM
         const monthDate = day + " " + month + " " + date 
         this.setState({startTimeString: startTimeString, startTime: chosenDate, monthDate: monthDate})
-        this.endDateToString(chosenDate)
+        if (endTime){
+            const chosenDateInSec =  Math.floor(chosenDate.getTime()/1000)
+            const endTimeInSec = Math.floor(endTime.getTime()/1000)
+            if (chosenDateInSec >= endTimeInSec){
+                hours = chosenDate.getHours()
+                let newEndTime = new Date(chosenDate)
+                newEndTime.setHours(hours, minutes + 30)
+                // console.log(newEndTime)
+                this.endDateToString(newEndTime)
+            }
+        }
         this.props.startTime(chosenDate)
         this.setMaxEndTime(chosenDate)
     }
@@ -111,56 +167,28 @@ export default class DatePicker extends React.Component{
     render(){
         let startTimePicker = null
         let endTimePicker = null
-        if(Platform.OS === 'android'){
 
-            startTimePicker=(
-                <DateTimePicker
-                    isVisible={this.state.isDateTimePickerVisible}
-                    onCancel={this.hideDateTimePicker}
-                    onConfirm={this.handleDatePicked}
-                    mode={'datetime'}
-                    minimumDate={this.state.minStartDate}
-                    maximumDate={this.state.maxStartDate}
-                    date={this.state.startTime}
-                />
-            )
+        startTimePicker=(
+            <DateTimePicker
+                isVisible={this.state.isDateTimePickerVisible}
+                onCancel={this.hideDateTimePicker}
+                onConfirm={this.handleDatePicked}
+                mode={'datetime'}
+                minimumDate={this.state.minStartDate}
+                maximumDate={this.state.maxStartDate}
+                date={this.state.startTime}
+            />
+        )
 
-            endTimePicker = (
-                <DateTimePicker
-                    isVisible={this.state.isTimePickerVisible}
-                    onCancel={this.hideDateTimePicker}
-                    onConfirm={this.handleTimePicked}
-                    mode={'time'}
-                    date={this.state.startTime}
-                />
-            )
-
-        }else{
-            startTimePicker = (
-                <DateTimePicker
-                    isVisible={this.state.isDateTimePickerVisible}
-                    onCancel={this.hideDateTimePicker}
-                    onConfirm={this.handleDatePicked}
-                    mode={'datetime'}
-                    minimumDate={this.state.minStartDate}
-                    maximumDate={this.state.maxStartDate}
-                    date={this.state.startTime}
-                />
-            )
-
-            endTimePicker = (
-                <DateTimePicker
-                    isVisible={this.state.isTimePickerVisible}
-                    onCancel={this.hideDateTimePicker}
-                    onConfirm={this.handleTimePicked}
-                    mode={'time'}
-                    date={this.state.endTime}
-                    minimumDate={this.state.startTime}
-                    maximumDate={this.state.maxEndTime}
-                />
-            )
-        }
-    
+        endTimePicker = (
+            <DateTimePicker
+                isVisible={this.state.isTimePickerVisible}
+                onCancel={this.hideDateTimePicker}
+                onConfirm={this.handleTimePicked}
+                mode={'time'}
+                date={this.state.endTime}
+            />
+        )
 
         return(
             <View style={styles.container}>

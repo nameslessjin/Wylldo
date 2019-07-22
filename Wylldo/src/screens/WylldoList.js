@@ -38,7 +38,8 @@ class WylldoList extends React.Component{
         Navigation.events().bindComponent(this);
         this.state = {
             loading: false,
-            refreshing: false
+            refreshing: false,
+            userLocation: {}
         }
         this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(this.tabChanged)
     }
@@ -58,13 +59,42 @@ class WylldoList extends React.Component{
     }
 
     getMapEventData = async () => {
-        const mapEventData = await Fire.getMapEvents()
+        const {latitude, longitude} = this.state.userLocation
+        const userLocation = {latitude: latitude, longitude: longitude}
+        const mapEventData = await Fire.getMapEvents(userLocation)
         return mapEventData
     }
+
+    // componentWillUnmount(){
+    //     navigator.geolocation.clearWatch(this.watchId)
+    // }
 
     //This part actually load when the home page is launched
     shouldComponentUpdate(nextProps, nextState){
         return nextProps != this.props
+    }
+
+    findCoordinates = () => {
+        this.watchId = navigator.geolocation.getCurrentPosition(
+            position => {
+                const userLocation = {
+                    ...userLocation,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: 0.0244,
+                    longitudeDelta: 0.0244,
+                    timestamp: position.coords.timestamp
+                }
+                this.setState({userLocation})
+                this.getMapEventData().then( mapEvents => {
+                    this.props.onGetMapEvents(mapEvents)
+                    this.getEventData().then(events => {this.props.onGetEvents(events)})
+                })
+                .catch(error => {console.log(error)}) 
+            },
+            error => console.log(error.message),
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        )
     }
 
     getEventData = async (startPosition) => {
@@ -76,10 +106,11 @@ class WylldoList extends React.Component{
     }
 
     _onRefresh = () => {
-        this.getMapEventData().then(mapEvents => {
-            this.props.onGetMapEvents(mapEvents)
-            this.getEventData().then(events => {this.props.onGetEvents(events)})
-        })
+        // this.getMapEventData().then(mapEvents => {
+        //     this.props.onGetMapEvents(mapEvents)
+        //     this.getEventData().then(events => {this.props.onGetEvents(events)})
+        // })
+        this.findCoordinates()
     }
 
     //When swipe up, trigger to load more evens

@@ -105,6 +105,7 @@ class AddMap extends React.Component{
 
 
     render(){
+        console.log(this.props)
         let marker = null
         if(this.state.eventLocation.latitude){
             marker= <Marker coordinate={this.state.eventLocation} ></Marker>
