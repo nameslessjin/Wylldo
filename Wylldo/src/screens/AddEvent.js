@@ -110,13 +110,23 @@ export default class addEvent extends React.Component{
     }
 
     render(){
-        const {Focus, inputHeight} = this.state
-
+        const {Focus, inputHeight, image} = this.state
+        let imageViewHeight = null
+        if (image){
+            imageViewHeight = image.height/image.width* width
+        }
+        console.log(imageViewHeight)
         return(
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={[styles.container, 
+                <ScrollView contentContainerStyle={[styles.container, 
                         (Focus) ? {bottom: inputHeight} : null]}>
-                    <View style={styles.ImgView}> 
+                    <View style={[styles.ImgView,
+                        (imageViewHeight) ? (imageViewHeight <= 450) ? {height: (imageViewHeight)}
+                            : {height: '60%'}
+                        : {height: '40%'},
+                        (Focus || !imageViewHeight) ? {height: '40%'} : (imageViewHeight <= 450) ? {height: (imageViewHeight)}
+                            : {height: '60%'}
+                    ]}> 
                         <ImagePicker updateImage= {(updatedImg) => this.setState({image: updatedImg})} resizedImage = {(resizedImage) => this.setState({resizedImage: resizedImage})}/>         
                     </View>
                     <View style={styles.DescriptionView}> 
@@ -142,7 +152,7 @@ export default class addEvent extends React.Component{
                         inviteCount={(inviteCount) => this.setState({inviteCount: inviteCount})}
                         viewType={(viewType) => this.setState({viewType: viewType})}
                     />
-                </View>
+                </ScrollView>
             </TouchableWithoutFeedback>
 
 
@@ -158,6 +168,8 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor: "#eee",
         alignItems: "center",
+        height: '100%',
+        width: '100%'
     },
     ImgView:{
         height: '40%',
