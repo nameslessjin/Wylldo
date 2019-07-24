@@ -79,7 +79,7 @@ export default class GuestSeeting extends React.Component{
         return(
             <View style={styles.container}>
                 <TouchableOpacity style={styles.subContainer} onPress={this.onInvitePressed}>
-                    <Text style={styles.text}>Invite</Text>
+                    <Text style={styles.text}>Participant</Text>
                     <Text>{this.state.inviteCount}</Text>
                 </TouchableOpacity>
                 <Modal 
@@ -111,7 +111,7 @@ export default class GuestSeeting extends React.Component{
                 </Modal>
 
                 <TouchableOpacity style={styles.subContainer} onPress={this.onViewPressed}> 
-                    <Text style={styles.text}>View</Text>
+                    <Text style={styles.text}>Access</Text>
                     <Text>{this.state.viewType}</Text>
                 </TouchableOpacity>
 

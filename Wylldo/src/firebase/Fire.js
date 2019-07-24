@@ -246,7 +246,7 @@ class Fire {
             resizedImage: uploadedResImag,
             image: uploadedImag,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
-            complete: false,
+            isCompleted: false,
             like_userIDs: [],
             joinedNum: 1,
             join_userIDs: [],

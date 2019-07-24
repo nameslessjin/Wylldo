@@ -115,7 +115,7 @@ export default class addEvent extends React.Component{
         if (image){
             imageViewHeight = image.height/image.width* width
         }
-        console.log(imageViewHeight)
+        // console.log(imageViewHeight)
         return(
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <ScrollView contentContainerStyle={[styles.container, 
