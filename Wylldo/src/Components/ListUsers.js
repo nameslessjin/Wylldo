@@ -7,6 +7,7 @@ export default class ListUsers extends React.Component{
                     componentId={this.props.componentId} 
                     currentUser_following_list={this.props.currentUser_following_list}
                     eventId = {this.props.eventId}
+                    hostUserId = {this.props.hostUserId}
                     onRemoveJoinedUser = {(updateInfo) => this.props.onRemoveJoinedUser(updateInfo)}
                     />
     

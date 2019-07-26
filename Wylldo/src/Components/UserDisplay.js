@@ -42,6 +42,8 @@ class UserDisplay extends React.Component{
 
 
     render(){
+        console.log(this.props)
+        const {hostUserId, userId} = this.props
         const userProfilePic = (this.props.userId == Fire.uid) ?  
         (
             <View style={styles.row} onPress={this.onUserPress}>
@@ -57,7 +59,7 @@ class UserDisplay extends React.Component{
             </TouchableOpacity>
         )
 
-        const hostDisplay = (
+        const UnremovableUserDisplay = (
             <View style={styles.detailContainer}>
                 {userProfilePic}
                 <FollowButton 
@@ -67,7 +69,7 @@ class UserDisplay extends React.Component{
             </View>
         )
 
-        const participantDisplay = (
+        const RemovableUserDisplay = (
             <SwipeRow disableLeftSwipe={true} leftOpenValue={75}>
                 <TouchableOpacity style={styles.rowBackOptions} onPress={this.onRemoveJoinedUser}>
                         <Text style={styles.optionTextStyle}>REMOVE</Text>
@@ -82,7 +84,13 @@ class UserDisplay extends React.Component{
             </SwipeRow>
         )
 
-        const userDisplay = (this.props.userId == Fire.uid) ? (hostDisplay) : (participantDisplay)
+        if (hostUserId == Fire.uid){
+            console.log(Fire.uid)
+        }
+
+        const userDisplay = (hostUserId == Fire.uid)  
+                            ? ((this.props.userId == hostUserId) ? (UnremovableUserDisplay) : (RemovableUserDisplay))
+                            : (UnremovableUserDisplay)
 
         return(
             <View style={styles.container}>

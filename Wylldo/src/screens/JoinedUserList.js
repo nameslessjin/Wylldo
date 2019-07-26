@@ -157,6 +157,7 @@ class JoinedUserList extends React.Component{
                         userList = {joinedUserList}
                         currentUser_following_list = {currentUser.following_list}
                         eventId = {eventId}
+                        hostUserId = {hostUserId}
                         onRemoveJoinedUser = {(updateInfo) => this.props.onRemoveJoinedUser(updateInfo)}
                     />
                     :
