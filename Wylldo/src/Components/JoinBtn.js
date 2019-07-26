@@ -21,7 +21,7 @@ class JoinBtn extends React.Component{
 
     componentDidUpdate(prevProps, prevState){
         if (prevProps != this.props){
-            this.setState({joinedNum: this.props.joinedNum})
+            this.setState({joinedNum: this.props.joinedNum, join_userIDs: this.props.join_userIDs})
             this.checkUserOnEvent()
         }
     }
@@ -34,9 +34,13 @@ class JoinBtn extends React.Component{
         if (this.state.joinedNum == this.props.inviteCount){
             this.setState({joinBtn: 'FULL'})
         }
+
         if (this.props.join_userIDs.find(userId => userId === Fire.uid)){
             this.setState({joinBtn: 'VIEW'})
+        } else {
+            this.setState({joinBtn: 'JOIN'})
         }
+        
         if (this.props.hostUserId === Fire.uid){
             this.setState({joinBtn: 'VIEW'})
         }
@@ -71,7 +75,8 @@ class JoinBtn extends React.Component{
                 name: 'JoinedUserList',
                 passProps:{
                     eventId: this.props.eventId,
-                    join_userIDs: this.props.join_userIDs,
+                    //There is problem with this.props/this.state join_userIDs
+                    join_userIDs: this.state.join_userIDs,
                     hostUserId: this.props.hostUserId,
                     onCancel: (res) => {
                         if (res.joinedNum != 0){
@@ -103,7 +108,6 @@ class JoinBtn extends React.Component{
      }
 
      render(){
-
         const viewBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
                             <Text style={styles.joinTextStyle}>VIEW</Text>
                         </TouchableOpacity>
