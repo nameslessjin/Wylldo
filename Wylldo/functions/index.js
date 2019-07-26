@@ -41,18 +41,41 @@ exports.onReport = functions.firestore
         })
     })
 
-exports.onJoinLikeEvent = functions.firestore
+exports.onJoinLikeRemoveEvent = functions.firestore
     .document('Events/{eventId}')
     .onUpdate((snap, context) => {
-        const receiverId = snap.after.data().hostUserId
+        const host_name = snap.after.data().hostUsername
         const old_joinedNum = snap.before.data().joinedNum
         const new_joinedNum = snap.after.data().joinedNum
-        const new_joined_group = snap.after.data().join_userIDs
+        const old_join_userIDs = snap.before.data().join_userIDs
+        const new_join_userIDs = snap.after.data().join_userIDs
         const old_likes = snap.before.data().likes
         const new_likes = snap.after.data().likes
         const new_like_userIDs = snap.after.data().like_userIDs
+
+        if (old_joinedNum > new_joinedNum){
+            const senderId = snap.after.data().hostUserId
+            const receiverId = old_join_userIDs.filter(user_id => !(new_join_userIDs.includes(user_id)))[0]
+            if (receiverId){
+                return db.collection('Users').doc(receiverId).get().then(res => {
+                    const receiverFCMToken = res.data().fcm_token
+                    let payload = {
+                        notification: {
+                            title: 'Removed',
+                            body: host_name + ' has removed you from joinee list.',
+                            sound: 'default'
+                        }
+                    }
+                    admin.messaging().sendToTopic('pushNotifications', payload)
+                    return admin.messaging().sendToDevice(receiverFCMToken, payload)
+                })
+            }
+        }
+
+
         if (old_joinedNum < new_joinedNum){
-            const senderId = [...new_joined_group][new_joined_group.length-1]
+            const receiverId = snap.after.data().hostUserId
+            const senderId = [...new_join_userIDs][new_join_userIDs.length-1]
             if (senderId){
                 return db.collection('Users').doc(receiverId).get().then(res => {
                     const receiverFCMToken = res.data().fcm_token
@@ -72,6 +95,7 @@ exports.onJoinLikeEvent = functions.firestore
             }
         }
         if (old_likes < new_likes){
+            const receiverId = snap.after.data().hostUserId
             const senderId = [...new_like_userIDs][new_like_userIDs.length-1]
             if (senderId){
                 if (receiverId != senderId){
