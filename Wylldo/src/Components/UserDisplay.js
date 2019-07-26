@@ -4,6 +4,8 @@ import FollowButton from './FollowButton'
 import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
+import {SwipeRow} from 'react-native-swipe-list-view'
+import {loadJoinedUser, updateJoinedUserEvent} from '../store/actions/action.index'
 
 class UserDisplay extends React.Component{
 
@@ -18,6 +20,25 @@ class UserDisplay extends React.Component{
         })
     }
 
+    onRemoveJoinedUser = async() => {
+        const {userId, eventId} = this.props
+        const removeUserResult = await Fire.onRemoveJoinedUser(eventId, userId)
+        if(removeUserResult){
+            const {joinUserIds} = removeUserResult
+            this.props.onUpdateJoinedUser(joinUserIds)
+            const updateInfo = {
+                eventId: eventId,
+                joinUserIds: joinUserIds
+            }
+            this.props.onUpdateJoinedUserEvent(updateInfo)
+
+            const passToJoinBtn = {
+                joinedNum: joinUserIds.length + 1,
+                join_userIDs: joinUserIds
+            }
+            this.props.onRemoveJoinedUser(passToJoinBtn)
+        }
+    }
 
 
     render(){
@@ -36,13 +57,36 @@ class UserDisplay extends React.Component{
             </TouchableOpacity>
         )
 
-        return(
-            <View style={styles.container}>
+        const hostDisplay = (
+            <View style={styles.detailContainer}>
                 {userProfilePic}
                 <FollowButton 
                     userId={this.props.userId} 
                     following_list={this.props.currentUser.following_list}
                 />
+            </View>
+        )
+
+        const participantDisplay = (
+            <SwipeRow disableLeftSwipe={true} leftOpenValue={75}>
+                <TouchableOpacity style={styles.rowBackOptions} onPress={this.onRemoveJoinedUser}>
+                        <Text style={styles.optionTextStyle}>REMOVE</Text>
+                </TouchableOpacity>
+                <View style={styles.detailContainer}>
+                    {userProfilePic}
+                    <FollowButton 
+                        userId={this.props.userId} 
+                        following_list={this.props.currentUser.following_list}
+                    />
+                </View>
+            </SwipeRow>
+        )
+
+        const userDisplay = (this.props.userId == Fire.uid) ? (hostDisplay) : (participantDisplay)
+
+        return(
+            <View style={styles.container}>
+                {userDisplay}
             </View>
         )
     }
@@ -54,17 +98,44 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(UserDisplay)
+const mapDispatchToProps = dispatch => {
+    return{
+        onUpdateJoinedUser: (joinedUser) => dispatch(loadJoinedUser(joinedUser)),
+        onUpdateJoinedUserEvent: (updateInfo) => dispatch(updateJoinedUserEvent(updateInfo))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserDisplay)
 
 
 const styles = StyleSheet.create({
     container:{
-        flexDirection: 'row',
         height: 80,
+        width: "100%",
+        backgroundColor: 'white',
+        marginTop: 10
+    },
+    detailContainer:{
+        flexDirection: 'row',
+        height: "100%",
         width: "100%",
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 10
+        backgroundColor: 'white',
+    },
+    rowBackOptions:{
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        backgroundColor: '#e74c3c',
+        borderRadius: 10,
+        paddingLeft: 7,
+        height: '100%'
+    },
+    optionTextStyle:{
+        fontSize: 14,
+        fontFamily: 'ArialRoundedMTBold',
+        color: 'white'
     },
     imageStyle:{
         width: 70,

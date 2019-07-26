@@ -1,9 +1,9 @@
 import React from 'react'
-import {View, Text, StyleSheet, Alert} from 'react-native'
+import {View, Text, StyleSheet, Alert, LayoutAnimation} from 'react-native'
 import Fire from '../firebase/Fire'
 import {Navigation} from 'react-native-navigation'
 import ListUsers from '../Components/ListUsers'
-import {deleteEvent} from '../store/actions/action.index'
+import {deleteEvent, loadJoinedUser} from '../store/actions/action.index'
 import {connect} from 'react-redux'
 import UserDisplay from '../Components/UserDisplay'
 
@@ -79,6 +79,7 @@ class JoinedUserList extends React.Component{
 
     _onRefresh = (type) => this.getJoinedUsers(type).then(userList => {
         this.setState({userList: userList})
+        this.props.onLoadJoinedUser(userList)
     })
 
     getHostData = async (userId) => {
@@ -88,7 +89,7 @@ class JoinedUserList extends React.Component{
 
     getJoinedUsers = async(type, startPosition) => {
         this.setState({refreshing: true})
-        const {userList, start} = await Fire.getUsers({size: SIZE, start: startPosition, userIdList: this.state.join_userIDs, type: type})
+        const {userList, start} = await Fire.getUsers({size: SIZE, start: startPosition, userIdList: this.props.join_userIDs, type: type})
         this.joinedUserStartPosition = start
         this.setState({refreshing: false, loading: false})
 
@@ -101,6 +102,7 @@ class JoinedUserList extends React.Component{
             this.getJoinedUsers('JOINED', this.joinedUserStartPosition).then(userList => {
                 const updatedUserList = this.state.userList.concat(userList)
                 this.setState({userList: updatedUserList})
+                this.props.onLoadJoinedUser(updatedUserList)
             })
             .catch( error => console.log(error))
         }
@@ -145,13 +147,17 @@ class JoinedUserList extends React.Component{
     render(){
         // console.log('JoinedUserList: props', this.props)
         // console.log('JoinedUserList: state ', this.state)
+        LayoutAnimation.easeInEaseOut()
+        const {componentId, currentUser, joinedUserList, hostUserId, eventId} = this.props
         const showList = (this.state.userList.length > 0) ?
                     <ListUsers
-                        componentId={this.props.componentId}
+                        componentId={componentId}
                         onEndReached = {this._loadMore}
                         onEndReachedThreshold = {0.5}
-                        userList = {this.state.userList}
-                        currentUser_following_list = {this.props.currentUser.following_list}
+                        userList = {joinedUserList}
+                        currentUser_following_list = {currentUser.following_list}
+                        eventId = {eventId}
+                        onRemoveJoinedUser = {(updateInfo) => this.props.onRemoveJoinedUser(updateInfo)}
                     />
                     :
                     <View style={styles.textContainer}>
@@ -163,9 +169,9 @@ class JoinedUserList extends React.Component{
                         <Text style={styles.hostText}>Host</Text>
                         <UserDisplay  
                             {...this.state.hostData} 
-                            userId={this.props.hostUserId} 
-                            componentId={this.props.componentId} 
-                            currentUser_following_list = {this.props.currentUser.following_list}
+                            userId={hostUserId} 
+                            componentId={componentId} 
+                            currentUser_following_list = {currentUser.following_list}
                         />
                     </View>
         )
@@ -184,13 +190,15 @@ class JoinedUserList extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-        currentUser: state.events.currentUser
+        currentUser: state.events.currentUser,
+        joinedUserList: state.events.joinedUser
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return{
-        onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId))
+        onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId)),
+        onLoadJoinedUser: (joinedUser) => dispatch(loadJoinedUser(joinedUser))
     }
 }
 

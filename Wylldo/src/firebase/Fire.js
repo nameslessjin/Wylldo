@@ -23,7 +23,9 @@ class Fire {
             const querySnapshot = await docRef.get()
             if (querySnapshot.exists){
                 const event = querySnapshot.data() || {}
+                //
                 const hostAvatarUri =  await this.getAvatarUri(event.hostAvatar)
+                //
                 const eventWithKey = {
                     key: querySnapshot.id,
                     eventId: querySnapshot.id,
@@ -78,7 +80,9 @@ class Fire {
         const querySnapshot = await ref.get();
         if (querySnapshot.exists){
             const event = querySnapshot.data() || {}
+            //
             const hostAvatarUri = await this.getAvatarUri(event.hostAvatar)
+            //
             eventWithKey = {
                 key: querySnapshot.id,
                 eventId: querySnapshot.id,
@@ -121,7 +125,9 @@ class Fire {
         }
 
         const createComment = await ref.add(uploadComment).catch(error => console.log(error))
+        //
         const user_avatar = await this.getAvatarUri(commentInfo.avatarUri)
+        //
         uploadComment = {
             ...uploadComment,
             user_avatar: {
@@ -145,7 +151,9 @@ class Fire {
             for (const doc of querySnapshot.docs){
                 if (doc.exists){
                     const comment = doc.data() || {}
+                    //
                     const user_avatar = await this.getAvatarUri(comment.user_avatar)
+                    //
                     const commentWithKey = {
                         key: doc.id,
                         commentId: doc.id,
@@ -182,7 +190,9 @@ class Fire {
             for (const doc of querySnapshot.docs){
                 if (doc.exists){
                     const event = doc.data() || {}
+                    //
                     const hostAvatar = await this.getAvatarUri(event.hostAvatar)
+                    //
                     const eventWithKey = {
                         key: doc.id,
                         eventId: doc.id,
@@ -212,7 +222,9 @@ class Fire {
         for (const doc of querySnapshot.docs){
             if (doc.exists){
                 const mapEvent = doc.data() || {}
+                //
                 const hostAvatarUri = await this.getAvatarUri(mapEvent.hostAvatar)
+                //
                 const mapEventsWithKey = {
                     key: doc.id,
                     ...mapEvent,
@@ -255,7 +267,9 @@ class Fire {
             geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }
         const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
+        //
         const hostAvatarUri = await this.getAvatarUri(uploadEventInfo.hostAvatar)
+        //
         const updateEventInfo = [{
             ...uploadEventInfo,
             key: createdEvent.id,
@@ -463,6 +477,28 @@ class Fire {
         const joinNum = this.joinNum
         const joinUserIds = this.joinUserIds
         return {joinNum: joinNum, joinUserIds: joinUserIds}
+
+    }
+
+    onRemoveJoinedUser = async(eventId, removedUserId) => {
+        const eventRef = this.eventsCollection.doc(eventId)
+        await this.db.runTransaction(async transaction => {
+            const doc = await transaction.get(eventRef)
+            let newJoin_userIDs = [...doc.data().join_userIDs]
+            newJoin_userIDs = newJoin_userIDs.filter(userId => userId !== removedUserId)
+            const newJoinedNum = newJoin_userIDs.length + 1
+            transaction.update(eventRef, {
+                    joinedNum: newJoinedNum,
+                    join_userIDs: newJoin_userIDs
+            })
+            this.joinNum = newJoinedNum
+            this.joinUserIds = newJoin_userIDs
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+        return {joinNum: this.joinNum, joinUserIds: this.joinUserIds}
 
     }
 

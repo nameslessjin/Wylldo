@@ -140,7 +140,6 @@ class WylldoList extends React.Component{
 
     render(){
         LayoutAnimation.easeInEaseOut()
-
         const eventDisplay = (this.props.events.length == 0) ? 
             (<Text style={styles.text} numberOfLines={2}>There is nothing going on currently.  Post your wylldo.  You can be the first!</Text>)
             : (

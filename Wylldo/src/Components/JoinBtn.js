@@ -71,11 +71,16 @@ class JoinBtn extends React.Component{
                 name: 'JoinedUserList',
                 passProps:{
                     eventId: this.props.eventId,
-                    join_userIDs: this.state.join_userIDs,
+                    join_userIDs: this.props.join_userIDs,
                     hostUserId: this.props.hostUserId,
                     onCancel: (res) => {
                         if (res.joinedNum != 0){
                             this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs, joinBtn: 'JOIN'})
+                        }
+                    },
+                    onRemoveJoinedUser: (res) => {
+                        if (res.joinedNum != 0){
+                            this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs})
                         }
                     }
                 }
@@ -112,6 +117,7 @@ class JoinBtn extends React.Component{
                             <Text style={styles.joinTextStyle}>FULL</Text>
                         </View>
 
+
         const currentTime = (new Date().getTime() / 1000)
         let joinBtn = (this.state.joinBtn == 'VIEW') ? viewBtn : 
                         (this.state.joinBtn == 'FULL') ? fullBtn : defaultJoinBtn
@@ -140,13 +146,19 @@ class JoinBtn extends React.Component{
 
 }
 
+const mapStateToProps = (state) => {
+    return{
+        events: state.events.Events
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     return{
         onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId))
     }
 }
 
-export default connect(null, mapDispatchToProps)(JoinBtn)
+export default connect(mapStateToProps, mapDispatchToProps)(JoinBtn)
 
 const styles = StyleSheet.create({
     container:{
