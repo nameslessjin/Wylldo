@@ -54,8 +54,8 @@ class AddMap extends React.Component{
             const {description, tag, startTime,
                     endTime, inviteCount, viewType, invite_userId
             } = this.props
-            const {username, display_name, avatarUri} = this.props.currentUserData
-            
+            const {username, display_name, avatarUri, follower_list} = this.props.currentUserData
+
             const eventData={
                 description : description,
                 tag : tag,
@@ -71,7 +71,8 @@ class AddMap extends React.Component{
                 endTime: endTime,
                 inviteCount: inviteCount,
                 viewType: viewType,
-                invite_userId: invite_userId
+                invite_userId: invite_userId,
+                host_follower_list: follower_list
             }
             const image = this.props.image
             const resizedImage = this.props.resizedImage

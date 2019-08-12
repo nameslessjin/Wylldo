@@ -2,19 +2,10 @@
 
 export default mapStyle = [
   {
-    "elementType": "labels.icon",
+    "featureType": "administrative.land_parcel",
     "stylers": [
       {
-        "saturation": 75
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "visibility": "off"
+        "visibility": "simplified"
       }
     ]
   },
@@ -22,24 +13,73 @@ export default mapStyle = [
     "featureType": "poi.business",
     "stylers": [
       {
-        "visibility": "off"
+        "lightness": 50
+      },
+      {
+        "visibility": "simplified"
       }
     ]
   },
   {
-    "featureType": "road",
+    "featureType": "poi.business",
     "elementType": "labels.icon",
     "stylers": [
       {
-        "visibility": "off"
+        "saturation": 50
+      },
+      {
+        "lightness": 50
       }
     ]
   },
   {
-    "featureType": "transit",
+    "featureType": "poi.government",
     "stylers": [
       {
-        "visibility": "off"
+        "visibility": "simplified"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.place_of_worship",
+    "stylers": [
+      {
+        "visibility": "simplified"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "stylers": [
+      {
+        "visibility": "simplified"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "lightness": 50
+      }
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "lightness": 50
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "visibility": "simplified"
       }
     ]
   }

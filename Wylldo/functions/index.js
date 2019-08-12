@@ -41,7 +41,66 @@ exports.onReport = functions.firestore
         })
     })
 
-exports.onJoinLikeRemoveEvent = functions.firestore
+// exports.onInteractiveBtnPressedMapEventUpdate = functions.firestore
+// .document('Events/{eventId}')
+// .onUpdate((snap, context) => {
+//     const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
+//     return db.runTransaction(transaction => {
+//         return transaction.get(mapEventRef).then(eventDoc => {
+//             const mapEventData = eventDoc.data().d
+//             const newLikesNum = snap.after.data().likes
+//             const newJoinedNum = snap.after.data().joinedNum
+
+//             return transaction.update(mapEventRef, {
+//                 d:{
+//                     ...mapEventData,
+//                     likes: newLikesNum,
+//                     joinedNum: newJoinedNum
+//                 }
+//             })
+//         })
+//     })
+
+// })
+
+exports.onUpdateUser = functions.firestore
+    .document('Users/{userId}')
+    .onUpdate((snap, context) => {
+
+        const new_follower_list = snap.after.data().follower_list
+        const old_follower_list = snap.before.data().follower_list
+        const new_follower_num = snap.after.data().followerNum
+        const old_follower_num = snap.before.data().followerNum
+        const new_following_list = snap.after.data().following_list
+        const old_following_list = snap.before.data().following_list
+        const new_following_num = snap.after.data().followingNum
+        const old_following_num = snap.before.data().followerNum
+        const fcm_token = snap.after.data().fcm_token
+
+        if (old_follower_num < new_follower_num){
+            const receiver_id = context.params.userId
+            const sender_id = new_follower_list.filter(user_id => !(old_follower_list.includes(user_id)))[0]
+            if (sender_id){
+                return db.collection('Users').doc(sender_id).get().then(res => {
+                    const sender_name = res.data().username
+                    let payload = {
+                        notification: {
+                            title: 'Followed',
+                            body: sender_name + ' just followed you!',
+                            sound: 'default'
+                        }
+                    }
+                    admin.messaging().sendToTopic('pushNotifications', payload)
+                    return admin.messaging().sendToDevice(fcm_token, payload)
+                })
+            }
+        }
+
+
+
+    })
+
+exports.onUpdateEvent = functions.firestore
     .document('Events/{eventId}')
     .onUpdate((snap, context) => {
         const host_name = snap.after.data().hostUsername
@@ -53,6 +112,25 @@ exports.onJoinLikeRemoveEvent = functions.firestore
         const new_likes = snap.after.data().likes
         const new_like_userIDs = snap.after.data().like_userIDs
 
+        //update mapEvents when event changes
+        const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
+        db.runTransaction(transaction => {
+            return transaction.get(mapEventRef).then(eventDoc => {
+                const mapEventData = eventDoc.data().d
+                const newLikesNum = snap.after.data().likes
+                const newJoinedNum = snap.after.data().joinedNum
+    
+                return transaction.update(mapEventRef, {
+                    d:{
+                        ...mapEventData,
+                        likes: newLikesNum,
+                        joinedNum: newJoinedNum
+                    }
+                })
+            })
+        })
+
+        //send notification to user when the user is removed
         if (old_joinedNum > new_joinedNum){
             const senderId = snap.after.data().hostUserId
             const receiverId = old_join_userIDs.filter(user_id => !(new_join_userIDs.includes(user_id)))[0]
@@ -72,7 +150,7 @@ exports.onJoinLikeRemoveEvent = functions.firestore
             }
         }
 
-
+        // send notification to the host when new user join
         if (old_joinedNum < new_joinedNum){
             const receiverId = snap.after.data().hostUserId
             const senderId = [...new_join_userIDs][new_join_userIDs.length-1]
@@ -94,6 +172,8 @@ exports.onJoinLikeRemoveEvent = functions.firestore
                 })
             }
         }
+
+        // send notification to the host when post is liked
         if (old_likes < new_likes){
             const receiverId = snap.after.data().hostUserId
             const senderId = [...new_like_userIDs][new_like_userIDs.length-1]
@@ -230,27 +310,6 @@ exports.onEventCreated = functions.firestore
         return mapEventCreated
     })
 
-exports.onInteractiveBtnPressedMapEventUpdate = functions.firestore
-    .document('Events/{eventId}')
-    .onUpdate((snap, context) => {
-        const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
-        return db.runTransaction(transaction => {
-            return transaction.get(mapEventRef).then(eventDoc => {
-                const mapEventData = eventDoc.data().d
-                const newLikesNum = snap.after.data().likes
-                const newJoinedNum = snap.after.data().joinedNum
-
-                return transaction.update(mapEventRef, {
-                    d:{
-                        ...mapEventData,
-                        likes: newLikesNum,
-                        joinedNum: newJoinedNum
-                    }
-                })
-            })
-        })
-
-    })
 
 exports.onEventDeleted = functions.firestore
     .document('Events/{eventId}')
