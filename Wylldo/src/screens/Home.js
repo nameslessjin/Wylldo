@@ -11,6 +11,8 @@ import {getCurrentUser, getMapEvents} from '../store/actions/action.index'
 import {goToAuth} from '../navigation'
 import {Navigation} from 'react-native-navigation'
 import firebase from 'react-native-firebase'
+import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
+// import GooglePlacesInput from '../Components/GooglePlacesInput'
 
 
 class Home extends React.Component{
@@ -49,7 +51,7 @@ class Home extends React.Component{
 
         if (selectedTabIndex == 0 && unselectedTabIndex != 0){
             if(Fire.uid){
-                this.getMapEventData().then(mapEvents => {
+                this.getMapEventData(this.state.userLocation).then(mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
                 })
             } else {
@@ -112,7 +114,7 @@ class Home extends React.Component{
                 }
 
                 this.setState({userLocation})
-                this.getMapEventData().then( mapEvents => {
+                this.getMapEventData(userLocation).then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
                 })
                 .catch(error => {console.log(error)})
@@ -149,10 +151,10 @@ class Home extends React.Component{
         return currentUserData
     }
 
-    getMapEventData = async () => {
-        const {latitude, longitude} = this.state.userLocation
-        const userLocation = {latitude: latitude, longitude: longitude}
-        const mapEventData = await Fire.getMapEvents(userLocation)
+    getMapEventData = async (userLocation) => {
+        const {latitude, longitude} = userLocation
+        const queryLocation = {latitude: latitude, longitude: longitude}
+        const mapEventData = await Fire.getMapEvents(queryLocation)
         return mapEventData
     }
 
@@ -216,6 +218,7 @@ class Home extends React.Component{
 
         return(
             <View style={[styles.container]}>
+                
                 <MapView
                     showsUserLocation={true}
                     showsMyLocationButton={this.state.markPressed ? false : true}
@@ -229,6 +232,8 @@ class Home extends React.Component{
                     {Markers}
                 </MapView>
                 {popUp}
+                {/* <GooglePlacesInput/> */}
+                <GooglePlaceAutoComplete></GooglePlaceAutoComplete>
             </View>
         )
     }
@@ -246,7 +251,8 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1
+        flex: 1,
+        position: 'absolute'
     },
     IndicatorView:{
         position: 'absolute',

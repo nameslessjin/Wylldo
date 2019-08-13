@@ -35,7 +35,7 @@ export default class DatePicker extends React.Component{
         let tomorrow = new Date()
         tomorrow.setDate(today.getDate() + 1)
         const currentHour = today.getHours()
-
+    
         if (currentHour < 15){
             let startTime = new Date(today.setHours(15, 0, 0))
             this.startDateToString(startTime)
@@ -167,28 +167,28 @@ export default class DatePicker extends React.Component{
     render(){
         let startTimePicker = null
         let endTimePicker = null
-
-        startTimePicker=(
-            <DateTimePicker
-                isVisible={this.state.isDateTimePickerVisible}
-                onCancel={this.hideDateTimePicker}
-                onConfirm={this.handleDatePicked}
-                mode={'datetime'}
-                minimumDate={this.state.minStartDate}
-                maximumDate={this.state.maxStartDate}
-                date={this.state.startTime}
-            />
-        )
-
-        endTimePicker = (
-            <DateTimePicker
-                isVisible={this.state.isTimePickerVisible}
-                onCancel={this.hideDateTimePicker}
-                onConfirm={this.handleTimePicked}
-                mode={'time'}
-                date={this.state.endTime}
-            />
-        )
+        if (this.state.startTime && this.state.endTime){
+            startTimePicker=(
+                <DateTimePicker
+                    isVisible={this.state.isDateTimePickerVisible}
+                    onCancel={this.hideDateTimePicker}
+                    onConfirm={this.handleDatePicked}
+                    mode={'datetime'}
+                    minimumDate={this.state.minStartDate}
+                    maximumDate={this.state.maxStartDate}
+                    date={this.state.startTime}
+                />
+            )
+            endTimePicker = (
+                <DateTimePicker
+                    isVisible={this.state.isTimePickerVisible}
+                    onCancel={this.hideDateTimePicker}
+                    onConfirm={this.handleTimePicked}
+                    mode={'time'}
+                    date={this.state.endTime}
+                />
+            )
+        }
 
         return(
             <View style={styles.container}>
