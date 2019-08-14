@@ -6,6 +6,7 @@ import {Navigation} from 'react-native-navigation'
 import {connect} from 'react-redux'
 import {addEvent} from '../store/actions/action.index'
 import Fire from '../firebase/Fire'
+import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
 
 class AddMap extends React.Component{
 
@@ -35,7 +36,8 @@ class AddMap extends React.Component{
             latitude: 40.798699,
             longitude: -77.859954,
             latitudeDelta: 0.0122,
-            longitudeDelta: 0.0122
+            longitudeDelta: 0.0122,
+            locationDetails: null
         },
         eventLocation:{
             latitude: null,
@@ -46,6 +48,24 @@ class AddMap extends React.Component{
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);
+    }
+
+    componentDidUpdate(prevPros, prevState){
+        if (this.state.locationDetails){
+            const locationCoordinate= {
+                latitude: this.state.locationDetails.geometry.location.lat,
+                longitude: this.state.locationDetails.geometry.location.lng,
+                latitudeDelta: 0.0122,
+                longitudeDelta: 0.0122
+            }
+            this.animateToRegion(locationCoordinate)
+        }
+    }
+
+    animateToRegion = (coords) => {
+        this.map.animateToRegion({
+            ...coords
+        })
     }
 
     navigationButtonPressed({buttonId}){
@@ -107,12 +127,35 @@ class AddMap extends React.Component{
 
     render(){
         console.log(this.props)
+        const {eventLocation, locationDetails} = this.state
         let marker = null
-        if(this.state.eventLocation.latitude){
-            marker= <Marker coordinate={this.state.eventLocation} ></Marker>
+        if(eventLocation.latitude){
+            marker= <Marker pinColor="#e74c3c" coordinate={eventLocation} ></Marker>
         }
+
+        let searchLocationMarker = null
+        if (locationDetails) {
+            console.log(locationDetails)
+            const locationCoordinate= {
+                latitude: locationDetails.geometry.location.lat,
+                longitude: locationDetails.geometry.location.lng,
+                latitudeDelta: 0.0122,
+                longitudeDelta: 0.0122
+            }
+            
+            const markerColor= (eventLocation.latitude==locationCoordinate.latitude && eventLocation.longitude==locationCoordinate.longitude ) 
+                            ? '#e74c3c' : "#DDDED1" 
+            searchLocationMarker = (
+                <Marker 
+                    pinColor={markerColor}
+                    coordinate={locationCoordinate} 
+                    title={locationDetails.name}
+                    description={'Press any place on the map to set your location'}
+                />)
+        }
+
         return(
-            <View style={{width: "100%", height: "100%", paddingTop: 0}}>
+            <View style={styles.container}>
                 <MapView
                     showsUserLocation={true}
                     showsMyLocationButton={true}
@@ -121,10 +164,14 @@ class AddMap extends React.Component{
                     customMapStyle={mapStyle}
                     style={styles.Map}
                     onPress={this.mapViewPressedHandler}
+                    ref={ref => this.map = ref}
                     >
-
+                    {searchLocationMarker}
                     {marker}
                 </MapView>
+                <GooglePlaceAutoComplete
+                    returnDetails={locationDetails => this.setState({locationDetails: locationDetails})}
+                />
             </View>
         )
     }
@@ -147,10 +194,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        height: '100%',
+        width: '100%',
     },
     Map:{
         width: "100%",
-        height: "100%"
+        height: "100%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        position: 'absolute'
     }
 })
