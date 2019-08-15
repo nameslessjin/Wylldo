@@ -139,20 +139,19 @@ export default class PopUpWnd extends React.Component{
                     {displayImage}
                     <View style={(displayImage) ? styles.informationContainer : styles.informationContainerNoImg}>
                         <TouchableOpacity style={{height: '80%'}} onPress={() => this.onWindowPressed()}>
-                            <Text adjustsFontSizeToFit style={styles.timeStyle}>{this.timeFormat()}</Text>
-                            <Text adjustsFontSizeToFit style={styles.name}>{this.props.hostUsername}</Text>
+                            <Text  style={styles.timeStyle}>{this.timeFormat()}</Text>
+                            <Text  style={styles.name}>{this.props.hostUsername}</Text>
                             <Text 
-                                adjustsFontSizeToFit
                                 ellipsizeMode={"tail"} 
                                 numberOfLines={2} 
                                 style={styles.comment}>
                                 {this.props.description}
                             </Text>
-                            <Text adjustsFontSizeToFit style={{color: 'grey', fontSize: 0.016 * height}} >See all {this.props.commentNum} comments</Text>
+                            <Text  style={{color: 'grey', fontSize: 0.016 * height}} >See all {this.props.commentNum} comments</Text>
                         </TouchableOpacity>
                         <View style={styles.buttonContainer}>
                             {heartBtn}
-                            <Text adjustsFontSizeToFit style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
+                            <Text  style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
                             {/* <Icon name={'md-share-alt'} size={30} /> */}
                         </View>
                     </View>

@@ -66,7 +66,7 @@ exports.onReport = functions.firestore
 exports.onUpdateUser = functions.firestore
     .document('Users/{userId}')
     .onUpdate((snap, context) => {
-
+        
         const new_follower_list = snap.after.data().follower_list
         const old_follower_list = snap.before.data().follower_list
         const new_follower_num = snap.after.data().followerNum
@@ -306,7 +306,7 @@ exports.onEventCreated = functions.firestore
             }
             mapEventCreated = db.collection('mapEvents').doc(snap.id).set(mapEventData).catch((error) => {console.log(error.message)})
         }
-
+        
         return mapEventCreated
     })
 

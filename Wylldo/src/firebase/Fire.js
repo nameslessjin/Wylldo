@@ -17,7 +17,7 @@ class Fire {
         if (start){
             startPosition = start
         }
-
+        
         while (eventData.length != size && startPosition < eventIdList.length){
             let docRef = this.eventsCollection.doc(eventIdList[startPosition][1])
             const querySnapshot = await docRef.get()
