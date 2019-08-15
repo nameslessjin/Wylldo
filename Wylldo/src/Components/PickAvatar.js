@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Image, TouchableOpacity, StyleSheet, Text} from "react-native"
+import {Image, TouchableOpacity, StyleSheet} from "react-native"
 import ImagePicker from "react-native-image-picker";
 
 

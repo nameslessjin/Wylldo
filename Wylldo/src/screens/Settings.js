@@ -39,7 +39,7 @@ class Settings extends React.Component{
     logOutBtn = () => {
         return(
             <TouchableOpacity style={[styles.optionBtn]} onPress={this.onLogOutPressed} >
-                <Text style={styles.logOutText}>Log Out</Text>
+                <Text adjustsFontSizeToFit style={styles.logOutText}>Log Out</Text>
             </TouchableOpacity>
         )
     }
@@ -47,7 +47,7 @@ class Settings extends React.Component{
     editProfileBtn = () => {
         return(
             <TouchableOpacity style={[styles.optionBtn, {marginTop: 10}]} onPress={this.onEditProfilePressed}>
-                <Text style={styles.optionText}>Edit Profile</Text>
+                <Text adjustsFontSizeToFit style={styles.optionText}>Edit Profile</Text>
             </TouchableOpacity>
         )
     }

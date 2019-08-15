@@ -138,19 +138,22 @@ export default class SignIn extends React.Component{
 
         const termNPolicy = (
             <View style={{marginTop: 15}}>
-                <Text style={styles.hyperLinkText}>By signing up, you agree to our </Text>
+                <Text adjustsFontSizeToFit style={styles.hyperLinkText}>By signing up, you agree to our </Text>
                 <View style={{flexDirection:'row'}}>
                     <Text 
+                        adjustsFontSizeToFit
                         style={[styles.hyperLinkText, {fontWeight: 'bold'}]}
                         onPress={() => this.onLinkPress('terms')}
                     >Terms</Text>
-                    <Text style={styles.hyperLinkText}>, </Text>
+                    <Text adjustsFontSizeToFit style={styles.hyperLinkText}>, </Text>
                     <Text 
+                        adjustsFontSizeToFit
                         style={[styles.hyperLinkText, {fontWeight: 'bold'}]}
                         onPress={() => this.onLinkPress('policy')}
                     >Privacy Policy</Text>
-                    <Text style={styles.hyperLinkText}> and </Text>
+                    <Text adjustsFontSizeToFit style={styles.hyperLinkText}> and </Text>
                     <Text
+                        adjustsFontSizeToFit
                         style={[styles.hyperLinkText, {fontWeight: 'bold'}]}
                         onPress={() => this.onLinkPress('EULA')} 
                     >EULA</Text>
@@ -162,7 +165,7 @@ export default class SignIn extends React.Component{
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <View style={[styles.inputContainer, (Focus) ? {bottom: inputHeight} : null]}>
-                        <Text style={styles.wylldoTextStyle}>Wylldo</Text>
+                        <Text adjustsFontSizeToFit style={styles.wylldoTextStyle}>Wylldo</Text>
                         {errorMessageDisplay}
                         <TextInput 
                             style={styles.inputStyle} 
@@ -206,7 +209,7 @@ export default class SignIn extends React.Component{
                             >
                         </TextInput>
                         <TouchableOpacity style={styles.buttonStyle} onPress={this.onSignUpPressed}>
-                            <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
+                            <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
                         </TouchableOpacity>
                         {termNPolicy}
                     </View>

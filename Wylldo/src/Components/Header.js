@@ -142,7 +142,7 @@ export default class Header extends React.Component{
                             style={styles.userProfilePic}
                             source={this.props.hostAvatar}
                         />
-                        <Text style={styles.usernameStyle}>{this.props.hostUsername}</Text>
+                        <Text adjustsFontSizeToFit style={styles.usernameStyle}>{this.props.hostUsername}</Text>
                         <View style={styles.icon}>
                             <Icon 
                                 name={this.props.tag} 
@@ -151,14 +151,14 @@ export default class Header extends React.Component{
                                     this.iconColor()
                                 ]}
                             />
-                            <Text style={[styles.iconText, this.iconColor()]}>
+                            <Text adjustsFontSizeToFit style={[styles.iconText, this.iconColor()]}>
                                 {this.iconText()}
                             </Text>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
                 <View style={styles.row}>
-                    <Text style={styles.dateText}>{createdTime}</Text>
+                    <Text adjustsFontSizeToFit style={styles.dateText}>{createdTime}</Text>
                     {optionButton}
                     <EventOption
                     isOptionVisible={this.state.isOptionVisible}

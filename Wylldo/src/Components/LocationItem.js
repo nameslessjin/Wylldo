@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import {Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 export default class LocationItem extends PureComponent {
     
@@ -12,7 +12,7 @@ export default class LocationItem extends PureComponent {
     render () {
         return (
             <TouchableOpacity style={styles.root} onPress={this._locationPress}>
-                <Text>{this.props.description}</Text>
+                <Text adjustsFontSizeToFit >{this.props.description}</Text>
             </TouchableOpacity>
         )
     }

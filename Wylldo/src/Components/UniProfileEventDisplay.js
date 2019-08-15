@@ -125,13 +125,13 @@ export default class ProfileEventDisplay extends React.Component{
                 <View style={{flex: 1}}>
                     <View style={styles.header}>
                         <View style={{flexDirection:'row'}}>
-                            <Text style={[styles.row, styles.nameText]}>{this.props.hostUsername}</Text>
+                            <Text adjustsFontSizeToFit style={[styles.row, styles.nameText]}>{this.props.hostUsername}</Text>
                             <Icon style={styles.row} name={this.props.tag} size= {13} />
                         </View>
-                        <Text style={styles.dateText}>{displayTime}</Text>
+                        <Text adjustsFontSizeToFit style={styles.dateText}>{displayTime}</Text>
                     </View>
                     <View style={styles.descriptionContainer}>
-                        <Text ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
+                        <Text adjustsFontSizeToFit ellipsizeMode={"tail"} numberOfLines={2}>{this.props.description}</Text>
                     </View>
                 </View>
             </TouchableOpacity>

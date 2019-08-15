@@ -61,12 +61,12 @@ export default class SignIn extends React.Component{
         errorMessageDisplay = null
         requestEmailVerificationBtn = null
         if (errorMessage){
-            errorMessageDisplay = <Text style={{color:'red'}}>{errorMessage}</Text>
+            errorMessageDisplay = <Text adjustsFontSizeToFit style={{color:'red'}}>{errorMessage}</Text>
         }
         if (requestEmailVerification){
             requestEmailVerificationBtn = (
                 <TouchableOpacity onPress={this.onVerifyEmailPress}>
-                    <Text style={styles.verifyEmailText}>
+                    <Text adjustsFontSizeToFit style={styles.verifyEmailText}>
                         {!(verifyBtnPress) ?
                         'Verify email' : 'resend email'}
                     </Text>
@@ -78,7 +78,7 @@ export default class SignIn extends React.Component{
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container} onPress={Keyboard.dismiss}>
                     <View style={styles.inputContainer}>
-                        <Text style={styles.wylldoTextStyle}>Wylldo</Text>
+                        <Text adjustsFontSizeToFit style={styles.wylldoTextStyle}>Wylldo</Text>
                         {errorMessageDisplay}
                         {requestEmailVerificationBtn}
                         <TextInput 
@@ -97,7 +97,7 @@ export default class SignIn extends React.Component{
                             maxLength={30}
                             onChangeText={password => this.setState({password})}></TextInput>
                         <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onLogInPressed()}>
-                            <Text style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
+                            <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

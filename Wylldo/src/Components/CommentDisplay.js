@@ -120,11 +120,11 @@ export default class CommentDisplay extends React.Component{
                     </TouchableWithoutFeedback>
                     <View style={ styles.textContainer}>
                         <View style={styles.row}>
-                            <Text style={styles.usernameStyle}>{username}</Text>
-                            <Text style={styles.timeStyle}>{this.displayTime()}</Text>
+                            <Text adjustsFontSizeToFit style={styles.usernameStyle}>{username}</Text>
+                            <Text adjustsFontSizeToFit style={styles.timeStyle}>{this.displayTime()}</Text>
                         </View>
                         <View style={styles.commentContainer}>
-                            <Text numberOfLines={10} style={styles.commentStyle}>{comment}</Text>
+                            <Text adjustsFontSizeToFit numberOfLines={10} style={styles.commentStyle}>{comment}</Text>
                         </View>
                     </View>
                     {optionButton}

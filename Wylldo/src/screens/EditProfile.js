@@ -106,7 +106,7 @@ class EditProfile extends React.Component{
 
         const usernameDisplay = (
             <View style={styles.userInputContainer}>
-                <Text style={styles.userInputText}>Username</Text>
+                <Text adjustsFontSizeToFit style={styles.userInputText}>Username</Text>
                 <TextInput 
                     defaultValue={username}
                     style={[styles.userInputTextInput, {backgroundColor: '#bdc3c7'}]}
@@ -119,7 +119,7 @@ class EditProfile extends React.Component{
 
         const emailDisplay = (
             <View style={styles.userInputContainer}>
-                <Text style={styles.userInputText}>Email</Text>
+                <Text adjustsFontSizeToFit style={styles.userInputText}>Email</Text>
                 <TextInput
                     defaultValue={email}
                     style={[styles.userInputTextInput, {backgroundColor: '#bdc3c7'}]}
@@ -132,7 +132,7 @@ class EditProfile extends React.Component{
 
         const phoneDisplay = (
             <View style={styles.userInputContainer}>
-                <Text style={styles.userInputText}>Phone</Text>
+                <Text adjustsFontSizeToFit style={styles.userInputText}>Phone</Text>
                 <TextInput
                     defaultValue={phone_num}
                     style={styles.userInputTextInput}
@@ -147,7 +147,7 @@ class EditProfile extends React.Component{
 
         const resetPassword = (
             <TouchableOpacity onPress={this.onResetPasswordPressed} style={styles.resetPasswordContainer}>
-                <Text style={styles.resetPasswordText}>Reset Password</Text>
+                <Text adjustsFontSizeToFit style={styles.resetPasswordText}>Reset Password</Text>
             </TouchableOpacity>
         )
 

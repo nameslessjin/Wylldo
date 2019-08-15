@@ -1,18 +1,24 @@
 import React from 'react'
-import { Text, StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native'
+import { Text, StyleSheet, View, Dimensions } from 'react-native'
 
 const {height, width} = Dimensions.get('window')
 export default class LocationPicker extends React.Component{
 
     setLocation = () => {
-        const {pinLocation, searchLocation, chooseLocation} = this.props
-        let location = pinLocation.short_address
-        if (searchLocation){
-            if (pinLocation.coords.latitude == searchLocation.coords.latitude
-                && pinLocation.coords.longitude == searchLocation.coords.longitude){
-                location = searchLocation.short_address
+        const {pinLocation, searchLocation} = this.props
+        let location = null
+        if (pinLocation){
+            location = pinLocation.short_address
+            if (searchLocation){
+                if (pinLocation.coords.latitude == searchLocation.coords.latitude
+                    && pinLocation.coords.longitude == searchLocation.coords.longitude){
+                    location = searchLocation.short_address
+                }
             }
+        } else {
+            location = 'No location'
         }
+
         
         return location
     }

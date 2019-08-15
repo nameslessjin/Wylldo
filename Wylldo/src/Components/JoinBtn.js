@@ -109,16 +109,16 @@ class JoinBtn extends React.Component{
 
      render(){
         const viewBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
-                            <Text style={styles.joinTextStyle}>VIEW</Text>
+                            <Text adjustsFontSizeToFit style={styles.joinTextStyle}>VIEW</Text>
                         </TouchableOpacity>
         const expireBtn = <View style={styles.expireBtn}>
-                            <Text style={styles.expireTextStyle}>EXPIRED</Text>
+                            <Text adjustsFontSizeToFit style={styles.expireTextStyle}>EXPIRED</Text>
                         </View>
         const defaultJoinBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
-                                <Text style={styles.joinTextStyle}>JOIN</Text>
+                                <Text adjustsFontSizeToFit style={styles.joinTextStyle}>JOIN</Text>
                             </TouchableOpacity>
         const fullBtn = <View style={[styles.joinBtn, {backgroundColor: 'grey'}]}>
-                            <Text style={styles.joinTextStyle}>FULL</Text>
+                            <Text adjustsFontSizeToFit style={styles.joinTextStyle}>FULL</Text>
                         </View>
 
 
@@ -143,7 +143,7 @@ class JoinBtn extends React.Component{
         return(
             <View style={styles.container}>
                 {joinBtn}
-                <Text style={styles.countStyle}>{this.state.joinedNum}/{this.props.inviteCount}</Text>
+                <Text adjustsFontSizeToFit style={styles.countStyle}>{this.state.joinedNum}/{this.props.inviteCount}</Text>
             </View>
         )
      }

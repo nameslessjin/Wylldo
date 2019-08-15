@@ -69,11 +69,11 @@ class CommentInput extends React.Component{
         const {comment, inputHeight, Focus} = this.state
         let postButton = (comment.trim() == '') ? (
             <View style={styles.postButton}>
-                <Text style={[styles.postButtonText, {color: 'grey'}]}>Post</Text>
+                <Text adjustsFontSizeToFit style={[styles.postButtonText, {color: 'grey'}]}>Post</Text>
             </View>
         ) : (
             <TouchableOpacity style={styles.postButton} onPress={this.onPostPressed}>
-                <Text style={styles.postButtonText}>Post</Text>
+                <Text adjustsFontSizeToFit style={styles.postButtonText}>Post</Text>
             </TouchableOpacity>
         )
 
@@ -84,6 +84,7 @@ class CommentInput extends React.Component{
                                 [styles.textInputContainerOnFocus, {bottom: inputHeight}] 
                                 : null ]}>
                     <TextInput 
+
                         placeholder={"say something"}
                         multiline = {true}
                         style={styles.textInput}

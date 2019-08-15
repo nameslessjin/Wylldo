@@ -74,6 +74,7 @@ export default class Footer extends React.Component{
     }
 
     render(){
+        // console.log(height)
         // console.log('Footer: props', this.props)
         // console.log('Footer: state ', this.state)
         const heartBtn = <TouchableOpacity onPress={() => this.onHeartBtnPressed()}>
@@ -83,7 +84,7 @@ export default class Footer extends React.Component{
                                 color={(this.state.heartPressed) ? '#E91E63' : null}/>
                         </TouchableOpacity>
 
-        console.log(this.props)
+        // console.log(this.props)
         return(
             <View style={styles.container}>
 
@@ -92,7 +93,7 @@ export default class Footer extends React.Component{
                 <View style={styles.buttonsContainer}>
                     <View style={{flexDirection:'row', alignItems: 'center'}}>
                         {heartBtn}
-                        <Text style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
+                        <Text adjustsFontSizeToFit style={{fontSize:15, marginHorizontal:4, color: 'grey', marginBottom:1}}>{this.state.likes}</Text>
                         {/* <Icon name={'md-share-alt'} size={30} /> */}
                     </View>
                     <JoinBtn {...this.props} componentId = {this.props.componentId} />
@@ -102,10 +103,10 @@ export default class Footer extends React.Component{
 
 
                 <View style={styles.commentContainer}>
-                    <Text style={styles.name}>{this.props.hostUsername}</Text>
-                    <Text style={styles.comment} numberOfLines={5} >{this.props.description}</Text>
+                    <Text adjustsFontSizeToFit style={styles.name}>{this.props.hostUsername}</Text>
+                    <Text adjustsFontSizeToFit style={styles.comment} numberOfLines={5} >{this.props.description}</Text>
                     <TouchableOpacity onPress={this.onCommentPressed}>
-                    <Text style={{color: 'grey', fontSize: 12}} >See {this.props.commentNum} more comments</Text>
+                    <Text adjustsFontSizeToFit style={{color: 'grey', fontSize: 12}} >See {this.props.commentNum} more comments</Text>
                     </TouchableOpacity>
                 </View>
             </View>

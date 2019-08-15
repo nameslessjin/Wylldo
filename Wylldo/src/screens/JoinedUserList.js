@@ -162,12 +162,12 @@ class JoinedUserList extends React.Component{
                     />
                     :
                     <View style={styles.textContainer}>
-                        <Text style={styles.text}>No one has joined yet</Text>
+                        <Text adjustsFontSizeToFit style={styles.text}>No one has joined yet</Text>
                     </View>
 
         const showHost = (
                     <View>
-                        <Text style={styles.hostText}>Host</Text>
+                        <Text adjustsFontSizeToFit style={styles.hostText}>Host</Text>
                         <UserDisplay  
                             {...this.state.hostData} 
                             userId={hostUserId} 

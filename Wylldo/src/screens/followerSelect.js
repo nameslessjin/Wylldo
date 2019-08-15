@@ -22,7 +22,7 @@ export default class FollowerSelect extends React.Component{
 
         return(
             <View>
-                <Text>Select Followers</Text>
+                <Text adjustsFontSizeToFit >Select Followers</Text>
             </View>
         )
     }

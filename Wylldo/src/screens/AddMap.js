@@ -1,11 +1,8 @@
 import React from 'react'
-import {View, Text, StyleSheet,Platform,PermissionsAndroid} from 'react-native'
+import {View, StyleSheet, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import mapStyle from '../UI/MapStyle'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import {Navigation} from 'react-native-navigation'
-import {connect} from 'react-redux'
-import {addEvent} from '../store/actions/action.index'
-import Fire from '../firebase/Fire'
 import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
 
@@ -43,12 +40,8 @@ export default class AddMap extends React.Component{
             latitudeDelta: 0.0122,
             longitudeDelta: 0.0122,
         },
-        eventLocation:{
-            latitude: null,
-            longitude: null,
-            details: null
-        },
-        locationDetails:null,
+        eventLocation: null,
+        locationDetails: null,
     }
 
     constructor(props){
@@ -78,18 +71,22 @@ export default class AddMap extends React.Component{
     navigationButtonPressed({buttonId}){
         if(buttonId == "AddEvent"){
             const {eventLocation, locationDetails} = this.state
-            const addressNum = eventLocation.details.address_components[0].short_name
-            const addressSt = eventLocation.details.address_components[1].short_name
-            const addressCity = eventLocation.details.address_components[2].short_name
-            let pinAddress = `${addressNum} ${addressSt} ${addressCity}`
-            let pinLocation = {
-                short_address: pinAddress,
-                formatted_address: eventLocation.details.formatted_address,
-                coords: {
-                    latitude: eventLocation.latitude,
-                    longitude: eventLocation.longitude
-                },
-                place_id: eventLocation.details.place_id
+            let pinLocation = null
+            console.log(eventLocation)
+            if (eventLocation){
+                const addressNum = eventLocation.details.address_components[0].short_name
+                const addressSt = eventLocation.details.address_components[1].short_name
+                const addressCity = eventLocation.details.address_components[2].short_name
+                let pinAddress = `${addressNum} ${addressSt} ${addressCity}`
+                pinLocation = {
+                    short_address: pinAddress,
+                    formatted_address: eventLocation.details.formatted_address,
+                    coords: {
+                        latitude: eventLocation.latitude,
+                        longitude: eventLocation.longitude
+                    },
+                    place_id: eventLocation.details.place_id
+                }
             }
             let searchLocation = null
             if(locationDetails){
@@ -192,7 +189,7 @@ export default class AddMap extends React.Component{
     render(){
         const {eventLocation, locationDetails} = this.state
         let marker = null
-        if(eventLocation.latitude){
+        if(eventLocation){
             marker= <Marker pinColor="#e74c3c" coordinate={eventLocation} ></Marker>
         }
 
@@ -219,19 +216,21 @@ export default class AddMap extends React.Component{
 
         return(
             <View style={styles.container}>
-                <MapView
-                    showsUserLocation={true}
-                    showsMyLocationButton={true}
-                    initialRegion={this.state.userLocation}
-                    provider={PROVIDER_GOOGLE}
-                    customMapStyle={mapStyle}
-                    style={styles.Map}
-                    onPress={this.mapViewPressedHandler}
-                    ref={ref => this.map = ref}
-                    >
-                    {searchLocationMarker}
-                    {marker}
-                </MapView>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <MapView
+                        showsUserLocation={true}
+                        showsMyLocationButton={true}
+                        initialRegion={this.state.userLocation}
+                        provider={PROVIDER_GOOGLE}
+                        customMapStyle={mapStyle}
+                        style={styles.Map}
+                        onPress={this.mapViewPressedHandler}
+                        ref={ref => this.map = ref}
+                        >
+                        {searchLocationMarker}
+                        {marker}
+                    </MapView>
+                </TouchableWithoutFeedback>
                 <GooglePlaceAutoComplete
                     returnDetails={locationDetails => this.setState({locationDetails: locationDetails})}
                 />

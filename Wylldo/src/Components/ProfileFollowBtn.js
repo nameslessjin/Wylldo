@@ -87,7 +87,7 @@ class FollowButton extends React.Component{
     render(){
         followBtn = (this.state.self) ? (
                         <View style={[styles.btnStyle, styles.selfBtnStyle]}>
-                            <Text style={[styles.textStyle, styles.selfText]}>Me</Text>
+                            <Text adjustsFontSizeToFit style={[styles.textStyle, styles.selfText]}>Me</Text>
                         </View>
         )
                     : (
@@ -96,6 +96,7 @@ class FollowButton extends React.Component{
                             (this.state.followButton == 'Follow') ? styles.followBtnStyle : styles.followedBtnStyle]} 
                         onPress={this.onFollowBtnPressed}>
                             <Text 
+                            adjustsFontSizeToFit
                             style={[styles.textStyle, 
                                 (this.state.followButton == 'Follow') ? styles.followText : styles.followedText]} 
                             >{this.state.followButton}</Text>

@@ -79,8 +79,8 @@ export default class GuestSeeting extends React.Component{
         return(
             <View style={styles.container}>
                 <TouchableOpacity style={styles.subContainer} onPress={this.onInvitePressed}>
-                    <Text style={styles.text}>Participant</Text>
-                    <Text>{this.state.inviteCount}</Text>
+                    <Text adjustsFontSizeToFit style={styles.text}>Participant</Text>
+                    <Text adjustsFontSizeToFit>{this.state.inviteCount}</Text>
                 </TouchableOpacity>
                 <Modal 
                     isVisible={this.state.isInviteVisible}
@@ -94,8 +94,8 @@ export default class GuestSeeting extends React.Component{
                         </TouchableWithoutFeedback>
                         <View style={ (Platform.OS === 'android') ? styles.pickerStyleAndroid : styles.pickerStyleIOS}>
                             <View style={styles.titleContainer}>
-                                <Text style={styles.titleText}>The number of people you want to invite</Text>
-                                <Text style={styles.titleText}>(Self-include)</Text>
+                                <Text adjustsFontSizeToFit style={styles.titleText}>The number of people you want to invite</Text>
+                                <Text adjustsFontSizeToFit style={styles.titleText}>(Self-include)</Text>
                             </View>
                             {inviteOptions}
                         </View>
@@ -106,13 +106,13 @@ export default class GuestSeeting extends React.Component{
                         underlayColor={"#ebebeb"}
                         onPress={this.onInviteConfirmPressed}
                     >
-                        <Text style={styles.confirmTextStyle}>Confirm</Text>
+                        <Text adjustsFontSizeToFit style={styles.confirmTextStyle}>Confirm</Text>
                     </TouchableOpacity>
                 </Modal>
 
                 <TouchableOpacity style={styles.subContainer} onPress={this.onViewPressed}> 
-                    <Text style={styles.text}>Access</Text>
-                    <Text>{this.state.viewType}</Text>
+                    <Text adjustsFontSizeToFit style={styles.text}>Access</Text>
+                    <Text adjustsFontSizeToFit>{this.state.viewType}</Text>
                 </TouchableOpacity>
 
                 <Modal 
@@ -128,7 +128,7 @@ export default class GuestSeeting extends React.Component{
                         </TouchableWithoutFeedback>
                         <View style={ (Platform.OS === 'android') ? styles.pickerStyleAndroid : styles.pickerStyleIOS}>
                             <View style={styles.titleContainer}>
-                                <Text style={styles.titleText}>Pick people to see your wylldo</Text>
+                                <Text adjustsFontSizeToFit style={styles.titleText}>Pick people to see your wylldo</Text>
                             </View>
                             {viewOptions}
                         </View>
@@ -139,7 +139,7 @@ export default class GuestSeeting extends React.Component{
                         underlayColor={"#ebebeb"}
                         onPress={this.onViewConfirmPressed}
                     >
-                        <Text style={styles.confirmTextStyle}>Confirm</Text>
+                        <Text adjustsFontSizeToFit style={styles.confirmTextStyle}>Confirm</Text>
                     </TouchableOpacity>
                 </Modal>
             </View>

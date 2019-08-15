@@ -105,19 +105,19 @@ export default class UniProfileHistory extends React.Component{
                             style={ (this.state.selectedOption == 'Liked') ? styles.selectedoptionBtn : styles.optionBtn}
                             onPress={this.onLikedPressed}    
                         >
-                            <Text style={(this.state.selectedOption == 'Liked') ? styles.selectedOptionsText : styles.optionsText}>Liked</Text>
+                            <Text adjustsFontSizeToFit style={(this.state.selectedOption == 'Liked') ? styles.selectedOptionsText : styles.optionsText}>Liked</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={(this.state.selectedOption == 'Joined') ? styles.selectedoptionBtn : styles.optionBtn}
                             onPress={this.onJoinedPressed}      
                         >
-                            <Text style={(this.state.selectedOption == 'Joined') ? styles.selectedOptionsText : styles.optionsText}>Joined</Text>
+                            <Text adjustsFontSizeToFit style={(this.state.selectedOption == 'Joined') ? styles.selectedOptionsText : styles.optionsText}>Joined</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={(this.state.selectedOption == 'Created') ? styles.selectedoptionBtn : styles.optionBtn}
                             onPress={this.onCreatedPressed}  
                         >
-                            <Text style={(this.state.selectedOption == 'Created') ? styles.selectedOptionsText : styles.optionsText}>Created</Text>
+                            <Text adjustsFontSizeToFit style={(this.state.selectedOption == 'Created') ? styles.selectedOptionsText : styles.optionsText}>Created</Text>
                     </TouchableOpacity>
                 </View>
 

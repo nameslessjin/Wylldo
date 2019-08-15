@@ -48,14 +48,14 @@ class UserDisplay extends React.Component{
         (
             <View style={styles.row} onPress={this.onUserPress}>
                 <Image source={this.props.avatarUri} style={styles.imageStyle}/>
-                <Text style={styles.usernameStyle}>{this.props.username}</Text>
+                <Text adjustsFontSizeToFit style={styles.usernameStyle}>{this.props.username}</Text>
             </View>
         )
         :
         (
             <TouchableOpacity style={styles.row} onPress={this.onUserPress}>
                 <Image source={this.props.avatarUri} style={styles.imageStyle}/>
-                <Text style={styles.usernameStyle}>{this.props.username}</Text>
+                <Text adjustsFontSizeToFit style={styles.usernameStyle}>{this.props.username}</Text>
             </TouchableOpacity>
         )
 
@@ -72,7 +72,7 @@ class UserDisplay extends React.Component{
         const RemovableUserDisplay = (
             <SwipeRow disableLeftSwipe={true} leftOpenValue={75}>
                 <TouchableOpacity style={styles.rowBackOptions} onPress={this.onRemoveJoinedUser}>
-                        <Text style={styles.optionTextStyle}>REMOVE</Text>
+                        <Text adjustsFontSizeToFit style={styles.optionTextStyle}>REMOVE</Text>
                 </TouchableOpacity>
                 <View style={styles.detailContainer}>
                     {userProfilePic}

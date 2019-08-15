@@ -69,21 +69,33 @@ export default class TimeNLocation extends React.Component {
         let locationBtn = null
         if (this.props.coords.latitude){
             locationBtn = (<TouchableOpacity onPress={() => this.onLocationBtnPressed()}>
-                            <Text style={{fontSize: 15, fontWeight: 'bold', color: '#FE4C4C'}}>{locationIcon}</Text> 
+                            <Text  style={{fontSize: 15, fontWeight: 'bold', color: '#FE4C4C'}}>{locationIcon}</Text> 
                           </TouchableOpacity>)
                            
         } else{
             locationBtn = (<Text style={{fontSize: 15, fontWeight: 'bold', color: '#7f8c8d'}}>{locationIcon}</Text>)
         }
 
-
-        return(
+        const timeLocationFormat = (
             <View style={styles.container}>
                 <View style={styles.locationContainer}>
                     <Text adjustsFontSizeToFit style={styles.timeText}>{location.short_address}</Text>
                     {locationBtn}
                 </View>
                 <Text adjustsFontSizeToFit style={styles.timeText}>{this.timeFormat()}</Text>
+            </View>
+        )
+
+        const timeFormat = (
+            <View style={styles.timeFormatContainer}>
+                <Text style={styles.timeText}>{this.timeFormat()}</Text>
+                {locationBtn}
+            </View>
+        )
+
+        return(
+            <View>
+                {(location) ? timeLocationFormat : timeFormat}
             </View>
         )
     }
@@ -95,6 +107,7 @@ const styles = StyleSheet.create({
         height: height * 0.07,
         width: '100%',
         flex: 1,  
+        marginBottom: 5
     },
     timeText:{
         fontWeight: 'bold', 
@@ -103,6 +116,14 @@ const styles = StyleSheet.create({
     locationContainer:{
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    timeFormatContainer:{
+        height: height * 0.05,
+        width: '100%',
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: -13
     }
 
 })

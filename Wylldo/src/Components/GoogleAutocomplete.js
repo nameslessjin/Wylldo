@@ -1,6 +1,6 @@
 import {GoogleAutoComplete} from 'react-native-google-autocomplete'
 import React from 'react'
-import {StyleSheet, Text, View, Platform, TextInput, ScrollView, Image, ActivityIndicator} from 'react-native'
+import {StyleSheet, View, Platform, TextInput, ScrollView, ActivityIndicator} from 'react-native'
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
 import LocationItem from './LocationItem'
 

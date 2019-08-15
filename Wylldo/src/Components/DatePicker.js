@@ -193,14 +193,14 @@ export default class DatePicker extends React.Component{
         return(
             <View style={styles.container}>
                 <TouchableOpacity style={styles.timeContainer} onPress = {this.showDateTimePicker}>
-                    <Text style={styles.timeText}>{this.state.monthDate}</Text>
-                    <Text style={styles.timeText}>From</Text>
-                    <Text>{this.state.startTimeString}</Text>
+                    <Text adjustsFontSizeToFit style={styles.timeText}>{this.state.monthDate}</Text>
+                    <Text adjustsFontSizeToFit style={styles.timeText}>From</Text>
+                    <Text adjustsFontSizeToFit >{this.state.startTimeString}</Text>
                 </TouchableOpacity>
                 {startTimePicker}
-                <Text style={styles.timeText}>To</Text>
+                <Text adjustsFontSizeToFit style={styles.timeText}>To</Text>
                 <TouchableOpacity style={styles.timeContainer} onPress ={this.showTimePicker}>
-                <Text>{this.state.endTimeString}</Text>
+                <Text adjustsFontSizeToFit>{this.state.endTimeString}</Text>
                 </TouchableOpacity>
                 {endTimePicker}
             </View>

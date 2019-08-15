@@ -35,6 +35,7 @@ export default class PickTag extends React.Component{
                     <View style={styles.iconContainer}>
                         <Icon name={icon.name} size={0.04 * height} style={icon.tagged ? styles.taggedIcon : null} />
                         <Text 
+                            adjustsFontSizeToFit
                             style={[styles.textStyle,icon.tagged ? styles.taggedText : null]}>
                             {icon.description}
                         </Text>

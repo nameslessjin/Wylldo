@@ -81,7 +81,7 @@ class Follower extends React.Component{
         } else{
             return (
                 <View style={styles.textContainer}>
-                    <Text style={styles.text}>Check what people will do and follow people you like!</Text>
+                    <Text adjustsFontSizeToFit style={styles.text}>Check what people will do and follow people you like!</Text>
                 </View>
             )
         }
@@ -90,7 +90,7 @@ class Follower extends React.Component{
     onLoadFollowerUsers = () => {
         if (this.state.loading && this.state.userList.length == 0){
             <View style={styles.textContainer}>
-                <Text style={styles.text}>Loading...</Text>
+                <Text adjustsFontSizeToFit style={styles.text}>Loading...</Text>
             </View>
         } else {
             this.onShowFollowerUsers()

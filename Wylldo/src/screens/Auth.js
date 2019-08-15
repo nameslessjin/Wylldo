@@ -40,13 +40,13 @@ export default class Auth extends React.Component{
         return(
             <View style={styles.container}>
                 <View style={styles.displayLabelContainer}>
-                    <Text style={[styles.labelStyle, {fontSize: 70, color: 'white'}]}>Wylldo</Text>
+                    <Text adjustsFontSizeToFit style={[styles.labelStyle, {fontSize: 70, color: 'white'}]}>Wylldo</Text>
                 </View>
                 <TouchableOpacity style={styles.signUpdisplay} onPress={() => this.onSignUpPressed()}>
-                    <Text style={styles.displayText}>SIGN UP</Text>
+                    <Text adjustsFontSizeToFit style={styles.displayText}>SIGN UP</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.logIndisplay} onPress={() => this.onLoginPressed()}>
-                    <Text style={styles.displayText}>LOG IN</Text>
+                    <Text adjustsFontSizeToFit style={styles.displayText}>LOG IN</Text>
                 </TouchableOpacity>
             </View>
         )

@@ -1,6 +1,6 @@
 // custom marker component
 import React from 'react'
-import {View, StyleSheet,Text, TouchableOpacity, ImageBackground} from "react-native"
+import {View, StyleSheet, Text, ImageBackground} from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 
 export default class CustomMarker extends React.Component{
@@ -14,7 +14,7 @@ export default class CustomMarker extends React.Component{
                             source={this.props.hostAvatar} 
                             style={styles.imgStyle} imageStyle={{borderRadius: 15, resizeMode: 'cover'}} 
                             onLoad={() => this.forceUpdate()}>
-                            <Text style={{width: 0, height: 0}}>{Math.random()}</Text> 
+                            <Text adjustsFontSizeToFit style={{width: 0, height: 0}}>{Math.random()}</Text> 
                         </ImageBackground>
                     </View>
                     <Icon name={this.props.icon} size={15} />

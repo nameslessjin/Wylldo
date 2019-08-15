@@ -44,18 +44,18 @@ export default class UniProfile extends React.Component {
             <Image source={avatarUri}  style={styles.avatar} />
         )
         const displayName = (
-            <Text style={styles.usernameText}>{username}</Text>
+            <Text adjustsFontSizeToFit style={styles.usernameText}>{username}</Text>
         )
         const followerDisplay = (
             <TouchableOpacity style={styles.followTouchBtn} onPress={this.onFollowerPressed}>
-                <Text style={styles.followNum}>{followerNum}</Text>
-                <Text style={styles.followText}>followers</Text>
+                <Text adjustsFontSizeToFit style={styles.followNum}>{followerNum}</Text>
+                <Text adjustsFontSizeToFit style={styles.followText}>followers</Text>
             </TouchableOpacity>
         )
         const followingDisplay = (
             <TouchableOpacity style={styles.followTouchBtn} onPress={this.onFollowingPressed}>
-                <Text style={styles.followNum}>{followingNum}</Text>
-                <Text style={styles.followText}>following</Text>
+                <Text adjustsFontSizeToFit style={styles.followNum}>{followingNum}</Text>
+                <Text adjustsFontSizeToFit style={styles.followText}>following</Text>
             </TouchableOpacity>
         )
         return(

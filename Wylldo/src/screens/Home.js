@@ -11,8 +11,6 @@ import {getCurrentUser, getMapEvents} from '../store/actions/action.index'
 import {goToAuth} from '../navigation'
 import {Navigation} from 'react-native-navigation'
 import firebase from 'react-native-firebase'
-import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
-// import GooglePlacesInput from '../Components/GooglePlacesInput'
 
 
 class Home extends React.Component{
