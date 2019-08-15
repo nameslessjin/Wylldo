@@ -64,7 +64,7 @@ export default class TimeNLocation extends React.Component {
     }
 
     render(){
-
+        const {location} = this.props
         const locationIcon = <Icon name='md-pin' size={0.031 * height} />
         let locationBtn = null
         if (this.props.coords.latitude){
@@ -79,8 +79,11 @@ export default class TimeNLocation extends React.Component {
 
         return(
             <View style={styles.container}>
-                <Text style={styles.timeText}>{this.timeFormat()}</Text>
-                {locationBtn}
+                <View style={styles.locationContainer}>
+                    <Text adjustsFontSizeToFit style={styles.timeText}>{location.short_address}</Text>
+                    {locationBtn}
+                </View>
+                <Text adjustsFontSizeToFit style={styles.timeText}>{this.timeFormat()}</Text>
             </View>
         )
     }
@@ -89,17 +92,17 @@ export default class TimeNLocation extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 40,
+        height: height * 0.07,
         width: '100%',
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: -13
+        flex: 1,  
     },
     timeText:{
-        fontSize: 0.02 * height, 
         fontWeight: 'bold', 
         marginEnd: 5
     },
+    locationContainer:{
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
 
 })

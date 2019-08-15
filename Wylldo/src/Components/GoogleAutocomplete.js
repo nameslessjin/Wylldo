@@ -18,7 +18,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                     apiKey = {API_KEY}
                     debounce = {500}
                     minLength = {3}
-                    queryTypes='establishment'
+                    queryTypes={'establishment'}
                 >
                     
                     {({handleTextChange, locationResults, fetchDetails, isSearching, inputValue, clearSearchs}) => (
@@ -27,7 +27,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                             <View>
                                 <TextInput 
                                     style={styles.textInput}
-                                    placeholder="Search a place"
+                                    placeholder="Search a place or press the map"
                                     onChangeText={handleTextChange}
                                     value={inputValue}
                                 />

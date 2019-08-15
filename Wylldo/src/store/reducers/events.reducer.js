@@ -1,4 +1,4 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, 
+import {POST_EVENT, GET_EVENTS, GET_CURRENTUSER, 
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
         LOAD_MORE_EVENTS, DELETE_EVENT, ON_FOLLOW,
         GET_COMMENT, POST_COMMENT, DELETE_COMMENT,
@@ -22,7 +22,7 @@ export default reducer = (state = initialState, action) => {
     switch (action.type){
 
         //add newly added event on the top of retrieved events to avoid refresh (maybe should be replaced with listener)
-        case ADD_EVENT:
+        case POST_EVENT:
             const mapEventData = [{
                 tag: action.EventInfo[0].tag,
                 hostAvatar: action.EventInfo[0].hostAvatar,

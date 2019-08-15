@@ -263,6 +263,9 @@ class Fire {
             joinedNum: 1,
             join_userIDs: [],
             sample_comment: [],
+            likes: 0,
+            commentNum: 0,
+            timestamp: Date.now(),
             geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
             geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
         }

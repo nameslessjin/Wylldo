@@ -8,7 +8,7 @@ import {store} from './store/configureStore'
 export function registerScreens(){
     Navigation.registerComponentWithRedux('Home', () => require('./screens/Home').default, Provider, store)
     Navigation.registerComponentWithRedux('WylldoList', () => require('./screens/WylldoList').default, Provider, store)
-    Navigation.registerComponentWithRedux('AddMap', () => require('./screens/AddMap').default, Provider, store)
+    Navigation.registerComponentWithRedux('AddEvent', () => require('./screens/AddEvent').default, Provider, store)
     Navigation.registerComponentWithRedux('Settings', () => require('./screens/Settings').default, Provider, store)
     Navigation.registerComponentWithRedux('FollowerSelect', () => require('./screens/FollowerSelect').default, Provider, store)
     Navigation.registerComponentWithRedux('SingleEvent', () => require('./screens/SingleEvent').default, Provider, store)
@@ -22,7 +22,7 @@ export function registerScreens(){
     Navigation.registerComponent('Initializing', () => require('./screens/Initializing').default)
     Navigation.registerComponent('LogIn', () => require('./screens/LogIn').default)
     Navigation.registerComponent('SignUp', () => require('./screens/SignUp').default)
-    Navigation.registerComponent('AddEvent', () => require('./screens/AddEvent').default)
+    Navigation.registerComponent('AddMap', () => require('./screens/AddMap').default)
     Navigation.registerComponent('ShowMap', () => require('./screens/ShowMap').default)
     Navigation.registerComponent('Auth', () => require('./screens/Auth').default)
 

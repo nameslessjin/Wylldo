@@ -1,4 +1,4 @@
-import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER, 
+import {POST_EVENT, GET_EVENTS, GET_CURRENTUSER, 
         SIGN_OUT, UPDATE_USER, GET_MAPEVENTS, 
         LOAD_MORE_EVENTS, DELETE_EVENT, ON_FOLLOW, 
         POST_COMMENT, DELETE_COMMENT, GET_COMMENT, 
@@ -8,9 +8,9 @@ import {ADD_EVENT, GET_EVENTS, GET_CURRENTUSER,
 //I want to put connect with firebase here.  However without a state, promise having format trouble to store information
 
 //get already upload event data and add to the top of current loaded event data instead of freshing.  Maybe should be replaced with listener
-export const addEvent = (eventInfo) => {
+export const postEvent = (eventInfo) => {
     return{
-        type: ADD_EVENT,
+        type: POST_EVENT,
         EventInfo: eventInfo
     }
 }

@@ -7,8 +7,10 @@ import {connect} from 'react-redux'
 import {addEvent} from '../store/actions/action.index'
 import Fire from '../firebase/Fire'
 import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
+import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
 
-class AddMap extends React.Component{
+const GOOGLE_API='https://maps.googleapis.com/maps/api/geocode/json'
+export default class AddMap extends React.Component{
 
     static options(){
         return{
@@ -20,10 +22,13 @@ class AddMap extends React.Component{
                     text: 'Add Your Location',
                     alignment: 'center'
                 },
+                backButton:{
+                    showTitle: false
+                },
                 rightButtons:[
                     {
-                        id: 'Post',
-                        text: 'Post',
+                        id: 'AddEvent',
+                        text: 'Next',
                         color: '#0481fe'
                     }
                 ]
@@ -37,12 +42,13 @@ class AddMap extends React.Component{
             longitude: -77.859954,
             latitudeDelta: 0.0122,
             longitudeDelta: 0.0122,
-            locationDetails: null
         },
         eventLocation:{
             latitude: null,
-            longitude: null
-        }
+            longitude: null,
+            details: null
+        },
+        locationDetails:null,
     }
 
     constructor(props){
@@ -51,10 +57,11 @@ class AddMap extends React.Component{
     }
 
     componentDidUpdate(prevPros, prevState){
-        if (this.state.locationDetails){
+        const {locationDetails} = this.state
+        if (locationDetails){
             const locationCoordinate= {
-                latitude: this.state.locationDetails.geometry.location.lat,
-                longitude: this.state.locationDetails.geometry.location.lng,
+                latitude: locationDetails.geometry.location.lat,
+                longitude: locationDetails.geometry.location.lng,
                 latitudeDelta: 0.0122,
                 longitudeDelta: 0.0122
             }
@@ -69,64 +76,120 @@ class AddMap extends React.Component{
     }
 
     navigationButtonPressed({buttonId}){
-        if(buttonId == "Post"){
-            const {eventLocation} = this.state
-            const {description, tag, startTime,
-                    endTime, inviteCount, viewType, invite_userId
-            } = this.props
-            const {username, display_name, avatarUri, follower_list} = this.props.currentUserData
-
-            const eventData={
-                description : description,
-                tag : tag,
-                coords : eventLocation,
-                likes: 0,
-                commentNum: 0,
-                timestamp: Date.now(),
-                hostUserId: Fire.uid,
-                hostUsername: username,
-                host_display_name: display_name,
-                hostAvatar: avatarUri.storageLocation,
-                startTime: startTime,
-                endTime: endTime,
-                inviteCount: inviteCount,
-                viewType: viewType,
-                invite_userId: invite_userId,
-                host_follower_list: follower_list
+        if(buttonId == "AddEvent"){
+            const {eventLocation, locationDetails} = this.state
+            const addressNum = eventLocation.details.address_components[0].short_name
+            const addressSt = eventLocation.details.address_components[1].short_name
+            const addressCity = eventLocation.details.address_components[2].short_name
+            let pinAddress = `${addressNum} ${addressSt} ${addressCity}`
+            let pinLocation = {
+                short_address: pinAddress,
+                formatted_address: eventLocation.details.formatted_address,
+                coords: {
+                    latitude: eventLocation.latitude,
+                    longitude: eventLocation.longitude
+                },
+                place_id: eventLocation.details.place_id
             }
-            const image = this.props.image
-            const resizedImage = this.props.resizedImage
-            this.createEvent(eventData, image, resizedImage).then(newEvent => {
-                this.props.onAddEvent(newEvent)
-            })
-            .catch((error) => (console.log(error.message)))
+            let searchLocation = null
+            if(locationDetails){
+                const locationCoordinate= {
+                    latitude: locationDetails.geometry.location.lat,
+                    longitude: locationDetails.geometry.location.lng,
+                }
+                const searchAddressNum = locationDetails.address_components[0].short_name
+                const searchAdressSt = locationDetails.address_components[1].short_name
+                const searchAddressCity = locationDetails.address_components[2].short_name
+                const searchAddress = `${searchAddressNum} ${searchAdressSt} ${searchAddressCity}`
+                const searchAddressName = locationDetails.name
+                searchLocation = {
+                    name: searchAddressName,
+                    short_address: searchAddress,
+                    formatted_address: locationDetails.formatted_address,
+                    coords: locationCoordinate,
+                    place_id: locationDetails.place_id
+                }
+            }
 
-            Navigation.popToRoot(this.props.componentId)
+            Navigation.push(this.props.componentId, {
+                component:{
+                    name: 'AddEvent',
+                    passProps:{
+                        searchLocation: searchLocation,
+                        pinLocation: pinLocation
+                    }
+                }
+            })
+            // const {eventLocation} = this.state
+            // const {description, tag, startTime,
+            //         endTime, inviteCount, viewType, invite_userId
+            // } = this.props
+            // const {username, display_name, avatarUri, follower_list} = this.props.currentUserData
+
+            // const eventData={
+            //.     description : description,
+            //.     tag : tag,
+            //.     coords : eventLocation,
+            //.     likes: 0,
+            //.     commentNum: 0,
+            //.     timestamp: Date.now(),
+            //.     hostUserId: Fire.uid,
+            //.     hostUsername: username,
+            //.     host_display_name: display_name,
+            //.     hostAvatar: avatarUri.storageLocation,
+            //.     startTime: startTime,
+            //.     endTime: endTime,
+            //.     inviteCount: inviteCount,
+            //.     viewType: viewType,
+            //.     invite_userId: invite_userId,
+            //.     host_follower_list: follower_list
+            // }
+            // const image = this.props.image
+            // const resizedImage = this.props.resizedImage
+            // this.createEvent(eventData, image, resizedImage).then(newEvent => {
+            //     this.props.onAddEvent(newEvent)
+            // })
+            // .catch((error) => (console.log(error.message)))
+
+            // Navigation.popToRoot(this.props.componentId)
         }
     }
 
-    createEvent = async (eventInfo, image, resizedImage) => {
-        const eventData = await Fire.addEvent(eventInfo, image, resizedImage)
-        return eventData
-    }
+    // createEvent = async (eventInfo, image, resizedImage) => {
+    //     const eventData = await Fire.addEvent(eventInfo, image, resizedImage)
+    //     return eventData
+    // }
 
     mapViewPressedHandler = event => {
         const coords = event.nativeEvent.coordinate
-        this.setState(prevState => {
-            return {
-                eventLocation: {
-                    ...prevState.eventLocation,
-                    latitude: coords.latitude,
-                    longitude: coords.longitude
+        this.getLocation(coords)
+    }
+
+    getLocation = (coords) => {
+        const latitude = coords.latitude
+        const longitude = coords.longitude
+        const API_KEY = (Platform.OS=='android') ? ANDROID_GOOGLE_PLACE_API_KEY : IOS_GOOGLE_PLACE_API_KEY
+        const url = `${GOOGLE_API}?latlng=${latitude},${longitude}&key=${API_KEY}`
+        fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            this.setState(prevState => {
+                return {
+                    eventLocation: {
+                        ...prevState.eventLocation,
+                        details: data.results[0],
+                        latitude: coords.latitude,
+                        longitude: coords.longitude
+                    }
                 }
-            }
-        }) 
+            })
+        })
+        .catch(err => console.error(err))
     }
 
 
 
     render(){
-        console.log(this.props)
         const {eventLocation, locationDetails} = this.state
         let marker = null
         if(eventLocation.latitude){
@@ -135,7 +198,7 @@ class AddMap extends React.Component{
 
         let searchLocationMarker = null
         if (locationDetails) {
-            console.log(locationDetails)
+            // console.log(locationDetails)
             const locationCoordinate= {
                 latitude: locationDetails.geometry.location.lat,
                 longitude: locationDetails.geometry.location.lng,
@@ -143,7 +206,7 @@ class AddMap extends React.Component{
                 longitudeDelta: 0.0122
             }
             
-            const markerColor= (eventLocation.latitude==locationCoordinate.latitude && eventLocation.longitude==locationCoordinate.longitude ) 
+            const markerColor= (eventLocation.latitude==locationCoordinate.latitude && eventLocation.longitude==locationCoordinate.longitude) 
                             ? '#e74c3c' : "#DDDED1" 
             searchLocationMarker = (
                 <Marker 
@@ -177,18 +240,7 @@ class AddMap extends React.Component{
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return{
-        onAddEvent: (eventInfo) => dispatch(addEvent(eventInfo))
-    }
-}
-const mapStateToProps = state => {
-    return {
-        currentUserData: state.events.currentUser
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddMap)
 
 const styles = StyleSheet.create({
     container: {

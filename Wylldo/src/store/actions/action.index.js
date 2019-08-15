@@ -1,4 +1,4 @@
-export {getEvents, addEvent, getCurrentUser, 
+export {getEvents, postEvent, getCurrentUser, 
         signOut, updateUserdata, getMapEvents, 
         loadMoreEvents, deleteEvent, onFollow, 
         postComment, getComment, deleteComment,

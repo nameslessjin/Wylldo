@@ -83,7 +83,7 @@ export default class Footer extends React.Component{
                                 color={(this.state.heartPressed) ? '#E91E63' : null}/>
                         </TouchableOpacity>
 
-
+        console.log(this.props)
         return(
             <View style={styles.container}>
 

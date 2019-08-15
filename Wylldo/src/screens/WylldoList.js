@@ -131,7 +131,7 @@ class WylldoList extends React.Component{
         if (buttonId == "addEvent"){
             Navigation.push(this.props.componentId, {
                 component: {
-                    name: 'AddEvent'
+                    name: 'AddMap'
                 }
             })
         }

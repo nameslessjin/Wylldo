@@ -13,9 +13,9 @@ export default uploadPhoto = (uri, uploadUri) => {
             },
             async () => {
                 unsubscribe();
-                console.log(ref)
+                // console.log(ref)
                 const storageLocation = ref.fullPath
-                console.log(storageLocation)
+                // console.log(storageLocation)
                 const url = await ref.getDownloadURL();
                 res({url: url, storageLocation: storageLocation})
             }

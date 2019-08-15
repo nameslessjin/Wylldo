@@ -5,11 +5,16 @@ import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
 import DatePicker from '../Components/DatePicker'
 import GuestSetting from '../Components/GuestSetting'
+import LocationPicker from '../Components/LocationPicker'
+import {connect} from 'react-redux'
+import {postEvent} from '../store/actions/action.index'
+import Fire from '../firebase/Fire'
+
 
 
 const {height, width} = Dimensions.get('window')
 
-export default class addEvent extends React.Component{
+class addEvent extends React.Component{
 
     static get options(){
         return{
@@ -20,8 +25,8 @@ export default class addEvent extends React.Component{
             topBar:{
                 rightButtons:[
                     {
-                        id: 'addMap',
-                        text: 'Next',
+                        id: 'Post',
+                        text: 'Post',
                         color: '#0481fe'
 
                     }
@@ -57,7 +62,7 @@ export default class addEvent extends React.Component{
 
 
     navigationButtonPressed({buttonId}){
-        if (buttonId == "addMap"){
+        if (buttonId == "Post"){
             const {description, image, tag, startTime, endTime, viewType,
                 inviteCount, resizedImage, invite_userId
             } = this.state
@@ -65,23 +70,37 @@ export default class addEvent extends React.Component{
                 alert('Description cannot be empty')
                 return
             }
+            const location = this.setLocation()
+            // console.log(location)
+            const {username, display_name, avatarUri, follower_list} = this.props.currentUserData
             if (endTime > startTime){
-                Navigation.push(this.props.componentId, {
-                    component:{
-                        name: 'AddMap',
-                        passProps:{
-                            description: description.trim(),
-                            image: image,
-                            tag: tag,
-                            startTime: startTime,
-                            endTime: endTime,
-                            viewType: viewType,
-                            inviteCount: inviteCount,
-                            resizedImage: resizedImage,
-                            invite_userId: invite_userId
-                        }
-                    }
+                const eventInfo = {
+                    description: description.trim(),
+                    tag: tag,
+                    startTime: startTime,
+                    endTime: endTime,
+                    viewType: viewType,
+                    inviteCount: inviteCount,
+                    resizedImage: resizedImage,
+                    invite_userId: invite_userId,
+                    hostUsername: username,
+                    host_display_name: display_name,
+                    hostAvatar: avatarUri.storageLocation,
+                    host_follower_list: follower_list,
+                    hostUserId: Fire.uid,
+                    coords: location.coords,
+                    location: location
+                }
+
+                const uploadImage = image
+                const uploadResizedImage = resizedImage
+                this.createEvent(eventInfo, uploadImage, uploadResizedImage).then(newEvent => {
+                    this.props.onPostEvent(newEvent)
                 })
+                .catch(err => console.error(err))
+
+                Navigation.popToRoot(this.props.componentId)
+
             } else{
                 alert("End Time must be greater than Start Time")
             }
@@ -98,7 +117,24 @@ export default class addEvent extends React.Component{
         resizedImage: null,
         invite_userId: [],
         inputHeight: 0,
-        Focus: false
+        Focus: false,
+    }
+
+    createEvent = async (eventInfo, image, resizedImage) => {
+        const eventData = await Fire.addEvent(eventInfo, image, resizedImage)
+        return eventData
+    }
+
+    setLocation = () => {
+        const {pinLocation, searchLocation} = this.props
+        let location = pinLocation
+        if (searchLocation){
+            if (pinLocation.coords.latitude == searchLocation.coords.latitude
+                && pinLocation.coords.longitude == searchLocation.coords.longitude){
+                location = searchLocation
+            }
+        }
+        return location
     }
 
     onFocus = () => {
@@ -111,6 +147,7 @@ export default class addEvent extends React.Component{
 
     render(){
         const {Focus, inputHeight, image} = this.state
+        const {searchLocation, pinLocation} = this.props
         let imageViewHeight = null
         if (image){
             imageViewHeight = image.height/image.width* width
@@ -143,6 +180,12 @@ export default class addEvent extends React.Component{
                     <View style= {(Platform.OS === 'android') ? styles.IconTagViewAndroid : styles.IconTagViewIOS }>
                         <PickTag defaultTag={this.state.tag} updateTag={(updatedTagName) => this.setState({tag: updatedTagName})} />
                     </View>
+
+                    <LocationPicker
+                        pinLocation={pinLocation}
+                        searchLocation={searchLocation}
+                    />
+
                     <DatePicker 
                         startTime={(startTime) => this.setState({startTime: startTime})} 
                         endTime={(endTime) => this.setState({endTime: endTime})}
@@ -160,7 +203,20 @@ export default class addEvent extends React.Component{
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        currentUserData: state.events.currentUser
+    }
+}
 
+const mapDispatchToProps = dispatch => {
+    return{
+        onPostEvent: (eventInfo) => dispatch(postEvent(eventInfo))
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(addEvent)
 
 
 const styles = StyleSheet.create({
