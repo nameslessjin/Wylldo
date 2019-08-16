@@ -3,6 +3,8 @@ import {View, Text, StyleSheet, TouchableOpacity, Image, Dimensions} from 'react
 import UniProfileHistory from './UniProfileHistory';
 import {Navigation} from 'react-native-navigation'
 import ProfileFollowBtn from './ProfileFollowBtn'
+import UserSearchBtn from './UserSearchBtn'
+import Fire from '../firebase/Fire'
 
 const {height, width} = Dimensions.get('window')
 export default class UniProfile extends React.Component {
@@ -58,14 +60,21 @@ export default class UniProfile extends React.Component {
                 <Text adjustsFontSizeToFit style={styles.followText}>following</Text>
             </TouchableOpacity>
         )
+
+        
+        const followOrSearch = (userId != Fire.uid)
+            ? (<ProfileFollowBtn userId = {userId} following_list = {following_list}/>)
+            : (<UserSearchBtn componentId={this.props.componentId} following_list={following_list} />)
+
         return(
             <View style={styles.container}>
                 <View style={styles.userContainer}>
                     <View style={styles.followBtn}>
-                        <ProfileFollowBtn
+                        {followOrSearch}
+                        {/* <ProfileFollowBtn
                             userId = {userId}
                             following_list = {following_list}
-                        />
+                        /> */}
                     </View>
                     {displayAvatar}
                     {displayName}

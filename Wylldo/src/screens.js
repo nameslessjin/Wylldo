@@ -19,6 +19,7 @@ export function registerScreens(){
     Navigation.registerComponentWithRedux('Comment', () => require('./screens/Comment').default, Provider, store)
     Navigation.registerComponentWithRedux('OtherProfile', () => require('./screens/OtherProfile').default, Provider, store)
     Navigation.registerComponentWithRedux('EditProfile', () => require('./screens/EditProfile').default, Provider, store)
+    Navigation.registerComponentWithRedux('UserSearch', () => require('./screens/UserSearch').default, Provider, store)
     Navigation.registerComponent('Initializing', () => require('./screens/Initializing').default)
     Navigation.registerComponent('LogIn', () => require('./screens/LogIn').default)
     Navigation.registerComponent('SignUp', () => require('./screens/SignUp').default)

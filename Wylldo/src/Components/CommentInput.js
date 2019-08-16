@@ -84,7 +84,6 @@ class CommentInput extends React.Component{
                                 [styles.textInputContainerOnFocus, {bottom: inputHeight}] 
                                 : null ]}>
                     <TextInput 
-
                         placeholder={"say something"}
                         multiline = {true}
                         style={styles.textInput}
@@ -135,14 +134,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         marginBottom: 30,
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     textInputContainerOnFocus:{
         borderColor: '#0481fe',
     },  
     textInput:{
         width: '80%',
-        marginLeft: 10
+        marginLeft: 10,
     },
     postButton:{
         marginRight: 10,

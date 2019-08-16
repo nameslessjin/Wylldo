@@ -38,14 +38,12 @@ class Fire {
             }
             startPosition = startPosition + 1
         }
-
         if (startPosition == eventIdList.length){
             startPosition = null
         }
-
         return {eventData, cursor: startPosition}
-
     }
+
 
     getUsers = async({size, start, userIdList, type}) => {
         let userList = []
@@ -73,6 +71,8 @@ class Fire {
         }
         return {userList, start: startPosition}
     }
+
+
 
     getEventsWithId = async(eventId) => {
         let ref = this.eventsCollection.doc(eventId)
@@ -171,6 +171,37 @@ class Fire {
             console.log('Get Comment error')
         }
     }
+
+    searchUser = async({searchText, start}) => {
+        const size = 7
+        let ref =  this.usersCollection.where('username', '>=', searchText).where('username', '<=', searchText+'\uf8ff').limit(size).orderBy('username', 'ASC')
+
+        try{
+            if (start){
+                ref = ref.startAfter(start)
+            }
+            let userList = []
+            const querySnapshot = await ref.get().catch(err => console.error(err))
+            for (const doc of querySnapshot.docs){
+                if (doc.exists){
+                    const user = doc.data() || {}
+                    const userWithKey = {
+                        key: doc.id,
+                        userId: doc.id,
+                        ...user
+                    }
+                    userList.push(userWithKey)
+                }
+            }
+            const startPosition = querySnapshot.docs[querySnapshot.docs.length - 1]
+            return {userList: userList, start: startPosition}
+        } catch(error){
+            console.log('search user error')
+            return {userList: []}
+        }
+        
+    }
+
     
     getProfileEvents = async({size, start, type, userId}) => {
         let ref = null
@@ -323,14 +354,6 @@ class Fire {
         })
     }
 
-    // requestFCMToken = (uid) => {
-    //     const FCM = firebase.messaging();
-    //     const ref = this.usersCollection
-    //     FCM.requestPermission()
-    //     FCM.getToken().then(token => {
-    //     ref.doc(uid).update({pushToken: token})
-    //     })
-    // }
 
     getToken = async(uid) => {
         const ref = this.usersCollection

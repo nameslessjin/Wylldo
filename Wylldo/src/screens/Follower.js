@@ -56,7 +56,7 @@ class Follower extends React.Component{
     _loadMore = () => {
         this.setState({loading: true})
         if (this.followingUsersStartPosition){
-            this.getFollowingUsers('Following', this.followingUsersStartPosition).then(userList => {
+            this.getFollowerUsers('Following', this.followingUsersStartPosition).then(userList => {
                 const updateUserList = this.state.userList.concat(userList)
                 this.setState({userList: updateUserList})
             })
