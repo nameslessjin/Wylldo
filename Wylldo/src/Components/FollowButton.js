@@ -33,10 +33,12 @@ class FollowButton extends React.Component{
     }
 
     checkFollow = () => {
-        if (this.props.currentUser.following_list.find(userId => userId === this.props.userId)) {
-            this.setState({followButton: 'Followed'})
-        } else {
-            this.setState({followButton: 'Follow'})
+        if (this.props.currentUser.following_list){
+            if (this.props.currentUser.following_list.find(userId => userId === this.props.userId)) {
+                this.setState({followButton: 'Followed'})
+            } else {
+                this.setState({followButton: 'Follow'})
+            }
         }
     }
 

@@ -247,7 +247,7 @@ class Fire {
         const {latitude, longitude} = userLocation
         // console.log(latitude, longitude)
         const mapRef = this.geoDB.collection('mapEvents')
-        const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(latitude, longitude), radius: 8.5})
+        const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(latitude, longitude), radius: 8.5}).where('isCompleted', '==', false)
         const querySnapshot = await geoQuery.get()
         let mapEventData = []
         for (const doc of querySnapshot.docs){
@@ -550,6 +550,11 @@ class Fire {
         
     }
 
+    completeEvent = async (eventId) => {
+        const ref = this.eventsCollection.doc(eventId)
+        const complete = await ref.update({isCompleted: true}).catch(err => console.error(err))
+    }
+
     //Delete an event
     deleteEvent = async (eventId) => {
         const ref = this.eventsCollection.doc(eventId)
@@ -645,7 +650,8 @@ class Fire {
             phone_num: '',
             birth_date: null,
             gender: '',
-            closed: false
+            closed: false,
+            superuser: false
         }
 
         this.usersCollection.doc(this.uid).set(signUpUserInfo)

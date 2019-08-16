@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
         borderWidth: 0.5
     },
     textStyle:{
+        fontSize: 0.018 * height,
         fontFamily: 'ArialRoundedMTBold',
         color: 'black',
     }

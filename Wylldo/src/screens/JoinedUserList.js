@@ -19,8 +19,8 @@ class JoinedUserList extends React.Component{
                 },
                 rightButtons:[
                     {
-                        id: 'Cancel',
-                        text: 'Cancel',
+                        id: 'Options',
+                        text: 'Options',
                         color: '#0481fe'
                     }
                 ],
@@ -55,9 +55,71 @@ class JoinedUserList extends React.Component{
     }
 
     navigationButtonPressed({buttonId}){
+
+        if (buttonId == 'Options'){
+            this._onOptionPress()
+        }
+
         if (buttonId == 'Cancel'){
             this.onCancelPressed()
         }
+    }
+
+    _onOptionPress = () => {
+        const {hostUserId, isCompleted} = this.props
+        const optionAlert = Alert.alert(
+            'Options',
+            '',
+            (hostUserId == Fire.uid && !isCompleted) ?
+            [
+                {
+                    text:  'Complete',
+                    onPress: () => this._onCompletePress()
+                },
+                {
+                    text: 'Invite',
+                },
+                {
+                    text: 'Close',
+                    onPress: () => this.onCancelPressed()
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                },
+            ]
+            : 
+            [
+                {
+                    text: 'Leave',
+                    onPress: () => this.onCancelPressed()
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                },
+            ]
+        )
+    }
+
+    _onCompletePress = () => {
+
+        const completeAlert = Alert.alert(
+            'Complete',
+            'Complete this event to keep it from the public',
+            [
+                {
+                    text: 'Confirm',
+                    onPress: () => this.confirmComplete()
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                }
+
+            ]
+        )
+
     }
 
     onCancelPressed = () => {
@@ -109,6 +171,11 @@ class JoinedUserList extends React.Component{
         this.setState({refreshing: false, loading: false})
     }
 
+    confirmComplete = () => {
+        this.onCompleteEvent()
+        this.props.onComplete()
+    }
+
     confirmCancel = () => {
 
         if (this.props.hostUserId == Fire.uid){
@@ -132,6 +199,10 @@ class JoinedUserList extends React.Component{
                 Navigation.pop(this.props.componentId)
             })
         }
+    }
+
+    onCompleteEvent = async() => {
+        await Fire.completeEvent(this.props.eventId)
     }
 
     onDeleteEvent = async() => {

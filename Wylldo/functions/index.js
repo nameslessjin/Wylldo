@@ -111,6 +111,17 @@ exports.onUpdateEvent = functions.firestore
         const old_likes = snap.before.data().likes
         const new_likes = snap.after.data().likes
         const new_like_userIDs = snap.after.data().like_userIDs
+        const old_isCompleted = snap.before.data().isCompleted
+        const new_isCompleted = snap.after.data().isCompleted
+
+        if (!old_isCompleted && new_isCompleted){
+            const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
+            mapEventRef.update({
+                d:{
+                    isCompleted: true
+                }
+            })
+        }
 
         //update mapEvents when event changes
         const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
@@ -299,6 +310,7 @@ exports.onEventCreated = functions.firestore
                     joinedNum: snap.data().joinedNum,
                     inviteCount: snap.data().inviteCount,
                     viewType: snap.data().viewType,
+                    isCompleted: snap.data().isCompleted
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates

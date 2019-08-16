@@ -23,8 +23,10 @@ class Settings extends React.Component{
     }
 
     onLogOutPressed = () => {
-        this.props.onSignOut()
-        firebase.auth().signOut().then(() => goToAuth())
+        firebase.auth().signOut()
+        .then(() => goToAuth())
+        .then(() => this.props.onSignOut())
+        
     }
 
     onEditProfilePressed = () => {

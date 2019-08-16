@@ -11,7 +11,8 @@ class JoinBtn extends React.Component{
     state ={
         joinBtn: 'JOIN',
         joinedNum: this.props.joinedNum,
-        join_userIDs: this.props.join_userIDs
+        join_userIDs: this.props.join_userIDs,
+        isCompleted: this.props.isCompleted
     }
 
     componentDidMount(){
@@ -78,6 +79,7 @@ class JoinBtn extends React.Component{
                     //There is problem with this.props/this.state join_userIDs
                     join_userIDs: this.state.join_userIDs,
                     hostUserId: this.props.hostUserId,
+                    isCompleted: this.state.isCompleted,
                     onCancel: (res) => {
                         if (res.joinedNum != 0){
                             this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs, joinBtn: 'JOIN'})
@@ -87,6 +89,9 @@ class JoinBtn extends React.Component{
                         if (res.joinedNum != 0){
                             this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs})
                         }
+                    },
+                    onComplete: () => {
+                        this.setState({isCompleted: true})
                     }
                 }
             }

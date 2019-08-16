@@ -84,9 +84,9 @@ class UserDisplay extends React.Component{
             </SwipeRow>
         )
 
-        if (hostUserId == Fire.uid){
-            console.log(Fire.uid)
-        }
+        // if (hostUserId == Fire.uid){
+        //     console.log(Fire.uid)
+        // }
 
         const userDisplay = (hostUserId == Fire.uid)  
                             ? ((this.props.userId == hostUserId) ? (UnremovableUserDisplay) : (RemovableUserDisplay))
