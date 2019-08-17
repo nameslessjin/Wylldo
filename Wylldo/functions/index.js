@@ -41,28 +41,6 @@ exports.onReport = functions.firestore
         })
     })
 
-// exports.onInteractiveBtnPressedMapEventUpdate = functions.firestore
-// .document('Events/{eventId}')
-// .onUpdate((snap, context) => {
-//     const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
-//     return db.runTransaction(transaction => {
-//         return transaction.get(mapEventRef).then(eventDoc => {
-//             const mapEventData = eventDoc.data().d
-//             const newLikesNum = snap.after.data().likes
-//             const newJoinedNum = snap.after.data().joinedNum
-
-//             return transaction.update(mapEventRef, {
-//                 d:{
-//                     ...mapEventData,
-//                     likes: newLikesNum,
-//                     joinedNum: newJoinedNum
-//                 }
-//             })
-//         })
-//     })
-
-// })
-
 exports.onUpdateUser = functions.firestore
     .document('Users/{userId}')
     .onUpdate((snap, context) => {
@@ -113,14 +91,26 @@ exports.onUpdateEvent = functions.firestore
         const new_like_userIDs = snap.after.data().like_userIDs
         const old_isCompleted = snap.before.data().isCompleted
         const new_isCompleted = snap.after.data().isCompleted
+        const new_invite_notification_userId = snap.after.data().invite_notification_userId
 
-        if (!old_isCompleted && new_isCompleted){
-            const mapEventRef = db.collection('mapEvents').doc(context.params.eventId)
-            mapEventRef.update({
-                d:{
-                    isCompleted: true
-                }
-            })
+        //send notification to users when they are invited
+        if (new_invite_notification_userId != []){
+            for (const userId of new_invite_notification_userId){
+                const receiverId = userId
+                db.collection('Users').doc(receiverId).get().then(res => {
+                    const receiverFCMToken = res.data().fcm_token
+                    let payload = {
+                        notification: {
+                            title: 'Invited',
+                            body: host_name + ' has invited you to join an event!',
+                            sound: 'default'
+                        }
+                    }
+                    admin.messaging().sendToTopic('pushNotifications', payload)
+                    return admin.messaging().sendToDevice(receiverFCMToken, payload)
+                })
+            }
+            return db.collection('Events').doc(context.params.eventId).update({invite_notification_userId: []})
         }
 
         //update mapEvents when event changes
@@ -130,12 +120,16 @@ exports.onUpdateEvent = functions.firestore
                 const mapEventData = eventDoc.data().d
                 const newLikesNum = snap.after.data().likes
                 const newJoinedNum = snap.after.data().joinedNum
+
+                let newIsCompleted = (!old_isCompleted && new_isCompleted) ? true : false
+
     
                 return transaction.update(mapEventRef, {
                     d:{
                         ...mapEventData,
                         likes: newLikesNum,
-                        joinedNum: newJoinedNum
+                        joinedNum: newJoinedNum,
+                        isCompleted: newIsCompleted
                     }
                 })
             })
@@ -351,41 +345,3 @@ exports.checkExpiredMapEvents = functions.pubsub.schedule('every 5 minutes').onR
 
 })
 
-// exports.onLikedCreated = functions.firestore
-//     .document('Users/{userId}/likedEvents/{eventId}')
-//     .onCreate((snap, context) => {
-//         const eventRef = db.collection('Events').doc(context.params.eventId)
-//         return db.runTransaction(transaction => {
-//             return transaction.get(eventRef).then(eventDoc => {
-//                 const newLikesNum = eventDoc.data().likes + 1
-//                 let newLike_userIDs = eventDoc.data().like_userIDs
-//                 newLike_userIDs.push(context.params.userId)
-
-//                 return transaction.update(eventRef, {
-//                     likes: newLikesNum,
-//                     like_userIDs: newLike_userIDs
-//                 })
-//             })
-//         })
-
-//     })
-
-// exports.onLikedDeleted = functions.firestore
-//     .document('Users/{userId}/likedEvents/{eventId}')
-//     .onDelete((snap, context) => {
-//         const eventRef = db.collection('Events').doc(context.params.eventId)
-        
-
-//         return db.runTransaction(transaction => {
-//             return transaction.get(eventRef).then(eventDoc => {
-//                 const newLikesNum = eventDoc.data().likes - 1
-//                 let newLike_userIDs = eventDoc.data().like_userIDs.filter(item => item !== context.params.userId )
-
-//                 return transaction.update(eventRef, {
-//                     likes: newLikesNum,
-//                     like_userIDs: newLike_userIDs
-//                 })
-//             })
-//         })
-
-//     })

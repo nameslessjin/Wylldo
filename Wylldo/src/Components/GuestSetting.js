@@ -79,8 +79,8 @@ export default class GuestSeeting extends React.Component{
         return(
             <View style={styles.container}>
                 <TouchableOpacity style={styles.subContainer} onPress={this.onInvitePressed}>
-                    <Text adjustsFontSizeToFit style={styles.text}>Participant</Text>
-                    <Text adjustsFontSizeToFit>{this.state.inviteCount}</Text>
+                    <Text adjustsFontSizeToFit style={styles.text}>Participant number:</Text>
+                    <Text adjustsFontSizeToFit style={styles.numberStyle}>{this.state.inviteCount}</Text>
                 </TouchableOpacity>
                 <Modal 
                     isVisible={this.state.isInviteVisible}
@@ -110,12 +110,12 @@ export default class GuestSeeting extends React.Component{
                     </TouchableOpacity>
                 </Modal>
 
-                <TouchableOpacity style={styles.subContainer} onPress={this.onViewPressed}> 
+                {/* <TouchableOpacity style={styles.subContainer} onPress={this.onViewPressed}> 
                     <Text adjustsFontSizeToFit style={styles.text}>Access</Text>
                     <Text adjustsFontSizeToFit>{this.state.viewType}</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                <Modal 
+                {/* <Modal 
                     isVisible={this.state.isViewVisible}
                     backdropOpacity={this.state.pickerOpacity}    
                     onBackdropPress={this.onViewConfirmPressed}
@@ -141,7 +141,7 @@ export default class GuestSeeting extends React.Component{
                     >
                         <Text adjustsFontSizeToFit style={styles.confirmTextStyle}>Confirm</Text>
                     </TouchableOpacity>
-                </Modal>
+                </Modal> */}
             </View>
         )
     }
@@ -164,10 +164,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text:{
-        fontWeight: 'bold', 
+        // fontWeight: 'bold', 
         fontSize: 0.02 * height, 
         marginRight: 10,
         marginLeft: 20,
+    },
+    numberStyle:{
+        fontWeight: 'bold', 
+        fontSize: 0.02 * height
     },
     confirmTextStyle:{
         fontSize: 20,

@@ -59,10 +59,6 @@ class JoinedUserList extends React.Component{
         if (buttonId == 'Options'){
             this._onOptionPress()
         }
-
-        if (buttonId == 'Cancel'){
-            this.onCancelPressed()
-        }
     }
 
     _onOptionPress = () => {
@@ -78,6 +74,7 @@ class JoinedUserList extends React.Component{
                 },
                 {
                     text: 'Invite',
+                    onPress: () => this._onInvitePress()
                 },
                 {
                     text: 'Close',
@@ -116,10 +113,23 @@ class JoinedUserList extends React.Component{
                     text: 'Cancel',
                     style: 'cancel'
                 }
-
             ]
         )
+    }
 
+    _onInvitePress = () => {
+        const {componentId, follower_list, eventId} = this.props
+        Navigation.push(componentId, {
+            component:{
+                name: 'UserInvite',
+                passProps:{
+                    follower_list: follower_list,
+                    componentId: componentId,
+                    eventId: eventId
+                }
+            }
+        })
+        
     }
 
     onCancelPressed = () => {

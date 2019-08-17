@@ -186,23 +186,6 @@ class Home extends React.Component{
         this.setState({markPressed: false, mapPressed: false})
     }
 
-    // componentDidUpdate(prevPros, prevState){
-    //     if (this.state.locationDetails){
-    //         const locationCoordinate= {
-    //             latitude: this.state.locationDetails.geometry.location.lat,
-    //             longitude: this.state.locationDetails.geometry.location.lng,
-    //             latitudeDelta: 0.0122,
-    //             longitudeDelta: 0.0122
-    //         }
-    //         this.animateToRegion(locationCoordinate)
-    //     }
-    // }
-
-    // animateToRegion = (coords) => {
-    //     this.map.animateToRegion({
-    //         ...coords
-    //     })
-    // }
 
     render(){
         const Markers = this.props.mapEvents.map(mapEvent => {
@@ -233,17 +216,6 @@ class Home extends React.Component{
             popUp = <View></View>
         }
 
-        // let marker = null
-        // if (this.state.locationDetails) {
-        //     console.log(this.state.locationDetails)
-        //     const locationCoordinate= {
-        //         latitude: this.state.locationDetails.geometry.location.lat,
-        //         longitude: this.state.locationDetails.geometry.location.lng,
-        //         latitudeDelta: 0.0122,
-        //         longitudeDelta: 0.0122
-        //     }
-        //     marker=<Marker coordinate={locationCoordinate} />
-        // }
 
         return(
             <View style={[styles.container]}>
@@ -257,16 +229,13 @@ class Home extends React.Component{
                     customMapStyle={mapStyle}
                     onPress={this.mapViewPressedHandler}
                     ref={ref => this.map = ref}
+                    loadingEnabled={true}
                     onMarkerPress={this.markPressedHandler}
                     onMapReady={(Platform.OS==='android') ? this.onMapReady : null} >
                     {Markers}
-                    {/* {marker} */}
+
                 </MapView>
                 {popUp}
-                {/* <GooglePlacesInput/> */}
-                {/* <GooglePlaceAutoComplete
-                    returnDetails={locationDetails => this.setState({locationDetails: locationDetails})}
-                /> */}
             </View>
         )
     }

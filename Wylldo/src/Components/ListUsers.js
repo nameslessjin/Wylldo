@@ -12,14 +12,12 @@ export default class ListUsers extends React.Component{
                     />
     
     render(){
-        const {...props} = this.props
         return(
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={this.props.userList}
                 keyExtractor = {this._keyExtractor}
                 renderItem={this.renderItem}
-                {...props} 
             />
         )
     }

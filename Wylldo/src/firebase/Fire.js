@@ -290,6 +290,8 @@ class Fire {
             image: uploadedImag,
             createdTime: firebase.firestore.FieldValue.serverTimestamp(),
             isCompleted: false,
+            invite_userId: [],
+            invite_notification_userId: [],
             like_userIDs: [],
             joinedNum: 1,
             join_userIDs: [],
@@ -553,6 +555,11 @@ class Fire {
     completeEvent = async (eventId) => {
         const ref = this.eventsCollection.doc(eventId)
         const complete = await ref.update({isCompleted: true}).catch(err => console.error(err))
+    }
+
+    inviteUser = async (eventId, inviteUserList) => {
+        const ref = this.eventsCollection.doc(eventId)
+        await ref.update({invite_userId: inviteUserList, invite_notification_userId: inviteUserList}).catch(err => console.error(err))
     }
 
     //Delete an event

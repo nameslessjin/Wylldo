@@ -80,6 +80,7 @@ class JoinBtn extends React.Component{
                     join_userIDs: this.state.join_userIDs,
                     hostUserId: this.props.hostUserId,
                     isCompleted: this.state.isCompleted,
+                    follower_list: this.props.currentUser.follower_list,
                     onCancel: (res) => {
                         if (res.joinedNum != 0){
                             this.setState({joinedNum: res.joinedNum, join_userIDs: res.join_userIDs, joinBtn: 'JOIN'})
@@ -157,7 +158,8 @@ class JoinBtn extends React.Component{
 
 const mapStateToProps = (state) => {
     return{
-        events: state.events.Events
+        events: state.events.Events,
+        currentUser: state.events.currentUser
     }
 }
 
