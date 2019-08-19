@@ -79,7 +79,7 @@ export default class TimeNLocation extends React.Component {
         const timeLocationFormat = (
             <View style={styles.container}>
                 <View style={styles.locationContainer}>
-                    <Text adjustsFontSizeToFit style={styles.timeText}>{location.short_address}</Text>
+                    <Text adjustsFontSizeToFit style={styles.timeText}>{ location.short_address}</Text>
                     {locationBtn}
                 </View>
                 <Text adjustsFontSizeToFit style={styles.timeText}>{this.timeFormat()}</Text>

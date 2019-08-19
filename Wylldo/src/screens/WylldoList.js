@@ -1,7 +1,7 @@
 //This page is a convinent instagram like viewing page that lists all correct events
 
 import React from 'react'
-import {View, StyleSheet, RefreshControl, LayoutAnimation, Text} from 'react-native'
+import {View, StyleSheet, RefreshControl, LayoutAnimation, Text, ActivityIndicator} from 'react-native'
 import  {Navigation} from 'react-native-navigation'
 import {connect} from 'react-redux'
 import ListEvents from '../Components/ListEvents'
@@ -10,7 +10,7 @@ import Fire from '../firebase/Fire'
 import { goToAuth } from '../navigation';
 import SortListBtn from '../Components/SortListBtn'
 
-const DOC_NUM = 4
+const DOC_NUM = 5
 
 class WylldoList extends React.Component{
 
@@ -67,11 +67,14 @@ class WylldoList extends React.Component{
     }
 
     getMapEventData = async () => {
+        this.setState({loading: true})
         const sortOption = this._findSortType()
+        console.log('Sort: ', sortOption)
         const {latitude, longitude} = this.state.userLocation
         const userLocation = {latitude: latitude, longitude: longitude}
         const mapEventData = await Fire.getMapEvents(userLocation, sortOption)
         // console.log(mapEventData)
+        console.log(mapEventData)
         return mapEventData
     }
 
@@ -98,8 +101,10 @@ class WylldoList extends React.Component{
 
     _followingEvents = () => {
         const {events} = this.props
+        
         const {following_list} = this.props.currentUser
         let eventList = [...events]
+        console.log('ListProps: ', eventList)
         eventList = eventList.filter(event => {
             return ( following_list.find(userId => {
                 return userId == event.hostUserId
@@ -107,6 +112,7 @@ class WylldoList extends React.Component{
 
         })
         
+        console.log('List: ', eventList)
 
         return eventList
         
@@ -138,8 +144,9 @@ class WylldoList extends React.Component{
                     this.props.onGetMapEvents(mapEvents)
                     this.getEventData().then(res => {
                         const {eventData, cursor} = res
+                        console.log(res)
                         this.props.onGetEvents(eventData)
-                        this.setState({startPosition: cursor})
+                        this.setState({startPosition: cursor, loading: false})
                     })
                 })
                 .catch(error => {console.log(error)}) 
@@ -152,7 +159,7 @@ class WylldoList extends React.Component{
     getEventData = async (startPosition) => {
         this.setState({refreshing: true})
         const {eventData, cursor} = await Fire.getEvents({size: DOC_NUM, start: startPosition, eventIdList: this.props.mapEventIdList})
-        this.setState({refreshing: false, loading: false})
+        this.setState({refreshing: false})
         return {eventData, cursor}
     }
 
@@ -161,13 +168,14 @@ class WylldoList extends React.Component{
         //     this.props.onGetMapEvents(mapEvents)
         //     this.getEventData().then(events => {this.props.onGetEvents(events)})
         // })
+        this.setState({startPosition: null})
         this.findCoordinates()
     }
 
     //When swipe up, trigger to load more evens
     //this function is triggered twice frequently
     _loadMore = () => {
-        this.setState({loading: true})
+        
         const {startPosition} = this.state
         if (startPosition){
             this.getEventData(startPosition).then(res => {
@@ -177,7 +185,6 @@ class WylldoList extends React.Component{
             })
             .catch(error => (console.log(error.message)))
         }
-        this.setState({refreshing: false, loading: false})
     }
 
     //once the "post" button is clicked, move to addevent screen page. (stack up from WylldoList screen)
@@ -185,7 +192,10 @@ class WylldoList extends React.Component{
         if (buttonId == "addEvent"){
             Navigation.push(this.props.componentId, {
                 component: {
-                    name: 'AddMap'
+                    name: 'AddMap',
+                    passProps: {
+                        userLocation: this.state.userLocation
+                    }
                 }
             })
         }
@@ -201,10 +211,12 @@ class WylldoList extends React.Component{
         LayoutAnimation.easeInEaseOut()
         const {isSet} = this.state.sortButtons[0]
         const events = (isSet) ? this._followingEvents() : this.props.events
+        console.log('Props: ', this.props.events)
         
-        const eventDisplay = (this.props.events.length == 0) ? 
-            (<Text adjustsFontSizeToFit style={styles.text} numberOfLines={2}>There is nothing going on in your region currently.  Be the first one to post your wylldo!</Text>)
-            : (
+        const eventDisplay = (this.state.loading) ? <ActivityIndicator/>
+            : (this.props.events.length == 0) 
+            ? (<Text adjustsFontSizeToFit style={styles.text} numberOfLines={2}>There is nothing going on in your region currently.  Be the first one to post your wylldo!</Text>)
+            :   (
 
                     <ListEvents 
                         events={events} 

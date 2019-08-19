@@ -22,4 +22,4 @@
 #import <Google-Maps-iOS-Utils/GMUNonHierarchicalDistanceBasedAlgorithm.h>
 #import <Google-Maps-iOS-Utils/GMUStaticCluster.h>
 
-#import "Google-Maps-iOS-Utils/GQTPointQuadTree.h"
+#import "Google_Maps_iOS_Utils/GQTPointQuadTree.h"

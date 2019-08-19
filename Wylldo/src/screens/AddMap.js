@@ -35,8 +35,7 @@ export default class AddMap extends React.Component{
 
     state={
         userLocation:{
-            latitude: 40.798699,
-            longitude: -77.859954,
+            ...this.props.userLocation,
             latitudeDelta: 0.0122,
             longitudeDelta: 0.0122,
         },
@@ -48,6 +47,7 @@ export default class AddMap extends React.Component{
         super(props);
         Navigation.events().bindComponent(this);
     }
+
 
     componentDidUpdate(prevPros, prevState){
         const {locationDetails} = this.state
@@ -71,7 +71,6 @@ export default class AddMap extends React.Component{
     navigationButtonPressed = ({buttonId}) => {
         if(buttonId == "AddEvent"){
             const {eventLocation, locationDetails} = this.state
-            console.log(locationDetails)
             this.getLocation(eventLocation).then(data => {
                 let pinLocation = null
                 let searchLocation = null

@@ -38,7 +38,8 @@ class Home extends React.Component{
             pressedEvent: null,
             mapEventKey: null,
             refreshing: false,
-            locationDetails: null
+            locationDetails: null,
+            loading: false
         }
     }
 
@@ -50,9 +51,7 @@ class Home extends React.Component{
 
         if (selectedTabIndex == 0 && unselectedTabIndex != 0){
             if(Fire.uid){
-                this.getMapEventData(this.state.userLocation).then(mapEvents => {
-                    this.props.onGetMapEvents(mapEvents)
-                })
+                this.findCoordinates()
             } else {
                 goToAuth()
             }
@@ -115,6 +114,7 @@ class Home extends React.Component{
                 this.setState({userLocation})
                 this.getMapEventData(userLocation).then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
+                    this.setState({loading: false})
                 })
                 .catch(error => {console.log(error)})
             },
@@ -151,6 +151,7 @@ class Home extends React.Component{
     }
 
     getMapEventData = async (userLocation) => {
+        this.setState({loading: true})
         const {latitude, longitude} = userLocation
         const queryLocation = {latitude: latitude, longitude: longitude}
         const mapEventData = await Fire.getMapEvents(queryLocation)
@@ -219,7 +220,7 @@ class Home extends React.Component{
 
         return(
             <View style={[styles.container]}>
-                
+                {(this.state.loading) ? <ActivityIndicator size={"large"} style={{zIndex: 1}}/> : null}
                 <MapView
                     showsUserLocation={true}
                     showsMyLocationButton={this.state.markPressed ? false : true}
@@ -233,7 +234,7 @@ class Home extends React.Component{
                     onMarkerPress={this.markPressedHandler}
                     onMapReady={(Platform.OS==='android') ? this.onMapReady : null} >
                     {Markers}
-
+            
                 </MapView>
                 {popUp}
             </View>
@@ -256,11 +257,6 @@ const styles = StyleSheet.create({
         flex: 1,
         position: 'absolute'
     },
-    IndicatorView:{
-        position: 'absolute',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
 })
 
 const mapStateToProps = state => {

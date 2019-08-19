@@ -11,8 +11,8 @@ export default class ShowMap extends React.Component{
         markerLocation:{
             latitude: this.props.coords.latitude,
             longitude: this.props.coords.longitude,
-            latitudeDelta: 0.0122,
-            longitudeDelta: 0.0122
+            latitudeDelta: 0.0020,
+            longitudeDelta: 0.0020
         }
     }
 

@@ -5,7 +5,7 @@ export default class LocationItem extends PureComponent {
     
     _locationPress = async() => {
         const res = await this.props.fetchDetails(this.props.place_id)
-        console.log(this.props)
+        // console.log(this.props)
         this.props.returnDetails(res)
 
     }

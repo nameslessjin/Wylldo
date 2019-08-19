@@ -12,7 +12,7 @@ export default class LocationPicker extends React.Component{
             if (searchLocation){
                 if (pinLocation.coords.latitude == searchLocation.coords.latitude
                     && pinLocation.coords.longitude == searchLocation.coords.longitude){
-                    location = searchLocation.short_address
+                    location =  searchLocation.short_address
                 }
             }
         } else {
