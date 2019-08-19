@@ -2,6 +2,7 @@
 import React from 'react'
 import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
+import ClusteredMapView from 'react-native-maps-super-cluster'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
 import PopUpWnd from '../Components/PopUpWnd'
@@ -12,7 +13,12 @@ import {goToAuth} from '../navigation'
 import {Navigation} from 'react-native-navigation'
 import firebase from 'react-native-firebase'
 
-
+const INIT_REGION = {
+    latitude: 40.798699,
+    longitude: -77.859954,
+    latitudeDelta: 12,
+    longitudeDelta: 12
+  }
 class Home extends React.Component{
     static get options(){
         return{
@@ -39,12 +45,13 @@ class Home extends React.Component{
             mapEventKey: null,
             refreshing: false,
             locationDetails: null,
-            loading: false
+            loading: false,
+            data: []
         }
     }
 
     state = {
-        userLocation:{}
+        userLocation: {}
     }
 
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
@@ -187,23 +194,63 @@ class Home extends React.Component{
         this.setState({markPressed: false, mapPressed: false})
     }
 
+    renderCluster = (cluster, onPress) => {
+        const pointCount = cluster.pointCount,
+              coordinate = cluster.coordinate,
+              clusterId = cluster.clusterId
+    
+        // use pointCount to calculate cluster size scaling
+        // and apply it to "style" prop below
+    
+        // eventually get clustered points by using
+        // underlying SuperCluster instance
+        // Methods ref: https://github.com/mapbox/supercluster
+        const clusteringEngine = this.map.getClusteringEngine(),
+              clusteredPoints = clusteringEngine.getLeaves(clusterId, 100)
+    
+        return (
+          <Marker coordinate={coordinate} onPress={onPress}>
+            <View style={styles.myClusterStyle}>
+              <Text style={styles.myClusterTextStyle}>
+                {pointCount}
+              </Text>
+            </View>
+            {
+              /*
+                Eventually use <Callout /> to
+                show clustered point thumbs, i.e.:
+                <Callout>
+                  <ScrollView>
+                    {
+                      clusteredPoints.map(p => (
+                        <Image source={p.image}>
+                      ))
+                    }
+                  </ScrollView>
+                </Callout>
+    
+                IMPORTANT: be aware that Marker's onPress event isn't really consistent when using Callout.
+               */
+            }
+          </Marker>
+        )
+    }
+
+    renderMarker = (data) => {
+        const coords = {latitude: data.coords._latitude, longitude: data.coords._longitude}
+        return (
+        <Marker
+            coordinate={coords}
+            key={data.key}
+            onPress={() => {this.getPressedEvent(data.key)} }
+            >       
+                
+            <CustomMarker icon={data.tag} hostAvatar={data.hostAvatar} likes={data.likes} />
+        </Marker>
+        )
+    }
 
     render(){
-        const Markers = this.props.mapEvents.map(mapEvent => {
-            if (mapEvent.coords){
-                const coords = {latitude: mapEvent.coords._latitude, longitude: mapEvent.coords._longitude}
-                return(
-                    <Marker
-                    coordinate={coords}
-                    key={mapEvent.key}
-                    onPress={() => {this.getPressedEvent(mapEvent.key)} }
-                    >       
-                     
-                    <CustomMarker icon={mapEvent.tag} hostAvatar={mapEvent.hostAvatar} likes={mapEvent.likes} />
-                    </Marker>
-                )
-            }
-        }) 
 
         let popUp = null 
         if (this.state.markPressed && !this.state.mapPressed){         
@@ -221,22 +268,23 @@ class Home extends React.Component{
         return(
             <View style={[styles.container]}>
                 {(this.state.loading) ? <ActivityIndicator size={"large"} style={{zIndex: 1}}/> : null}
-                <MapView
+                <ClusteredMapView
+                    style={styles.mapStyle}
                     showsUserLocation={true}
                     showsMyLocationButton={this.state.markPressed ? false : true}
-                    initialRegion={this.state.userLocation} 
-                    style={styles.mapStyle} 
                     provider={PROVIDER_GOOGLE} 
                     customMapStyle={mapStyle}
-                    onPress={this.mapViewPressedHandler}
-                    ref={ref => this.map = ref}
+                    data={this.props.mapEvents}
                     loadingEnabled={true}
+                    initialRegion={INIT_REGION}
+                    region={this.state.userLocation}
+                    onPress={this.mapViewPressedHandler}
                     onMarkerPress={this.markPressedHandler}
-                    onMapReady={(Platform.OS==='android') ? this.onMapReady : null} >
-                    {Markers}
-            
-                </MapView>
-                {popUp}
+                    onMapReady={(Platform.OS==='android') ? this.onMapReady : null}
+                    ref={(r) => { this.map = r }}
+                    renderMarker={this.renderMarker}
+                    renderCluster={this.renderCluster} />
+                    {popUp}
             </View>
         )
     }

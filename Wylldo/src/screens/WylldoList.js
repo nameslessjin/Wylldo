@@ -69,12 +69,12 @@ class WylldoList extends React.Component{
     getMapEventData = async () => {
         this.setState({loading: true})
         const sortOption = this._findSortType()
-        console.log('Sort: ', sortOption)
+        // console.log('Sort: ', sortOption)
         const {latitude, longitude} = this.state.userLocation
         const userLocation = {latitude: latitude, longitude: longitude}
         const mapEventData = await Fire.getMapEvents(userLocation, sortOption)
         // console.log(mapEventData)
-        console.log(mapEventData)
+
         return mapEventData
     }
 
@@ -112,7 +112,7 @@ class WylldoList extends React.Component{
 
         })
         
-        console.log('List: ', eventList)
+        // console.log('List: ', eventList)
 
         return eventList
         
@@ -211,9 +211,9 @@ class WylldoList extends React.Component{
         LayoutAnimation.easeInEaseOut()
         const {isSet} = this.state.sortButtons[0]
         const events = (isSet) ? this._followingEvents() : this.props.events
-        console.log('Props: ', this.props.events)
+        // console.log('Props: ', this.props.events)
         
-        const eventDisplay = (this.state.loading) ? <ActivityIndicator/>
+        const eventDisplay = (this.state.loading) ? <ActivityIndicator size={'large'}/>
             : (this.props.events.length == 0) 
             ? (<Text adjustsFontSizeToFit style={styles.text} numberOfLines={2}>There is nothing going on in your region currently.  Be the first one to post your wylldo!</Text>)
             :   (

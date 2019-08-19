@@ -268,7 +268,8 @@ class Fire {
                     eventId: doc.id,
                     hostAvatar:{
                         uri: hostAvatarUri
-                    }
+                    },
+                    location: mapEvent.coords
                 }
                 mapEventData.push(mapEventsWithKey)
             }

@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
         borderRadius: 45,
         backgroundColor: '#ced6e0',
         flexDirection: "row",
-        alignItems: 'center'
+        alignItems: 'center',
+
     },
     ImgView:{
         borderRadius: 50,
