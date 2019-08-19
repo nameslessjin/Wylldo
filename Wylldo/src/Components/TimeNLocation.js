@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         height: height * 0.07,
         width: '100%',
         flex: 1,  
-        marginBottom: 5
+        marginBottom: 5,
     },
     timeText:{
         fontWeight: 'bold', 
@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     },
     locationContainer:{
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '90%'
     },
     timeFormatContainer:{
         height: height * 0.05,

@@ -4,6 +4,7 @@ import {Navigation} from 'react-native-navigation'
 import Fire from '../firebase/Fire'
 import {connect} from 'react-redux'
 import {deleteEvent} from '../store/actions/action.index'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const {height, width} = Dimensions.get('window')
 class JoinBtn extends React.Component{
@@ -114,6 +115,10 @@ class JoinBtn extends React.Component{
      }
 
      render(){
+
+        const {joinedNum} = this.state
+        const {inviteCount} = this.props
+
         const viewBtn = <TouchableOpacity style={styles.joinBtn} onPress={this.onJoinBtnPressed}>
                             <Text adjustsFontSizeToFit style={styles.joinTextStyle}>VIEW</Text>
                         </TouchableOpacity>
@@ -149,7 +154,14 @@ class JoinBtn extends React.Component{
         return(
             <View style={styles.container}>
                 {joinBtn}
-                <Text adjustsFontSizeToFit style={styles.countStyle}>{this.state.joinedNum}/{this.props.inviteCount}</Text>
+                <View style={styles.participantContainer}>
+                    <Icon
+                        name={'md-contacts'}
+                        size= {0.025 * height}
+                        style={{color: (joinedNum < inviteCount) ? '#FE4C4C' : 'grey'}}
+                    />
+                    <Text adjustsFontSizeToFit style={styles.countStyle}>{joinedNum}/{inviteCount}</Text>
+                </View>
             </View>
         )
      }
@@ -194,6 +206,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     countStyle:{
+        marginLeft: 1,
         fontSize: 15,
         color:'grey'
     },
@@ -206,5 +219,9 @@ const styles = StyleSheet.create({
         fontSize: 14, 
         color:'white',
         fontFamily: 'ArialRoundedMTBold',
+    },
+    participantContainer:{
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 })

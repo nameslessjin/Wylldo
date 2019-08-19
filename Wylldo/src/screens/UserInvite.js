@@ -16,7 +16,7 @@ export default class userInvite extends React.Component{
                     {
                         id: 'Invite',
                         text: 'Invite',
-                        color: '#0481fe'
+                        color: '#0481fe',
                     }
                 ],
                 backButton:{
@@ -53,20 +53,33 @@ export default class userInvite extends React.Component{
     navigationButtonPressed({buttonId}){
         if (buttonId == 'Invite'){
             const {selectedUserList} = this.state
-            const {componentId, eventId} = this.props
-            this.onInviteUser(eventId, selectedUserList).then(() => {
+            if (selectedUserList.length == 0){
                 Alert.alert(
-                    'User invited',
+                    'Select users to invite',
                     '',
                     [
                         {
-                            text: 'Ok',
-                            style: 'cancel',
-                            onPress: () => Navigation.pop(componentId)
+                            text: 'Close',
+                            style: 'cancel'
                         }
                     ]
                 )
-            })
+            } else {
+                const {componentId, eventId} = this.props
+                this.onInviteUser(eventId, selectedUserList).then(() => {
+                    Alert.alert(
+                        'User invited',
+                        '',
+                        [
+                            {
+                                text: 'Ok',
+                                style: 'cancel',
+                                onPress: () => Navigation.pop(componentId)
+                            }
+                        ]
+                    )
+                })
+            }
         }
     }
 

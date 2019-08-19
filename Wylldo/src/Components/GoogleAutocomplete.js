@@ -41,6 +41,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                                         key={el.place_id}
                                         fetchDetails={fetchDetails}
                                         returnDetails={details => {
+                                            console.log(details)
                                             this.props.returnDetails(details)
                                             clearSearchs()
                                         }}

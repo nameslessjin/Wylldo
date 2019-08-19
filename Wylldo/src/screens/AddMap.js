@@ -71,7 +71,7 @@ export default class AddMap extends React.Component{
     navigationButtonPressed = ({buttonId}) => {
         if(buttonId == "AddEvent"){
             const {eventLocation, locationDetails} = this.state
-
+            console.log(locationDetails)
             this.getLocation(eventLocation).then(data => {
                 let pinLocation = null
                 let searchLocation = null

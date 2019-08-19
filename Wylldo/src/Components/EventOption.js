@@ -89,10 +89,10 @@ class EventOption extends React.Component{
 
         let deleteBtn = null
         let reportBtn = null
-        if (Fire.uid === this.props.hostUserId){
+        if (Fire.uid === this.props.hostUserId || this.props.currentUser.moderator){
             deleteBtn = (
                 <TouchableOpacity style={[styles.optionBtnStyle]} onPress={this.onDeletePress}>
-                <Text adjustsFontSizeToFit style={[styles.optionsTextStyle, {color: 'red'}]}>Delete</Text>
+                    <Text adjustsFontSizeToFit style={[styles.optionsTextStyle, {color: 'red'}]}>Delete</Text>
                 </TouchableOpacity>
             )
             reportBtn = null

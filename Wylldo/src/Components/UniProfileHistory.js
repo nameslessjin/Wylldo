@@ -14,7 +14,8 @@ export default class UniProfileHistory extends React.Component{
         loading: false,
         createdEvents: [],
         joinedEvents: [],
-        likedEvents: []
+        likedEvents: [],
+        profileEventPosition: null
     }
 
     componentDidMount(){
@@ -46,8 +47,7 @@ export default class UniProfileHistory extends React.Component{
     getProfileEvents = async (type, startPosition) => {
         this.setState({refreshing: true})
         const {eventData, cursor} = await Fire.getProfileEvents({size: SIZE, start: startPosition, type: type, userId: this.props.userId})
-        this.profileEventPosition = cursor
-        this.setState({refreshing: false, loading: false})
+        this.setState({refreshing: false, loading: false, profileEventPosition: cursor})
         return eventData
     }
 
@@ -65,8 +65,9 @@ export default class UniProfileHistory extends React.Component{
 
     _loadMore = () => {
         this.setState({loading: true})
-        if (this.profileEventPosition){
-            this.getProfileEvents(this.state.selectedOption, this.profileEventPosition).then(events => {
+        const {profileEventPosition} = this.state
+        if (profileEventPosition){
+            this.getProfileEvents(this.state.selectedOption, profileEventPosition).then(events => {
 
                 switch(this.state.selectedOption){
                     case 'Created':
@@ -133,7 +134,7 @@ export default class UniProfileHistory extends React.Component{
                             />
                         }
                         onEndReached = {this._loadMore}
-                        onEndReachedThreshold = {0.5}
+                        onEndReachedThreshold = {0.3}
                     />
 
                 </View>

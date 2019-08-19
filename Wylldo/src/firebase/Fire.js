@@ -17,9 +17,10 @@ class Fire {
         if (start){
             startPosition = start
         }
-        
+
         while (eventData.length != size && startPosition < eventIdList.length){
             let docRef = this.eventsCollection.doc(eventIdList[startPosition][1])
+
             const querySnapshot = await docRef.get()
             if (querySnapshot.exists){
                 const event = querySnapshot.data() || {}
@@ -41,6 +42,7 @@ class Fire {
         if (startPosition == eventIdList.length){
             startPosition = null
         }
+
         return {eventData, cursor: startPosition}
     }
 
@@ -243,11 +245,15 @@ class Fire {
     }
 
     //used to get location and tag for the map.
-    getMapEvents = async(userLocation) => {
+    getMapEvents = async(userLocation, sortOption) => {
         const {latitude, longitude} = userLocation
-        // console.log(latitude, longitude)
+        
         const mapRef = this.geoDB.collection('mapEvents')
-        const geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(latitude, longitude), radius: 8.5}).where('isCompleted', '==', false)
+        let geoQuery = mapRef.near({center: new firebase.firestore.GeoPoint(latitude, longitude), radius: 8.5}).where('isCompleted', '==', false)
+        if (sortOption){
+            geoQuery = geoQuery.where('eventTag', '==', sortOption)
+        }
+
         const querySnapshot = await geoQuery.get()
         let mapEventData = []
         for (const doc of querySnapshot.docs){
@@ -658,7 +664,7 @@ class Fire {
             birth_date: null,
             gender: '',
             closed: false,
-            superuser: false
+            moderator: false
         }
 
         this.usersCollection.doc(this.uid).set(signUpUserInfo)

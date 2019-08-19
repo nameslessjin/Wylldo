@@ -73,6 +73,13 @@ class addEvent extends React.Component{
             const location = this.setLocation()
             // console.log(location)
             const {username, display_name, avatarUri, follower_list} = this.props.currentUserData
+            const eventTag = (tag == 'md-beer') 
+                            ? 'Fun' 
+                            : (tag == 'md-american-football') 
+                            ? 'Sport' 
+                            : (tag == 'md-book')
+                            ? 'Study'
+                            : null
             if (endTime > startTime){
                 const eventInfo = {
                     description: description.trim(),
@@ -89,7 +96,8 @@ class addEvent extends React.Component{
                     host_follower_list: follower_list,
                     hostUserId: Fire.uid,
                     coords: location.coords,
-                    location: location
+                    location: location,
+                    eventTag: eventTag
                 }
 
                 const uploadImage = image
@@ -169,7 +177,7 @@ class addEvent extends React.Component{
                     <View style={styles.DescriptionView}> 
                         <Text style={styles.emptySpace} ></Text>
                         <TextInput
-                            placeholder="I wylldo..."
+                            placeholder="I will... (more detailed location and description)"
                             multiline={true}
                             onChangeText={(text) => this.setState({description:text})}
                             maxLength={250}

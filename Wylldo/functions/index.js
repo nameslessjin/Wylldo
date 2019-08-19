@@ -222,7 +222,7 @@ exports.onAddComment = functions.firestore
                 let payload = {
                     notification:{
                         title: 'Comment',
-                        body: username + ' just commented your post.  Check it out',
+                        body: username + ' just commented on your post.  Check it out',
                         sound: 'default'
                     }
                 }
@@ -304,7 +304,8 @@ exports.onEventCreated = functions.firestore
                     joinedNum: snap.data().joinedNum,
                     inviteCount: snap.data().inviteCount,
                     viewType: snap.data().viewType,
-                    isCompleted: snap.data().isCompleted
+                    isCompleted: snap.data().isCompleted,
+                    eventTag: snap.data().eventTag
                 },
                 g: snap.data().geoHash,
                 l: snap.data().geoCoordinates

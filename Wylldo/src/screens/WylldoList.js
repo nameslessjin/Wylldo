@@ -8,8 +8,9 @@ import ListEvents from '../Components/ListEvents'
 import {getEvents, loadMoreEvents, getMapEvents} from '../store/actions/action.index'
 import Fire from '../firebase/Fire'
 import { goToAuth } from '../navigation';
+import SortListBtn from '../Components/SortListBtn'
 
-const DOC_NUM = 5
+const DOC_NUM = 4
 
 class WylldoList extends React.Component{
 
@@ -39,8 +40,15 @@ class WylldoList extends React.Component{
         this.state = {
             loading: false,
             refreshing: false,
-            userLocation: {}
+            userLocation: {},
+            sortButtons: [
+                {name: 'Following', isSet: false},
+                {name: 'Fun', isSet: false},
+                {name: 'Sport', isSet: false}
+            ],
+            startPosition: null
         }
+
         this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(this.tabChanged)
     }
 
@@ -59,10 +67,49 @@ class WylldoList extends React.Component{
     }
 
     getMapEventData = async () => {
+        const sortOption = this._findSortType()
         const {latitude, longitude} = this.state.userLocation
         const userLocation = {latitude: latitude, longitude: longitude}
-        const mapEventData = await Fire.getMapEvents(userLocation)
+        const mapEventData = await Fire.getMapEvents(userLocation, sortOption)
+        // console.log(mapEventData)
         return mapEventData
+    }
+
+    _findSortType = () => {
+        const {sortButtons} = this.state
+        let sortOption = sortButtons.map(btn => btn)
+        const option = sortOption.find(option => {
+                return (option.name !='Following' && option.isSet == true) || null
+            })
+        return (option) ? option.name : null
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        const prevSortButtons = prevState.sortButtons
+        const sortButtons = this.state.sortButtons
+        if (prevSortButtons != sortButtons){
+            
+            if (sortButtons[0].isSet == prevSortButtons[0].isSet){
+                this._onRefresh()
+            }
+
+        }
+    }
+
+    _followingEvents = () => {
+        const {events} = this.props
+        const {following_list} = this.props.currentUser
+        let eventList = [...events]
+        eventList = eventList.filter(event => {
+            return ( following_list.find(userId => {
+                return userId == event.hostUserId
+            }))
+
+        })
+        
+
+        return eventList
+        
     }
 
     // componentWillUnmount(){
@@ -71,7 +118,7 @@ class WylldoList extends React.Component{
 
     //This part actually load when the home page is launched
     shouldComponentUpdate(nextProps, nextState){
-        return nextProps != this.props
+        return (nextProps != this.props || nextState != this.state)
     }
 
     findCoordinates = () => {
@@ -86,9 +133,14 @@ class WylldoList extends React.Component{
                     timestamp: position.coords.timestamp
                 }
                 this.setState({userLocation})
+                // this.startPosition = null
                 this.getMapEventData().then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
-                    this.getEventData().then(events => {this.props.onGetEvents(events)})
+                    this.getEventData().then(res => {
+                        const {eventData, cursor} = res
+                        this.props.onGetEvents(eventData)
+                        this.setState({startPosition: cursor})
+                    })
                 })
                 .catch(error => {console.log(error)}) 
             },
@@ -100,9 +152,8 @@ class WylldoList extends React.Component{
     getEventData = async (startPosition) => {
         this.setState({refreshing: true})
         const {eventData, cursor} = await Fire.getEvents({size: DOC_NUM, start: startPosition, eventIdList: this.props.mapEventIdList})
-        this.startPosition = cursor
         this.setState({refreshing: false, loading: false})
-        return eventData
+        return {eventData, cursor}
     }
 
     _onRefresh = () => {
@@ -117,9 +168,12 @@ class WylldoList extends React.Component{
     //this function is triggered twice frequently
     _loadMore = () => {
         this.setState({loading: true})
-        if (this.startPosition){
-            this.getEventData(this.startPosition).then(events => {
-                this.props.onLoadMoreEvents(events)
+        const {startPosition} = this.state
+        if (startPosition){
+            this.getEventData(startPosition).then(res => {
+                const {eventData, cursor} = res
+                this.props.onLoadMoreEvents(eventData)
+                this.setState({startPosition: cursor})
             })
             .catch(error => (console.log(error.message)))
         }
@@ -137,29 +191,40 @@ class WylldoList extends React.Component{
         }
     }
 
+    setSort = (sortButtons) => {
+        this.setState({sortButtons: sortButtons})
+    }
+
+
 
     render(){
         LayoutAnimation.easeInEaseOut()
+        const {isSet} = this.state.sortButtons[0]
+        const events = (isSet) ? this._followingEvents() : this.props.events
+        
         const eventDisplay = (this.props.events.length == 0) ? 
-            (<Text adjustsFontSizeToFit style={styles.text} numberOfLines={2}>There is nothing going on currently.  Post your wylldo.  You can be the first!</Text>)
+            (<Text adjustsFontSizeToFit style={styles.text} numberOfLines={2}>There is nothing going on in your region currently.  Be the first one to post your wylldo!</Text>)
             : (
-                <ListEvents 
-                    events={this.props.events} 
-                    componentId={this.props.componentId} 
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh}
-                        />
-                    }
-                    onEndReached = {this._loadMore}
-                    onEndReachedThreshold = {0.5}
 
-                />
+                    <ListEvents 
+                        events={events} 
+                        componentId={this.props.componentId} 
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh}
+                            />
+                        }
+                        onEndReached = {this._loadMore}
+                        onEndReachedThreshold = {0.5}
+
+                    />
+
             )
 
         return(
             <View style={styles.container}>
+                <SortListBtn setSort={(buttons) => this.setSort(buttons)}/>
                 {/* passing all the event data from redux to listevent screen to further process list */}
                 {eventDisplay}
             </View>
@@ -199,4 +264,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginHorizontal: 10
     },
+    sortButtonContainer:{
+        width: '100%',
+        height: 50,
+        backgroundColor: 'grey',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    }
 })
