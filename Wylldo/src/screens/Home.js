@@ -1,7 +1,7 @@
 //Home page
 import React from 'react'
-import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator} from 'react-native'
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
+import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator, Text, ScrollView, Image} from 'react-native'
+import {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps'
 import ClusteredMapView from 'react-native-maps-super-cluster'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
@@ -12,6 +12,8 @@ import {getCurrentUser, getMapEvents} from '../store/actions/action.index'
 import {goToAuth} from '../navigation'
 import {Navigation} from 'react-native-navigation'
 import firebase from 'react-native-firebase'
+import Icon from 'react-native-vector-icons/Ionicons'
+import EventCallOutItem from '../Components/EventCallOutItem'
 
 const INIT_REGION = {
     latitude: 40.798699,
@@ -46,13 +48,20 @@ class Home extends React.Component{
             refreshing: false,
             locationDetails: null,
             loading: false,
-            data: []
+            data: [],
+            userLocation: {},
+            isSameLocation: false,
+            clusterPressed: false,
+            clusterCarryOn: false,
+            initialLoad: true
+            
         }
     }
 
     state = {
         userLocation: {}
     }
+
 
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
 
@@ -79,7 +88,6 @@ class Home extends React.Component{
 
     }
 
-
     componentDidMount(){
         if (Platform.OS == 'android'){
             Fire.createChannel()
@@ -99,6 +107,15 @@ class Home extends React.Component{
 
     }
 
+    componentDidUpdate(prevProps, prevState){
+        const {userLocation} = this.state
+
+        if (userLocation != prevState.userLocation){
+            this.animateToUserLocation(userLocation, 1)
+        }
+
+        // if ()
+    }
 
     componentWillUnmount(){
         this.bottomTabEventListener.remove()
@@ -121,7 +138,7 @@ class Home extends React.Component{
                 this.setState({userLocation})
                 this.getMapEventData(userLocation).then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
-                    this.setState({loading: false})
+                    this.setState({loading: false, initialLoad: false})
                 })
                 .catch(error => {console.log(error)})
             },
@@ -148,9 +165,9 @@ class Home extends React.Component{
 
 
     // When mark is pressed.  This part it rendered twice.
-    // shouldComponentUpdate(nextProps, nextState){
-    //     return nextState.mapEventKey != this.state.mapEventKey
-    // }
+    shouldComponentUpdate(nextProps, nextState){
+        return nextState != this.state
+    }
 
     getCurrentUserData = async () => {
         const currentUserData = await Fire.getUserData(Fire.uid)
@@ -162,14 +179,25 @@ class Home extends React.Component{
         const {latitude, longitude} = userLocation
         const queryLocation = {latitude: latitude, longitude: longitude}
         const mapEventData = await Fire.getMapEvents(queryLocation)
+        
         return mapEventData
     }
 
+    onMapReady = () =>{
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+            .then(granted => {
+                this.setState({paddingTop: 0})
+            })
+    }
+
     mapViewPressedHandler = () => {
+        console.log('map')
         this.setState({markPressed: false, mapPressed: true})
+
     }
 
     getPressedEvent = async (mapEventKey) =>{
+
         let pressedEventData = await Fire.getEventsWithId(mapEventKey)
         pressedEventData = {
             ...pressedEventData,
@@ -179,15 +207,15 @@ class Home extends React.Component{
     }
 
     markPressedHandler = () => {
-        this.setState({markPressed: true, mapPressed: false})
-    }
+        console.log('mark')
+        const {clusterPressed} = this.state
+        if (clusterPressed){
+            this.setState({clusterPressed: false, markPressed: false})
+        } else {
+            this.setState({markPressed: true})
+        }
+        this.setState({mapPressed: false})
 
-
-    onMapReady = () =>{
-        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-            .then(granted => {
-                this.setState({paddingTop: 0})
-            })
     }
 
     onPopUpPress = () => {
@@ -198,47 +226,123 @@ class Home extends React.Component{
         const pointCount = cluster.pointCount,
               coordinate = cluster.coordinate,
               clusterId = cluster.clusterId
-    
-        // use pointCount to calculate cluster size scaling
-        // and apply it to "style" prop below
-    
-        // eventually get clustered points by using
-        // underlying SuperCluster instance
-        // Methods ref: https://github.com/mapbox/supercluster
+
         const clusteringEngine = this.map.getClusteringEngine(),
               clusteredPoints = clusteringEngine.getLeaves(clusterId, 100)
     
-        return (
-          <Marker coordinate={coordinate} onPress={onPress}>
-            <View style={styles.myClusterStyle}>
-              <Text style={styles.myClusterTextStyle}>
-                {pointCount}
-              </Text>
-            </View>
-            {
-              /*
-                Eventually use <Callout /> to
-                show clustered point thumbs, i.e.:
-                <Callout>
-                  <ScrollView>
-                    {
-                      clusteredPoints.map(p => (
-                        <Image source={p.image}>
-                      ))
+        let tagCount = [
+            {name: 'Fun', tag: 'md-beer',  count: 0},
+            {name: 'Sport', tag: 'md-american-football',  count: 0},
+            {name: 'Study', tag: 'md-book', count: 0},
+        ]
+
+        let key = ''
+
+        const clusterEvents = [...clusteredPoints].map((point, index) => {
+            const data = point.properties.item
+            return data
+        })
+
+        clusterEvents.forEach(event => {
+            const eventTag = event.eventTag
+            tagCount.forEach(type => {
+                if (type.name == eventTag){
+                    type.count = type.count + 1
+                    let randomNumber = (Math.random()*10000).toString()
+                    key = key.concat(type.name).concat(randomNumber)
+                }
+            })
+        })
+
+        let clusterEventsId = clusterEvents.map((event, index) => {
+            return [event.createdTime, event.eventId]
+        })
+        clusterEventsId.sort((a, b) => {
+            return (b[0] - a[0])
+        })
+
+
+        const location = clusterEvents.map((event, index) => {
+            return {eventId: event.eventId, coords: event.coords}
+        })
+
+        const iconAndCount = tagCount.map((icon, index) => {
+            return (
+                (icon.count == 0) ? null
+                :(
+                    <View style={styles.tagPair} key={index}>
+                        <Icon name={icon.tag} size={15} />
+                        <Text>{icon.count}</Text>
+                    </View>
+                )
+            )
+        })
+
+        const isSameLocation = (location.every((val, index, arr) => 
+            (val.coords.latitude == arr[0].coords.latitude 
+                && val.coords.longitude == arr[0].coords.longitude)
+        ))
+
+        const callOut = (isSameLocation) ? (
+            <Callout onPress={() => this._onCallOutPress(clusterEventsId)}>
+                <ScrollView style={styles.splitContainer}>
+                    {clusterEvents.map(data => (
+                        <EventCallOutItem
+                            key={data.eventId}
+                            id={data.eventId}
+                            icon={data.tag}
+                            hostAvatar={data.hostAvatar}
+                            likes={data.likes}
+                        />
+                    ))
+
                     }
-                  </ScrollView>
-                </Callout>
-    
-                IMPORTANT: be aware that Marker's onPress event isn't really consistent when using Callout.
-               */
-            }
+                </ScrollView>
+            </Callout> 
+        ) : null
+
+        return (
+          <Marker coordinate={coordinate} key={key} onPress={() => this._onClusterPress(location ,onPress)}>
+
+            <View style={styles.clusterContainer}>
+                {iconAndCount}
+            </View>
+            {callOut}
+
           </Marker>
         )
+    }
+
+    _onClusterPress = (location, onPress) => {
+        const isSameLocation = (location.every((val, index, arr) => 
+            (val.coords.latitude == arr[0].coords.latitude 
+                && val.coords.longitude == arr[0].coords.longitude)
+        ))
+        console.log('cluster')
+        this.setState({mapPressed: false, markPressed: false, clusterPressed: true})
+        if (!isSameLocation){
+            onPress()
+        } else {
+            
+        }
+    }
+
+    _onCallOutPress = (clusterEventsId) => {
+        this.setState({markPressed: false, mapPressed: false, clusterPressed: false})
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'MultiEventDisplay',
+                passProps: {
+                    clusterEventsId: clusterEventsId
+                }
+            }
+        })
     }
 
     renderMarker = (data) => {
         const coords = {latitude: data.coords._latitude, longitude: data.coords._longitude}
         return (
+            
         <Marker
             coordinate={coords}
             key={data.key}
@@ -250,10 +354,21 @@ class Home extends React.Component{
         )
     }
 
+
+
+    animateToUserLocation = () => {
+        const {userLocation} = this.state
+        if (this.map && userLocation != {}){
+            this.map.getMapRef().animateToRegion(userLocation)
+        }
+    }
+
     render(){
 
+        const {markPressed, mapPressed, loading, initialLoad} = this.state
+
         let popUp = null 
-        if (this.state.markPressed && !this.state.mapPressed){         
+        if (markPressed && !mapPressed){         
             const pressedEvent = this.state.pressedEvent
             if (pressedEvent){
                 popUp = <PopUpWnd {...pressedEvent}  componentId={this.props.componentId} onPress={() => this.onPopUpPress()} />
@@ -267,24 +382,23 @@ class Home extends React.Component{
 
         return(
             <View style={[styles.container]}>
-                {(this.state.loading) ? <ActivityIndicator size={"large"} style={{zIndex: 1}}/> : null}
+                {(loading && initialLoad) ? <ActivityIndicator size={"large"} style={{zIndex: 1}}/> : null}
                 <ClusteredMapView
                     style={styles.mapStyle}
                     showsUserLocation={true}
-                    showsMyLocationButton={this.state.markPressed ? false : true}
+                    showsMyLocationButton={true}
                     provider={PROVIDER_GOOGLE} 
                     customMapStyle={mapStyle}
                     data={this.props.mapEvents}
                     loadingEnabled={true}
                     initialRegion={INIT_REGION}
-                    region={this.state.userLocation}
                     onPress={this.mapViewPressedHandler}
                     onMarkerPress={this.markPressedHandler}
                     onMapReady={(Platform.OS==='android') ? this.onMapReady : null}
                     ref={(r) => { this.map = r }}
                     renderMarker={this.renderMarker}
                     renderCluster={this.renderCluster} />
-                    {popUp}
+                {popUp}
             </View>
         )
     }
@@ -305,6 +419,28 @@ const styles = StyleSheet.create({
         flex: 1,
         position: 'absolute'
     },
+    clusterContainer:{
+        flexDirection: 'row',
+        minWidth: 45,
+        height: 32,
+        borderRadius: 45,
+        backgroundColor: '#e67e22',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 2
+    },
+    tagPair:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    splitContainer:{
+        minWidth: 60,
+        minHeight: 65,
+        
+        backgroundColor: 'white',
+        paddingHorizontal: 2
+    }
 })
 
 const mapStateToProps = state => {

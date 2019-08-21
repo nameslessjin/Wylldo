@@ -19,6 +19,8 @@ export default class GooglePlaceAutoComplete extends React.Component{
                     debounce = {500}
                     minLength = {3}
                     queryTypes={'establishment'}
+                    lat={this.props.location.latitude}
+                    lng={this.props.location.longitude}
                 >
                     
                     {({handleTextChange, locationResults, fetchDetails, isSearching, inputValue, clearSearchs}) => (

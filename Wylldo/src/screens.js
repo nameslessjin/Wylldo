@@ -12,6 +12,7 @@ export function registerScreens(){
     Navigation.registerComponentWithRedux('Settings', () => require('./screens/Settings').default, Provider, store)
     Navigation.registerComponentWithRedux('FollowerSelect', () => require('./screens/FollowerSelect').default, Provider, store)
     Navigation.registerComponentWithRedux('SingleEvent', () => require('./screens/SingleEvent').default, Provider, store)
+    Navigation.registerComponentWithRedux('MultiEventDisplay', () => require('./screens/MultiEventDisplay').default, Provider, store)
     Navigation.registerComponentWithRedux('JoinedUserList', () => require('./screens/JoinedUserList').default, Provider, store)
     Navigation.registerComponentWithRedux('MainProfile', () => require('./screens/MainProfile').default, Provider, store)
     Navigation.registerComponentWithRedux('Following', () => require('./screens/Following').default, Provider, store)

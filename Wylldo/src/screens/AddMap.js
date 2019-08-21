@@ -222,6 +222,7 @@ export default class AddMap extends React.Component{
                 </TouchableWithoutFeedback>
                 <GooglePlaceAutoComplete
                     returnDetails={locationDetails => this.setState({locationDetails: locationDetails})}
+                    location={this.state.userLocation}
                 />
             </View>
         )

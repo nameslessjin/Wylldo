@@ -12,7 +12,7 @@ export default class LocationPicker extends React.Component{
             if (searchLocation){
                 if (pinLocation.coords.latitude == searchLocation.coords.latitude
                     && pinLocation.coords.longitude == searchLocation.coords.longitude){
-                    location =  searchLocation.short_address
+                    location =  searchLocation.name + ', ' + searchLocation.short_address
                 }
             }
         } else {
@@ -40,11 +40,14 @@ const styles = StyleSheet.create({
     container:{
         alignItems: 'center',
         width: '100%',
-        height: '6%',
+        minHeight: '6%',
         backgroundColor: 'white',
         borderBottomWidth: 0.5,
         borderColor: "#DDDED1",
-        justifyContent:'center'
+        justifyContent:'center',
+        paddingHorizontal: 10,
+        paddingVertical: 5
+        
     },
     locationText:{
         fontSize: width * 0.04

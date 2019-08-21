@@ -97,7 +97,7 @@ class addEvent extends React.Component{
                     hostUserId: Fire.uid,
                     coords: location.coords,
                     location: location,
-                    eventTag: eventTag
+                    eventTag: eventTag,
                 }
 
                 const uploadImage = image

@@ -46,7 +46,8 @@ class WylldoList extends React.Component{
                 {name: 'Fun', isSet: false},
                 {name: 'Sport', isSet: false}
             ],
-            startPosition: null
+            startPosition: null,
+            initialLoad: true
         }
 
         this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(this.tabChanged)
@@ -159,7 +160,7 @@ class WylldoList extends React.Component{
     getEventData = async (startPosition) => {
         this.setState({refreshing: true})
         const {eventData, cursor} = await Fire.getEvents({size: DOC_NUM, start: startPosition, eventIdList: this.props.mapEventIdList})
-        this.setState({refreshing: false})
+        this.setState({refreshing: false, initialLoad: false})
         return {eventData, cursor}
     }
 
@@ -214,7 +215,7 @@ class WylldoList extends React.Component{
         // console.log('Props: ', this.props.events)
         
         const eventDisplay = (this.state.loading) ? <ActivityIndicator size={'large'}/>
-            : (this.props.events.length == 0) 
+            : (events.length == 0) 
             ? (<Text adjustsFontSizeToFit style={styles.text} numberOfLines={2}>There is nothing going on in your region currently.  Be the first one to post your wylldo!</Text>)
             :   (
 

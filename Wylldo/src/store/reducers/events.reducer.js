@@ -32,7 +32,9 @@ export default reducer = (state = initialState, action) => {
                 endTime: action.EventInfo[0].endTime,
                 coords: action.EventInfo[0].geoCoordinates,
                 key: action.EventInfo[0].key,
-                createdTime: action.EventInfo[0].timestamp
+                createdTime: action.EventInfo[0].timestamp,
+                location: action.EventInfo[0].location.coords,
+                eventTag: action.EventInfo[0].eventTag
             }]
             const updateEvents = action.EventInfo.concat(state.Events)
             const updateMapEvents = mapEventData.concat(state.mapEvents)

@@ -269,7 +269,10 @@ class Fire {
                     hostAvatar:{
                         uri: hostAvatarUri
                     },
-                    location: mapEvent.coords
+                    location: {
+                        latitude: mapEvent.coords._latitude,
+                        longitude: mapEvent.coords._longitude
+                    }
                 }
                 mapEventData.push(mapEventsWithKey)
             }
