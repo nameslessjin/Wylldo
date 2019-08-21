@@ -429,6 +429,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
+        position: (Platform.OS=='ios') ? 'absolute' : 'relative'
         
     },
     clusterContainer:{

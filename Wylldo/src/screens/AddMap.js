@@ -5,14 +5,24 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import {Navigation} from 'react-native-navigation'
 import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
+import ClusteredMapView from 'react-native-maps-super-cluster'
 
 const GOOGLE_API='https://maps.googleapis.com/maps/api/geocode/json'
+
+const INIT_REGION = {
+    latitude: 40.798699,
+    longitude: -77.859954,
+    latitudeDelta: 0.0122,
+    longitudeDelta: 0.0122,
+}
+
 export default class AddMap extends React.Component{
 
     static options(){
         return{
             bottomTabs: {
-                visible: false
+                visible: false,
+                drawBehind: true
             },
             topBar:{
                 title:{
@@ -46,6 +56,15 @@ export default class AddMap extends React.Component{
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);
+        this.state={
+            userLocation:{
+                ...this.props.userLocation,
+                latitudeDelta: 0.0122,
+                longitudeDelta: 0.0122,
+            },
+            eventLocation: null,
+            locationDetails: null,
+        }
     }
 
 
@@ -207,14 +226,14 @@ export default class AddMap extends React.Component{
             <View style={styles.container}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <MapView
-                        showsUserLocation={true}
-                        showsMyLocationButton={true}
-                        initialRegion={this.state.userLocation}
-                        provider={PROVIDER_GOOGLE}
-                        customMapStyle={mapStyle}
+                        // showsUserLocation={true}
+                        // showsMyLocationButton={true}
+                        // initialRegion={INIT_REGION}
+                        // provider={PROVIDER_GOOGLE}
+                        // customMapStyle={mapStyle}
                         style={styles.Map}
-                        onPress={this.mapViewPressedHandler}
-                        ref={ref => this.map = ref}
+                        // onPress={this.mapViewPressedHandler}
+                        // ref={ref => this.map = ref}
                         >
                         {searchLocationMarker}
                         {marker}
@@ -245,6 +264,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        position: 'absolute'
+        position: (Platform.OS='ios') ? 'absolute' : 'relative'
     }
 })

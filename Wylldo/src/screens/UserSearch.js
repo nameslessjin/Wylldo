@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Platform} from 'react-native'
 import Fire from '../firebase/Fire'
 import ListUsers from '../Components/ListUsers'
 import {connect} from 'react-redux'
@@ -130,7 +130,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: '100%',
+        width: '100%'
     },
     textInput:{
         height: '100%',
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '5%',
+        height: (Platform.OS=='ios') ? '5%' : '8%',
         width: '90%',
         top: '2%',
     }, 
@@ -165,6 +167,6 @@ const styles = StyleSheet.create({
     userListContainer:{
         top: '2%',
         height: '95%',
-        width: '92%%',
+        width: '92%',
     }
 })

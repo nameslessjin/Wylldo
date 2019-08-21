@@ -10,7 +10,7 @@ import Fire from '../firebase/Fire'
 import { goToAuth } from '../navigation';
 import SortListBtn from '../Components/SortListBtn'
 
-const DOC_NUM = 5
+const DOC_NUM = 7
 
 class WylldoList extends React.Component{
 
@@ -110,11 +110,7 @@ class WylldoList extends React.Component{
             }))
 
         })
-        
-        const uniqueSet = new Set(eventList)
-        eventList = [...uniqueSet]
 
-        
         return eventList
         
     }
@@ -222,7 +218,9 @@ class WylldoList extends React.Component{
         LayoutAnimation.easeInEaseOut()
         const {loading, initialLoad, sortButtons} = this.state
         const {isSet} = sortButtons[0]
-        const events = (isSet) ? this._followingEvents() : this.props.events
+        let events = (isSet) ? this._followingEvents() : this.props.events
+        const uniqueSet = new Set(events)
+        events = [...uniqueSet]
         
         const eventDisplay = (loading && (initialLoad)) ? <ActivityIndicator size={'large'}/>
             : (events.length == 0) 
