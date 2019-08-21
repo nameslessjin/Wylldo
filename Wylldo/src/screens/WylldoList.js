@@ -68,7 +68,6 @@ class WylldoList extends React.Component{
     }
 
     getMapEventData = async () => {
-        this.setState({loading: true})
         const sortOption = this._findSortType()
         // console.log('Sort: ', sortOption)
         const {latitude, longitude} = this.state.userLocation
@@ -88,6 +87,7 @@ class WylldoList extends React.Component{
         return (option) ? option.name : null
     }
 
+
     componentDidUpdate(prevProps, prevState){
         const prevSortButtons = prevState.sortButtons
         const sortButtons = this.state.sortButtons
@@ -102,10 +102,8 @@ class WylldoList extends React.Component{
 
     _followingEvents = () => {
         const {events} = this.props
-        
         const {following_list} = this.props.currentUser
         let eventList = [...events]
-        console.log('ListProps: ', eventList)
         eventList = eventList.filter(event => {
             return ( following_list.find(userId => {
                 return userId == event.hostUserId
@@ -113,8 +111,10 @@ class WylldoList extends React.Component{
 
         })
         
-        // console.log('List: ', eventList)
+        const uniqueSet = new Set(eventList)
+        eventList = [...uniqueSet]
 
+        
         return eventList
         
     }
@@ -131,23 +131,35 @@ class WylldoList extends React.Component{
     findCoordinates = () => {
         this.watchId = navigator.geolocation.getCurrentPosition(
             position => {
+                // For production
+                // const userLocation = {
+                //     ...userLocation,
+                //     latitude: position.coords.latitude,
+                //     longitude: position.coords.longitude,
+                //     latitudeDelta: 0.0244,
+                //     longitudeDelta: 0.0244,
+                //     timestamp: new Date()
+                // }
+
+                // For development
                 const userLocation = {
                     ...userLocation,
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
+                    latitude: 40.798699,
+                    longitude: -77.859954,
                     latitudeDelta: 0.0244,
                     longitudeDelta: 0.0244,
-                    timestamp: position.coords.timestamp
+                    timestamp: new Date()
                 }
+
                 this.setState({userLocation})
                 // this.startPosition = null
+                this.setState({loading: true})
                 this.getMapEventData().then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
                     this.getEventData().then(res => {
                         const {eventData, cursor} = res
-                        console.log(res)
                         this.props.onGetEvents(eventData)
-                        this.setState({startPosition: cursor, loading: false})
+                        this.setState({startPosition: cursor, loading: false, initialLoad: false})
                     })
                 })
                 .catch(error => {console.log(error)}) 
@@ -160,7 +172,7 @@ class WylldoList extends React.Component{
     getEventData = async (startPosition) => {
         this.setState({refreshing: true})
         const {eventData, cursor} = await Fire.getEvents({size: DOC_NUM, start: startPosition, eventIdList: this.props.mapEventIdList})
-        this.setState({refreshing: false, initialLoad: false})
+        this.setState({refreshing: false})
         return {eventData, cursor}
     }
 
@@ -206,15 +218,13 @@ class WylldoList extends React.Component{
         this.setState({sortButtons: sortButtons})
     }
 
-
-
     render(){
         LayoutAnimation.easeInEaseOut()
-        const {isSet} = this.state.sortButtons[0]
+        const {loading, initialLoad, sortButtons} = this.state
+        const {isSet} = sortButtons[0]
         const events = (isSet) ? this._followingEvents() : this.props.events
-        // console.log('Props: ', this.props.events)
         
-        const eventDisplay = (this.state.loading) ? <ActivityIndicator size={'large'}/>
+        const eventDisplay = (loading && (initialLoad)) ? <ActivityIndicator size={'large'}/>
             : (events.length == 0) 
             ? (<Text adjustsFontSizeToFit style={styles.text} numberOfLines={2}>There is nothing going on in your region currently.  Be the first one to post your wylldo!</Text>)
             :   (

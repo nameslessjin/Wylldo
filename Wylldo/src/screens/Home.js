@@ -126,15 +126,27 @@ class Home extends React.Component{
     findCoordinates = () => {
         this.watchId = navigator.geolocation.getCurrentPosition(
             position => {
+                // For production
+                // const userLocation = {
+                //     ...userLocation,
+                //     latitude: position.coords.latitude,
+                //     longitude: position.coords.longitude,
+                //     latitudeDelta: 0.0244,
+                //     longitudeDelta: 0.0244,
+                //     timestamp: new Date()
+                // }
+
+                // For development
                 const userLocation = {
                     ...userLocation,
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
+                    latitude: 40.798699,
+                    longitude: -77.859954,
                     latitudeDelta: 0.0244,
                     longitudeDelta: 0.0244,
-                    timestamp: position.coords.timestamp
+                    timestamp: new Date()
                 }
 
+                // console.log(userLocation)
                 this.setState({userLocation})
                 this.getMapEventData(userLocation).then( mapEvents => {
                     this.props.onGetMapEvents(mapEvents)
@@ -191,7 +203,7 @@ class Home extends React.Component{
     }
 
     mapViewPressedHandler = () => {
-        console.log('map')
+
         this.setState({markPressed: false, mapPressed: true})
 
     }
@@ -207,7 +219,7 @@ class Home extends React.Component{
     }
 
     markPressedHandler = () => {
-        console.log('mark')
+
         const {clusterPressed} = this.state
         if (clusterPressed){
             this.setState({clusterPressed: false, markPressed: false})
@@ -318,7 +330,7 @@ class Home extends React.Component{
             (val.coords.latitude == arr[0].coords.latitude 
                 && val.coords.longitude == arr[0].coords.longitude)
         ))
-        console.log('cluster')
+
         this.setState({mapPressed: false, markPressed: false, clusterPressed: true})
         if (!isSameLocation){
             onPress()
@@ -417,7 +429,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        position: 'absolute'
+        
     },
     clusterContainer:{
         flexDirection: 'row',

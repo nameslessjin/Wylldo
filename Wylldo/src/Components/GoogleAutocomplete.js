@@ -1,8 +1,10 @@
 import {GoogleAutoComplete} from 'react-native-google-autocomplete'
 import React from 'react'
-import {StyleSheet, View, Platform, TextInput, ScrollView, ActivityIndicator} from 'react-native'
+import {StyleSheet, View, TextInput, ScrollView, ActivityIndicator, Platform, Dimensions} from 'react-native'
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
 import LocationItem from './LocationItem'
+
+const {height} = Dimensions.get('window')
 
 export default class GooglePlaceAutoComplete extends React.Component{
 
@@ -28,6 +30,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                             {(inputValue=='') ? locationResults=[] : null}
                             <View>
                                 <TextInput 
+                                    adjustsFontSizeToFit
                                     style={styles.textInput}
                                     placeholder="Search a place or press the map"
                                     onChangeText={handleTextChange}
@@ -61,7 +64,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
 const styles = StyleSheet.create({
     container:{
         backgroundColor: '#fff',
-        height: '5%',
+        height: (Platform.OS = 'ios') ? '5%' : '10%',
         width: '75%',
         bottom: '45%',
         borderRadius: 10
