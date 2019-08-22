@@ -99,6 +99,9 @@ export default class SignIn extends React.Component{
                         <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onLogInPressed()}>
                             <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity style={styles.forgotPasswordBtn}>
+                            <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -143,6 +146,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     verifyEmailText:{
+        color: '#0481fe'
+    },
+    forgotPasswordBtn:{
+        marginTop: 20
+    },
+    forgotPasswordText:{
         color: '#0481fe'
     }
 })

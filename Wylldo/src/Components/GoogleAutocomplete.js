@@ -4,7 +4,7 @@ import {StyleSheet, View, TextInput, ScrollView, ActivityIndicator, Platform, Di
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
 import LocationItem from './LocationItem'
 
-const {height} = Dimensions.get('window')
+const {height, width} = Dimensions.get('window')
 
 export default class GooglePlaceAutoComplete extends React.Component{
 
@@ -20,7 +20,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                     apiKey = {API_KEY}
                     debounce = {500}
                     minLength = {3}
-                    radius= {100000}
+                    radius= {'10000'}
                     queryTypes={'establishment'}
                     lat={this.props.location.latitude}
                     lng={this.props.location.longitude}
@@ -29,7 +29,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                     {({handleTextChange, locationResults, fetchDetails, isSearching, inputValue, clearSearchs}) => (
                         <React.Fragment>
                             {(inputValue=='') ? locationResults=[] : null}
-                            <View>
+                            <View style={styles.inputWrapper}>
                                 <TextInput 
                                     adjustsFontSizeToFit
                                     style={styles.textInput}
@@ -39,17 +39,17 @@ export default class GooglePlaceAutoComplete extends React.Component{
                                 />
                             </View>
 
+
                             {isSearching && <ActivityIndicator size="large" color="grey"/>}
-                            <ScrollView style={styles.locationItems}>
-                                {locationResults.map(el => (
+                            <ScrollView style={styles.locationItems} keyboardDismissMode={'interactive'} >
+                                {locationResults.map((el, i) => (
                                     <LocationItem
                                         {...el}
-                                        key={el.place_id}
+                                        key={String(i)}
                                         fetchDetails={fetchDetails}
                                         returnDetails={details => {
-                                            console.log(details)
-                                            this.props.returnDetails(details)
                                             clearSearchs()
+                                            this.props.returnDetails(details)
                                         }}
                                     />
                                 ))}
@@ -64,23 +64,34 @@ export default class GooglePlaceAutoComplete extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: '#fff',
-        height: (Platform.OS == 'ios') ? '5%' : '7%',
-        width: '75%',
+        // backgroundColor: '#fff',
+        // height: (Platform.OS == 'ios') ? '5%' : '7%',
+        // width: '75%',
         bottom: '45%',
-        borderRadius: 10
+        // borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // flex: 1
     },
     textInput:{
         height: '100%',
         width: '100%',
         paddingHorizontal: 16,
     },
+    inputWrapper:{
+        width: width * 0.75,
+        borderWidth: 1,
+        height: (Platform.OS == 'ios') ? height * 0.05 : height * 0.06,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+    },
     locationItems:{
         top: '100%',
         maxHeight: 200,
-        width: '100%',
+        width: '75%',
         position: 'absolute',
         backgroundColor: 'white',
-        borderRadius: 10
+        borderRadius: 10,
+        zIndex: 1
     }
 })

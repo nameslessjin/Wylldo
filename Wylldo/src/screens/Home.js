@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
     splitContainer:{
         minWidth: 60,
         minHeight: 65,
-        
+        maxHeight: 150,
         backgroundColor: 'white',
         paddingHorizontal: 2
     }

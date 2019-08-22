@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
         borderBottomColor:  "#DDDED1",
         justifyContent: 'center',
         paddingHorizontal: 10,
-        paddingVertical: 5
+        paddingVertical: 5,
+        
     }
 })

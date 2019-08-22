@@ -7,6 +7,24 @@ import CustomMarker from '../Components/CustomMarker'
 
 export default class ShowMap extends React.Component{
 
+    static options(){
+        return{
+            bottomTabs: {
+                visible: false,
+                drawBehind: true
+            },
+            topBar:{
+                title:{
+                    text: 'Location',
+                    alignment: 'center'
+                },
+                backButton:{
+                    showTitle: false,
+                },
+            }
+        }
+    }
+
     state={
         markerLocation:{
             latitude: this.props.coords.latitude,

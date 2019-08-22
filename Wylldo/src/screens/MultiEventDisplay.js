@@ -30,12 +30,14 @@ export default class MultiEventDisplay extends React.Component{
 
     render(){
         const {eventData} = this.state
-        console.log(eventData)
+
+        
         return(
             <ScrollView style={{backgroundColor: 'white'}}>
-                {eventData.map(data => (
-                    <EventDisplay {...data} />
-                ))}
+                {eventData.map(data => {
+
+                    return <EventDisplay {...data} componentId = {this.props.componentId} />
+                })}
             </ScrollView>
         )
     }

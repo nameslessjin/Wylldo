@@ -5,7 +5,6 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import {Navigation} from 'react-native-navigation'
 import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
-import ClusteredMapView from 'react-native-maps-super-cluster'
 
 const GOOGLE_API='https://maps.googleapis.com/maps/api/geocode/json'
 
@@ -51,6 +50,7 @@ export default class AddMap extends React.Component{
         },
         eventLocation: null,
         locationDetails: null,
+        searchMarkerSelect: false
     }
 
     constructor(props){
@@ -89,7 +89,7 @@ export default class AddMap extends React.Component{
 
     navigationButtonPressed = ({buttonId}) => {
         if(buttonId == "AddEvent"){
-            const {eventLocation, locationDetails} = this.state
+            const {eventLocation, locationDetails, searchMarkerSelect} = this.state
             this.getLocation(eventLocation).then(data => {
                 let pinLocation = null
                 let searchLocation = null
@@ -128,6 +128,10 @@ export default class AddMap extends React.Component{
                     }
                 }
 
+                if (searchMarkerSelect){
+                    pinLocation = searchLocation
+                }
+
                 Navigation.push(this.props.componentId, {
                     component:{
                         name: 'AddEvent',
@@ -152,10 +156,10 @@ export default class AddMap extends React.Component{
                     longitude: coords.longitude,
                     latitudeDelta: 0.0032,
                     longitudeDelta: 0.0032,
-                }
+                },
+                searchMarkerSelect: false
             }
         })
-        // this.getLocation(coords)
     }
 
     getLocation = async (coords) => {
@@ -190,7 +194,9 @@ export default class AddMap extends React.Component{
         // .catch(err => console.error(err))
     }
 
-
+    onSearchMarkerPress = () => {
+        this.setState({searchMarkerSelect: true})
+    }
 
     render(){
         const {eventLocation, locationDetails} = this.state
@@ -210,25 +216,39 @@ export default class AddMap extends React.Component{
             }
             
 
-            const markerColor= (eventLocation) ? (eventLocation.latitude==locationCoordinate.latitude && eventLocation.longitude==locationCoordinate.longitude) 
+            const markerColor= (eventLocation) ? (Math.floor(eventLocation.latitude * 10000)==Math.floor(locationCoordinate.latitude * 10000)
+                    && Math.floor(eventLocation.longitude * 10000)==Math.floor(locationCoordinate.longitude * 10000)) 
                             ? '#e74c3c' : "#DDDED1" 
                             : "#DDDED1"
+
+            console.log(eventLocation)            
             searchLocationMarker = (
                 <Marker 
                     pinColor={markerColor}
                     coordinate={locationCoordinate} 
                     title={locationDetails.name}
-                    description={'Press any place on the map to set your location'}
+                    description={'Location Selected.  Press any place on the map to reselect'}
+                    onPress={this.onSearchMarkerPress}
                 />)
+
+            // if (Platform.OS=='android'){
+            //     if (eventLocation){
+            //         if (eventLocation.latitude==locationCoordinate.latitude && eventLocation.longitude==locationCoordinate.longitude){
+            //             searchLocationMarker = null
+            //         }
+                    
+            //     }
+            // }
+
         }
 
         return(
-            <View style={styles.container}>
+            <View style={styles.container} >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <MapView
                         showsUserLocation={true}
                         showsMyLocationButton={true}
-                        initialRegion={INIT_REGION}
+                        initialRegion={this.state.userLocation}
                         provider={PROVIDER_GOOGLE}
                         customMapStyle={mapStyle}
                         style={styles.Map}
@@ -264,6 +284,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        position: (Platform.OS='ios') ? 'absolute' : 'relative'
+        position: 'absolute'
     }
 })
