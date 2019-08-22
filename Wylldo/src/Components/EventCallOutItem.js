@@ -1,26 +1,37 @@
 import React from 'react'
-import { View, StyleSheet, Text, ImageBackground, Image, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Text, ImageBackground, Image} from 'react-native'
 import Icon from "react-native-vector-icons/Ionicons"
 
 export default class EventCallOutItem extends React.Component{
 
-    _onPress = () => {
-        console.log(this.props.id)
+    onLoad = () => {
+        
+        this.forceUpdate()
     }
+
 
     render() {
         const {icon, hostAvatar, likes, id} = this.props
         return (
-            <TouchableOpacity 
+            <View 
                 style={[styles.container, likes >= 10 ? {backgroundColor: 'e74c3c'} : null]}
-                onPress={this._onPress}
                 >
+                {/* <View style={styles.imgStyle}>
+                    <ImageBackground
+                        source={hostAvatar}
+                        style={styles.imgStyle} imageStyle={{resizeMode: 'cover'}}
+                        onLoad  = {() => this.forceUpdate()}
+                        >
+                    </ImageBackground>
+                </View> */}
+
                 <Image
                     source = {hostAvatar}
                     style={styles.imgStyle}
+                    onLoad={() => this.forceUpdate()}
                 />
                 <Icon name={icon} size={15} />
-            </TouchableOpacity>
+            </View>
         )
     }
 
@@ -38,9 +49,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderBottomWidth: StyleSheet.hairlineWidth
     },
-    imgStyle:{
+    ImgView:{
+        borderRadius: 14,
         height: '95%',
         aspectRatio: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    imgStyle:{
+        height: '100%',
+        aspectRatio: 1,
         borderRadius: 14,
+        backgroundColor: 'green',
     }
 })

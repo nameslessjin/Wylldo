@@ -20,6 +20,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                     apiKey = {API_KEY}
                     debounce = {500}
                     minLength = {3}
+                    radius= {100000}
                     queryTypes={'establishment'}
                     lat={this.props.location.latitude}
                     lng={this.props.location.longitude}

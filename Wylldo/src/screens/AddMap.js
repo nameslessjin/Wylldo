@@ -226,14 +226,14 @@ export default class AddMap extends React.Component{
             <View style={styles.container}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <MapView
-                        // showsUserLocation={true}
-                        // showsMyLocationButton={true}
-                        // initialRegion={INIT_REGION}
-                        // provider={PROVIDER_GOOGLE}
-                        // customMapStyle={mapStyle}
+                        showsUserLocation={true}
+                        showsMyLocationButton={true}
+                        initialRegion={INIT_REGION}
+                        provider={PROVIDER_GOOGLE}
+                        customMapStyle={mapStyle}
                         style={styles.Map}
-                        // onPress={this.mapViewPressedHandler}
-                        // ref={ref => this.map = ref}
+                        onPress={this.mapViewPressedHandler}
+                        ref={ref => this.map = ref}
                         >
                         {searchLocationMarker}
                         {marker}

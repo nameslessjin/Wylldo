@@ -1,7 +1,7 @@
 //Home page
 import React from 'react'
-import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator, Text, ScrollView, Image} from 'react-native'
-import {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps'
+import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator, Text, ScrollView, Dimensions} from 'react-native'
+import {PROVIDER_GOOGLE, Marker, Callout,} from 'react-native-maps'
 import ClusteredMapView from 'react-native-maps-super-cluster'
 import mapStyle from '../UI/MapStyle'
 import CustomMarker from '../Components/CustomMarker'
@@ -14,6 +14,8 @@ import {Navigation} from 'react-native-navigation'
 import firebase from 'react-native-firebase'
 import Icon from 'react-native-vector-icons/Ionicons'
 import EventCallOutItem from '../Components/EventCallOutItem'
+
+const {width, height} = Dimensions.get('window')
 
 const INIT_REGION = {
     latitude: 40.798699,
@@ -295,9 +297,11 @@ class Home extends React.Component{
                 && val.coords.longitude == arr[0].coords.longitude)
         ))
 
-        const callOut = (isSameLocation) ? (
+        this.tracksViewChanges = true
+
+        const callOut = (isSameLocation && Platform.OS == 'ios') ? (
             <Callout onPress={() => this._onCallOutPress(clusterEventsId)}>
-                <ScrollView style={styles.splitContainer}>
+                <ScrollView  style={styles.splitContainer}>
                     {clusterEvents.map(data => (
                         <EventCallOutItem
                             key={data.eventId}
@@ -305,6 +309,7 @@ class Home extends React.Component{
                             icon={data.tag}
                             hostAvatar={data.hostAvatar}
                             likes={data.likes}
+                            
                         />
                     ))
 
@@ -314,7 +319,7 @@ class Home extends React.Component{
         ) : null
 
         return (
-          <Marker coordinate={coordinate} key={key} onPress={() => this._onClusterPress(location ,onPress)}>
+          <Marker  coordinate={coordinate} key={key} onPress={() => this._onClusterPress(location ,onPress, clusterEventsId)}>
 
             <View style={styles.clusterContainer}>
                 {iconAndCount}
@@ -325,17 +330,20 @@ class Home extends React.Component{
         )
     }
 
-    _onClusterPress = (location, onPress) => {
+    _onClusterPress = (location, onPress, clusterEventsId) => {
+        
         const isSameLocation = (location.every((val, index, arr) => 
             (val.coords.latitude == arr[0].coords.latitude 
                 && val.coords.longitude == arr[0].coords.longitude)
         ))
-
-        this.setState({mapPressed: false, markPressed: false, clusterPressed: true})
         if (!isSameLocation){
             onPress()
+        }
+
+        if (Platform.OS=='ios'){
+            this.setState({mapPressed: false, markPressed: false, clusterPressed: true})
         } else {
-            
+            this._onCallOutPress(clusterEventsId)
         }
     }
 
@@ -398,6 +406,7 @@ class Home extends React.Component{
                 <ClusteredMapView
                     style={styles.mapStyle}
                     showsUserLocation={true}
+                    moveOnMarkerPress={false}
                     showsMyLocationButton={true}
                     provider={PROVIDER_GOOGLE} 
                     customMapStyle={mapStyle}
