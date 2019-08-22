@@ -9,7 +9,7 @@ export default class PickTag extends React.Component{
         icons:[
             {name: 'md-beer', tagged: true, description: 'Fun'},
             {name: 'md-american-football', tagged: false, description: 'Sport'},
-            // {name: 'md-book', tagged: false},
+            {name: 'md-book', tagged: false, description: 'Study'},
         ]
     }
 

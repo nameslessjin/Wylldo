@@ -64,14 +64,9 @@ export default class GooglePlaceAutoComplete extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        // backgroundColor: '#fff',
-        // height: (Platform.OS == 'ios') ? '5%' : '7%',
-        // width: '75%',
         bottom: '45%',
-        // borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        // flex: 1
     },
     textInput:{
         height: '100%',

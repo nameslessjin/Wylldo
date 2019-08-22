@@ -14,6 +14,7 @@ import {Navigation} from 'react-native-navigation'
 import firebase from 'react-native-firebase'
 import Icon from 'react-native-vector-icons/Ionicons'
 import EventCallOutItem from '../Components/EventCallOutItem'
+import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
 
 const {width, height} = Dimensions.get('window')
 
@@ -420,6 +421,19 @@ class Home extends React.Component{
                     renderMarker={this.renderMarker}
                     renderCluster={this.renderCluster} />
                 {popUp}
+                {
+                    (Platform.OS == 'ios') ? (
+                        <View style={{bottom: '38%' , width: '100%'}}>
+                            <GooglePlaceAutoComplete
+                                returnDetails={locationDetails => this.setState({locationDetails: locationDetails})}
+                                location={this.state.userLocation}
+                            />
+                        </View>
+                    ) : (
+                        null
+                    )
+                }
+
             </View>
         )
     }
