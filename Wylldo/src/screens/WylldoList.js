@@ -125,32 +125,35 @@ class WylldoList extends React.Component{
     }
 
     findCoordinates = () => {
+        this.setState({loading: true})
         this.watchId = navigator.geolocation.getCurrentPosition(
             position => {
                 // For production
-                // const userLocation = {
-                //     ...userLocation,
-                //     latitude: position.coords.latitude,
-                //     longitude: position.coords.longitude,
-                //     latitudeDelta: 0.0244,
-                //     longitudeDelta: 0.0244,
-                //     timestamp: new Date()
-                // }
-
-                // For development
                 const userLocation = {
                     ...userLocation,
-                    latitude: 40.798699,
-                    longitude: -77.859954,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
                     latitudeDelta: 0.0244,
                     longitudeDelta: 0.0244,
                     timestamp: new Date()
                 }
 
+                // // For development
+                // const userLocation = {
+                //     ...userLocation,
+                //     latitude: 40.798699,
+                //     longitude: -77.859954,
+                //     latitudeDelta: 0.0244,
+                //     longitudeDelta: 0.0244,
+                //     timestamp: new Date()
+                // }
+
                 this.setState({userLocation})
                 // this.startPosition = null
-                this.setState({loading: true})
                 this.getMapEventData().then( mapEvents => {
+                    if (mapEvents == []){
+                        this.setState({loading: false})
+                    }
                     this.props.onGetMapEvents(mapEvents)
                     this.getEventData().then(res => {
                         const {eventData, cursor} = res
@@ -161,7 +164,7 @@ class WylldoList extends React.Component{
                 .catch(error => {console.log(error)}) 
             },
             error => console.log(error.message),
-            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+            {enableHighAccuracy: false, timeout: 60000, maximumAge: 1000}
         )
     }
 

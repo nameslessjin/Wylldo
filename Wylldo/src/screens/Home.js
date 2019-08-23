@@ -1,6 +1,6 @@
 //Home page
 import React from 'react'
-import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator, Text, ScrollView, Dimensions} from 'react-native'
+import {View, StyleSheet, Platform, PermissionsAndroid, ActivityIndicator, Text, ScrollView, Dimensions, Keyboard} from 'react-native'
 import {PROVIDER_GOOGLE, Marker, Callout,} from 'react-native-maps'
 import ClusteredMapView from 'react-native-maps-super-cluster'
 import mapStyle from '../UI/MapStyle'
@@ -61,10 +61,6 @@ class Home extends React.Component{
         }
     }
 
-    state = {
-        userLocation: {}
-    }
-
 
     tabChanged = ({selectedTabIndex, unselectedTabIndex}) => {
 
@@ -111,13 +107,21 @@ class Home extends React.Component{
     }
 
     componentDidUpdate(prevProps, prevState){
-        const {userLocation} = this.state
+        const {userLocation, locationDetails} = this.state
 
         if (userLocation != prevState.userLocation){
             this.animateToUserLocation(userLocation, 1)
         }
 
-        // if ()
+        if (locationDetails != prevState.locationDetails){
+            const locationCoordinate= {
+                latitude: locationDetails.geometry.location.lat,
+                longitude: locationDetails.geometry.location.lng,
+                latitudeDelta: 0.0032,
+                longitudeDelta: 0.0032
+            }
+            this.map.getMapRef().animateToRegion(locationCoordinate, 1)
+        }
     }
 
     componentWillUnmount(){
@@ -129,36 +133,38 @@ class Home extends React.Component{
     findCoordinates = () => {
         this.watchId = navigator.geolocation.getCurrentPosition(
             position => {
+                this.setState({loading: true})
                 // For production
-                // const userLocation = {
-                //     ...userLocation,
-                //     latitude: position.coords.latitude,
-                //     longitude: position.coords.longitude,
-                //     latitudeDelta: 0.0244,
-                //     longitudeDelta: 0.0244,
-                //     timestamp: new Date()
-                // }
-
-                // For development
                 const userLocation = {
                     ...userLocation,
-                    latitude: 40.798699,
-                    longitude: -77.859954,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
                     latitudeDelta: 0.0244,
                     longitudeDelta: 0.0244,
                     timestamp: new Date()
                 }
 
+                // // For development
+                // const userLocation = {
+                //     ...userLocation,
+                //     latitude: 40.798699,
+                //     longitude: -77.859954,
+                //     latitudeDelta: 0.0244,
+                //     longitudeDelta: 0.0244,
+                //     timestamp: new Date()
+                // }
+
                 // console.log(userLocation)
                 this.setState({userLocation})
                 this.getMapEventData(userLocation).then( mapEvents => {
+                    
                     this.props.onGetMapEvents(mapEvents)
                     this.setState({loading: false, initialLoad: false})
                 })
                 .catch(error => {console.log(error)})
             },
             error => console.log(error.message),
-            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+            {enableHighAccuracy: false, timeout: 50000, maximumAge: 1000}
         )
     }
 
@@ -199,14 +205,17 @@ class Home extends React.Component{
     }
 
     onMapReady = () =>{
-        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+            title: "Location Accessing Permission",
+            message: "App needs access to your location to find local events"
+        })
             .then(granted => {
                 this.setState({paddingTop: 0})
             })
     }
 
     mapViewPressedHandler = () => {
-
+        Keyboard.dismiss()
         this.setState({markPressed: false, mapPressed: true})
 
     }
@@ -263,7 +272,7 @@ class Home extends React.Component{
             tagCount.forEach(type => {
                 if (type.name == eventTag){
                     type.count = type.count + 1
-                    let randomNumber = (Math.random()*10000).toString()
+                    let randomNumber = (Math.random()*100000).toString()
                     key = key.concat(type.name).concat(randomNumber)
                 }
             })
@@ -292,10 +301,10 @@ class Home extends React.Component{
                 )
             )
         })
-
+        
         const isSameLocation = (location.every((val, index, arr) => 
-            (val.coords.latitude == arr[0].coords.latitude 
-                && val.coords.longitude == arr[0].coords.longitude)
+            (Math.floor(val.coords.latitude * 1000)== Math.floor(arr[0].coords.latitude * 1000)
+                && Math.floor(val.coords.longitude * 1000) == Math.floor(arr[0].coords.longitude * 1000))
         ))
 
         this.tracksViewChanges = true
@@ -305,7 +314,7 @@ class Home extends React.Component{
                 <ScrollView  style={styles.splitContainer}>
                     {clusterEvents.map(data => (
                         <EventCallOutItem
-                            key={data.eventId}
+                            key={data.eventId || data.likes.toString() + (Math.random()*100000).toString() +  (Math.random()*100000).toString()}
                             id={data.eventId}
                             icon={data.tag}
                             hostAvatar={data.hostAvatar}
@@ -334,8 +343,8 @@ class Home extends React.Component{
     _onClusterPress = (location, onPress, clusterEventsId) => {
         
         const isSameLocation = (location.every((val, index, arr) => 
-            (val.coords.latitude == arr[0].coords.latitude 
-                && val.coords.longitude == arr[0].coords.longitude)
+            (Math.floor(val.coords.latitude * 1000)== Math.floor(arr[0].coords.latitude * 1000)
+                && Math.floor(val.coords.longitude * 1000) == Math.floor(arr[0].coords.longitude * 1000))
         ))
         if (!isSameLocation){
             onPress()
@@ -406,6 +415,8 @@ class Home extends React.Component{
                 {(loading && initialLoad) ? <ActivityIndicator size={"large"} style={{zIndex: 1}}/> : null}
                 <ClusteredMapView
                     style={styles.mapStyle}
+                    minZoom = {1}
+                    maxZoom = {24}
                     showsUserLocation={true}
                     moveOnMarkerPress={false}
                     showsMyLocationButton={true}

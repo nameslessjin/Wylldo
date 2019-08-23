@@ -1,6 +1,6 @@
 import {GoogleAutoComplete} from 'react-native-google-autocomplete'
 import React from 'react'
-import {StyleSheet, View, TextInput, ScrollView, ActivityIndicator, Platform, Dimensions} from 'react-native'
+import {StyleSheet, View, TextInput, ScrollView, ActivityIndicator, Platform, Dimensions, Text} from 'react-native'
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
 import LocationItem from './LocationItem'
 
@@ -41,19 +41,27 @@ export default class GooglePlaceAutoComplete extends React.Component{
 
 
                             {isSearching && <ActivityIndicator size="large" color="grey"/>}
-                            <ScrollView style={styles.locationItems} keyboardDismissMode={'interactive'} >
-                                {locationResults.map((el, i) => (
-                                    <LocationItem
-                                        {...el}
-                                        key={String(i)}
-                                        fetchDetails={fetchDetails}
-                                        returnDetails={details => {
-                                            clearSearchs()
-                                            this.props.returnDetails(details)
-                                        }}
-                                    />
-                                ))}
-                            </ScrollView>
+                            {
+                                (locationResults.length == 0) ? null
+                                : (
+                                    <ScrollView style={styles.locationItems} keyboardDismissMode={'interactive'} >
+                                        {locationResults.map((el, i) => (
+                                            <LocationItem
+                                                {...el}
+                                                key={String(i)}
+                                                fetchDetails={fetchDetails}
+                                                returnDetails={details => {
+                                                    clearSearchs()
+                                                    this.props.returnDetails(details)
+                                                }}
+                                            />
+                                        ))}
+                                        <View style={styles.google}>
+                                            <Text>Powered by Google</Text>
+                                        </View>
+                                    </ScrollView>
+                                )
+                            }
                         </React.Fragment>
                     )}
                 </GoogleAutoComplete>
@@ -75,7 +83,6 @@ const styles = StyleSheet.create({
     },
     inputWrapper:{
         width: width * 0.75,
-        borderWidth: 1,
         height: (Platform.OS == 'ios') ? height * 0.05 : height * 0.06,
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -88,5 +95,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 10,
         zIndex: 1
+    },
+    google:{
+        height: 50,
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
     }
 })
