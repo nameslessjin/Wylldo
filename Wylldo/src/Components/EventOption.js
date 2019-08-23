@@ -89,7 +89,7 @@ class EventOption extends React.Component{
 
         let deleteBtn = null
         let reportBtn = null
-        if (Fire.uid === this.props.hostUserId || this.props.currentUser.moderator){
+        if (Fire.uid === this.props.hostUserId){
             deleteBtn = (
                 <TouchableOpacity style={[styles.optionBtnStyle]} onPress={this.onDeletePress}>
                     <Text adjustsFontSizeToFit style={[styles.optionsTextStyle, {color: 'red'}]}>Delete</Text>
@@ -97,6 +97,19 @@ class EventOption extends React.Component{
             )
             reportBtn = null
         } else {
+            reportBtn = (
+                <TouchableOpacity style={styles.optionBtnStyle} onPress={this.onReportPressed}>
+                    <Text adjustsFontSizeToFit style={[styles.optionsTextStyle]}>Report</Text>
+                </TouchableOpacity>
+            )
+        }
+
+        if (this.props.currentUser.moderator){
+            deleteBtn = (
+                <TouchableOpacity style={[styles.optionBtnStyle]} onPress={this.onDeletePress}>
+                    <Text adjustsFontSizeToFit style={[styles.optionsTextStyle, {color: 'red'}]}>Delete</Text>
+                </TouchableOpacity>
+            )
             reportBtn = (
                 <TouchableOpacity style={styles.optionBtnStyle} onPress={this.onReportPressed}>
                     <Text adjustsFontSizeToFit style={[styles.optionsTextStyle]}>Report</Text>

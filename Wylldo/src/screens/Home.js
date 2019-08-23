@@ -157,14 +157,16 @@ class Home extends React.Component{
                 // console.log(userLocation)
                 this.setState({userLocation})
                 this.getMapEventData(userLocation).then( mapEvents => {
-                    
+                    if (mapEvents == []){
+                        this.setState({loading: false})
+                    }
                     this.props.onGetMapEvents(mapEvents)
                     this.setState({loading: false, initialLoad: false})
                 })
                 .catch(error => {console.log(error)})
             },
             error => console.log(error.message),
-            {enableHighAccuracy: false, timeout: 50000, maximumAge: 1000}
+            {enableHighAccuracy: false, timeout: 60000, maximumAge: 1000}
         )
     }
 
@@ -416,7 +418,7 @@ class Home extends React.Component{
                 <ClusteredMapView
                     style={styles.mapStyle}
                     minZoom = {1}
-                    maxZoom = {24}
+                    maxZoom = {20}
                     showsUserLocation={true}
                     moveOnMarkerPress={false}
                     showsMyLocationButton={true}

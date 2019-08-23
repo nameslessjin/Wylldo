@@ -641,7 +641,12 @@ class Fire {
     }
 
     resetPassword = async(email) => {
-        await firebase.auth().sendPasswordResetEmail(email)
+        const result = (
+            firebase
+            .auth()
+            .sendPasswordResetEmail(email)
+            .catch(err => err))
+        return result
     }
 
     createUserInFireStore = async (name, email) => {

@@ -140,9 +140,12 @@ export default reducer = (state = initialState, action) => {
             }
 
         case LOAD_MORE_EVENTS:
+                let events = [...state.Events]
+                events = [... new Set(events)]
+
                 return{
                     ...state,
-                    Events: state.Events.concat(action.Events)
+                    Events: events
                 }
         
 

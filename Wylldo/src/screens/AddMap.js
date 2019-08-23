@@ -220,8 +220,7 @@ export default class AddMap extends React.Component{
                     && Math.floor(eventLocation.longitude * 10000)==Math.floor(locationCoordinate.longitude * 10000)) 
                             ? '#e74c3c' : "#DDDED1" 
                             : "#DDDED1"
-
-            console.log(eventLocation)            
+         
             searchLocationMarker = (
                 <Marker 
                     pinColor={markerColor}

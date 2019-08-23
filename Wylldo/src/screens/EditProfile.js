@@ -82,12 +82,21 @@ class EditProfile extends React.Component{
         gender: this.props.currentUser.gender,
         email: this.props.currentUser.email,
         avatarUri: this.props.currentUser.avatarUri,
-        avatarChange: false
+        avatarChange: false,
+        resetPasswordPress: false,
+        errorMessage: ''
     }
 
-    onResetPasswordPressed = () => {
+    onResetPasswordPressed = async() => {
         const {email} = this.state
-        Fire.resetPassword(email)
+        this.setState({resetPasswordPress: true})
+        const resetResult = await Fire.resetPassword(email)
+        if (resetResult){
+            this.setState({errorMessage: resetResult.message})
+        } else {
+            this.setState({errorMessage: ''})
+        }
+        
     }
 
     onBlur = () => {
@@ -101,7 +110,12 @@ class EditProfile extends React.Component{
 
     render(){
         const {avatarUri} = this.props.currentUser
-        const {username, email, phone_num} = this.state
+        const {username, email, phone_num, resetPasswordPress, errorMessage} = this.state
+
+        resetPasswordText = (resetPasswordPress) ? (
+            <Text style={{width: '90%'}} numberOfLines={2}>{(errorMessage != '') ? errorMessage : 'Email sent'}</Text>
+        ) : null
+
         LayoutAnimation.easeInEaseOut()
 
         const usernameDisplay = (
@@ -164,6 +178,7 @@ class EditProfile extends React.Component{
                         {emailDisplay}
                         {phoneDisplay}
                         {resetPassword}
+                        {resetPasswordText}
                     </View>
                 </View>
             </TouchableWithoutFeedback>

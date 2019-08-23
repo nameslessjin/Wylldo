@@ -3,6 +3,7 @@ import {Text, View, StyleSheet,TextInput, TouchableOpacity, Keyboard, TouchableW
 import {goHome} from '../navigation'
 import firebase from 'react-native-firebase'
 import Fire from '../firebase/Fire'
+import {Navigation} from 'react-native-navigation'
 
 export default class SignIn extends React.Component{
     static get options(){
@@ -54,6 +55,16 @@ export default class SignIn extends React.Component{
         await Fire.checkMessagePermission()
     }
 
+    onForgetPasswordPress = () => {
+        Navigation.push(this.props.componentId, {
+            component:{
+                name: 'ForgetPassword',
+                passProps:{
+                    email: this.state.email
+                }
+            }
+        })
+    }
 
 
     render(){
@@ -99,7 +110,7 @@ export default class SignIn extends React.Component{
                         <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onLogInPressed()}>
                             <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.forgotPasswordBtn}>
+                        <TouchableOpacity style={styles.forgotPasswordBtn} onPress={this.onForgetPasswordPress}>
                             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
                         </TouchableOpacity>
                     </View>
