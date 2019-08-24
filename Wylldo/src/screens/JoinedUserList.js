@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     hostText:{
         color: 'grey',
         fontSize: 18,
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
     },
     breakLine:{
         borderBottomColor: "#DDDED1",

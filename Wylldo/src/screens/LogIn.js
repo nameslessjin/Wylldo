@@ -108,7 +108,7 @@ export default class SignIn extends React.Component{
                             maxLength={30}
                             onChangeText={password => this.setState({password})}></TextInput>
                         <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onLogInPressed()}>
-                            <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Log In</Text>
+                            <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'Jellee-Roman', fontSize: 20}}>Log In</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.forgotPasswordBtn} onPress={this.onForgetPasswordPress}>
                             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
@@ -144,7 +144,8 @@ const styles = StyleSheet.create({
     },
     wylldoTextStyle:{
         fontSize: 30,
-        fontFamily: 'ArialRoundedMTBold',
+        // fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman' ,
         marginBottom: 20
     },
     buttonStyle:{

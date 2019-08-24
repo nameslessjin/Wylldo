@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
     wylldoTextStyle:{
         fontSize: 20,
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
         color: 'white'
     },
 

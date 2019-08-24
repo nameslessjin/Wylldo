@@ -213,12 +213,12 @@ const styles = StyleSheet.create({
     joinTextStyle:{
         fontSize: 20, 
         color:'white',
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
     },
     expireTextStyle:{
         fontSize: 14, 
         color:'white',
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
     },
     participantContainer:{
         flexDirection: 'row',

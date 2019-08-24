@@ -12,7 +12,8 @@ export default class SortListBtn extends React.Component{
         buttons:[
             {name: 'Following', isSet: false},
             {name: 'Fun', isSet: false},
-            {name: 'Sport', isSet: false}
+            {name: 'Sport', isSet: false},
+            {name: 'Study', isSet: false}
         ]
     }
 
@@ -77,14 +78,14 @@ const styles = StyleSheet.create({
         borderColor: '#FE4C4C',
         borderWidth: 1,
         backgroundColor: 'white',
-        width: width * 0.3,
+        width: width * 0.23,
         height: width * 0.09,
         borderRadius: 15,
         alignItems: 'center',
         justifyContent: 'center'
     },
     text:{
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
         color: '#FE4C4C'
 
     }

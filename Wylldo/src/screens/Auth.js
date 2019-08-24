@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     labelStyle:{
-        fontFamily: 'ArialRoundedMTBold'
+        fontFamily: 'Jellee-Roman'
     },
     displayText:{
         fontSize: 25,
         color: 'white',
-        fontFamily: 'ArialRoundedMTBold'
+        fontFamily: 'Jellee-Roman'
     },
     signUpdisplay:{
         backgroundColor: '#e74c3c',

@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     FollowerText:{
         color: 'grey',
         fontSize: 18,
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
         marginLeft: 10,
         marginVertical: 10
     }

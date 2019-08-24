@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     },
     textStyle:{
         fontSize: 0.018 * height,
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
     },
     followText:{
         color: 'white'

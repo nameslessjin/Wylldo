@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     },
     optionTextStyle:{
         fontSize: 14,
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
         color: 'white'
     },
     imageStyle:{
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     followText:{
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
         fontSize: 16,
         color: 'white'
     }

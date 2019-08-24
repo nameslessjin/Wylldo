@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     displayText:{
         fontSize: 30,
         color: 'white',
-        fontFamily: 'ArialRoundedMTBold'
+        fontFamily: 'Jellee-Roman'
     },
 
 })

@@ -209,7 +209,7 @@ export default class SignIn extends React.Component{
                             >
                         </TextInput>
                         <TouchableOpacity style={styles.buttonStyle} onPress={this.onSignUpPressed}>
-                            <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'ArialRoundedMTBold', fontSize: 20}}>Sign Up</Text>
+                            <Text adjustsFontSizeToFit style={{color:'white', fontFamily: 'Jellee-Roman', fontSize: 20}}>Sign Up</Text>
                         </TouchableOpacity>
                         {termNPolicy}
                     </View>
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     },
     wylldoTextStyle:{
         fontSize: 30,
-        fontFamily: 'ArialRoundedMTBold',
+        fontFamily: 'Jellee-Roman',
         marginBottom: 20
     },
     inputContainer:{
