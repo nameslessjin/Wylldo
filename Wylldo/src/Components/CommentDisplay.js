@@ -4,6 +4,7 @@ import {Navigation} from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Fire from '../firebase/Fire'
 import EventOption from './EventOption'
+
 // import {connect} from 'react-redux'
 
 export default class CommentDisplay extends React.Component{
@@ -22,64 +23,70 @@ export default class CommentDisplay extends React.Component{
 
     
     displayTime(){
-        const {createdTime} = this.props
+        //The naming is messed up here.  The first comment is the description from event.  It uses "createdTime"
+        //The other comments are independent.  They use "create_time"
+        const {create_time} = this.props
+        // console.log(createdTime)
+        // console.log(create_time)
+        const createdTime = (create_time) ? create_time : this.props.createdTime
+
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         try{
-        const timestamp = new Date(createdTime.seconds * 1000)
-        const now = Date.now()
-        const differenceInSec = Math.round(now / 1000 - createdTime.seconds) 
-        const createDate = timestamp.getDate()
-        const createMonth = months[timestamp.getMonth()]
-        const createYear = timestamp.getFullYear()
-        const currentYear = (new Date(now)).getFullYear
+            const timestamp = new Date(createdTime.seconds * 1000)
+            const now = Date.now()
+            const differenceInSec = Math.round(now / 1000 - createdTime.seconds) 
+            const createDate = timestamp.getDate()
+            const createMonth = months[timestamp.getMonth()]
+            const createYear = timestamp.getFullYear()
+            const currentYear = (new Date(now)).getFullYear
         
-        //if it is not the same year
-        if (currentYear > createYear){
-            const returnDate = createMonth + " " + createDate + " " + createYear
-            return returnDate
-        }
-        //if greater then 7 days put date on it
-        if (differenceInSec > 604800){
-            const returnDate = createMonth + " " + createDate
-            return returnDate
-        } 
-        // if greater then 1 days put how many days on it
-        else if (differenceInSec > 86400) {
-            const days = Math.floor((differenceInSec / 86400))
-            let daysAgo = days.toString() + " days ago"
-            if (days == 1){
-                daysAgo = "1 day ago"
+            //if it is not the same year
+            if (currentYear > createYear){
+                const returnDate = createMonth + " " + createDate + " " + createYear
+                return returnDate
             }
-            return daysAgo
-        }
-        // if greater then 1 hour put hours on it
-        else if (differenceInSec > 3600){
-            const hours = Math.floor((differenceInSec / 3600))
-            let hoursAgo = hours.toString() + " hours ago"
-            if (hours == 1){
-                hoursAgo = "1 hour ago"
+            //if greater then 7 days put date on it
+            if (differenceInSec > 604800){
+                const returnDate = createMonth + " " + createDate
+                return returnDate
+            } 
+            // if greater then 1 days put how many days on it
+            else if (differenceInSec > 86400) {
+                const days = Math.floor((differenceInSec / 86400))
+                let daysAgo = days.toString() + " days ago"
+                if (days == 1){
+                    daysAgo = "1 day ago"
+                }
+                return daysAgo
             }
-            return hoursAgo
-        }
+            // if greater then 1 hour put hours on it
+            else if (differenceInSec > 3600){
+                const hours = Math.floor((differenceInSec / 3600))
+                let hoursAgo = hours.toString() + " hours ago"
+                if (hours == 1){
+                    hoursAgo = "1 hour ago"
+                }
+                return hoursAgo
+            }
 
-        //if greater then 1 minute put minutes on it
-        else if (differenceInSec > 60){
-            const minutes = Math.floor((differenceInSec / 60))
-            let minutesAgo = minutes.toString() + " mins ago"
-            if (minutes == 1){
-                minutesAgo = "1 min ago"
+            //if greater then 1 minute put minutes on it
+            else if (differenceInSec > 60){
+                const minutes = Math.floor((differenceInSec / 60))
+                let minutesAgo = minutes.toString() + " mins ago"
+                if (minutes == 1){
+                    minutesAgo = "1 min ago"
+                }
+                return minutesAgo
             }
-            return minutesAgo
-        }
 
-        //if grater then 1 second put seconds on it
-        else if (differenceInSec >= 1){
-            let secondsAgo = differenceInSec.toString() + " secs ago"
-            if (differenceInSec == 1){
-                secondsAgo = "1 sec ago "
+            //if grater then 1 second put seconds on it
+            else if (differenceInSec >= 1){
+                let secondsAgo = differenceInSec.toString() + " secs ago"
+                if (differenceInSec == 1){
+                    secondsAgo = "1 sec ago "
+                }
+                return secondsAgo
             }
-            return secondsAgo
-        }
      } catch{}
         
     }
