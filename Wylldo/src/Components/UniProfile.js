@@ -6,6 +6,7 @@ import ProfileFollowBtn from './ProfileFollowBtn'
 import UserSearchBtn from './UserSearchBtn'
 import Fire from '../firebase/Fire'
 
+
 const {height, width} = Dimensions.get('window')
 export default class UniProfile extends React.Component {
 
@@ -42,6 +43,7 @@ export default class UniProfile extends React.Component {
 
     render(){
         const {avatarUri, username, followerNum, followingNum, componentId, userId, following_list} = this.props
+        console.log(avatarUri)
         const displayAvatar = (
             <Image source={avatarUri}  style={styles.avatar} />
         )

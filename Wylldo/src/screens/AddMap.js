@@ -199,7 +199,7 @@ export default class AddMap extends React.Component{
     }
 
     render(){
-        const {eventLocation, locationDetails} = this.state
+        const {eventLocation, locationDetails, userLocation} = this.state
         let marker = null
         if(eventLocation){
             marker= <Marker pinColor="#e74c3c" coordinate={eventLocation} ></Marker>
@@ -247,7 +247,7 @@ export default class AddMap extends React.Component{
                     <MapView
                         showsUserLocation={true}
                         showsMyLocationButton={true}
-                        initialRegion={this.state.userLocation}
+                        initialRegion={(userLocation) ? userLocation : INIT_REGION}
                         provider={PROVIDER_GOOGLE}
                         customMapStyle={mapStyle}
                         style={styles.Map}

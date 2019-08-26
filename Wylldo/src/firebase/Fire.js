@@ -59,10 +59,15 @@ class Fire {
             const querySnapshot = await docRef.get()
             if (querySnapshot.exists){
                 const user = querySnapshot.data() || {}
+                const avatar_uri = await this.getAvatarUri(user.avatarUri.storageLocation)
                 const userWithKey = {
+                    ...user,
                     key: querySnapshot.id,
                     userId: querySnapshot.id,
-                    ...user
+                    avatarUri: {
+                        ...user.avatarUri,
+                        uri: avatar_uri,
+                    }
                 }
                 userList.push(userWithKey)
             }
@@ -72,6 +77,8 @@ class Fire {
             startPosition = null
         }
         return {userList, start: startPosition}
+
+
     }
 
 
@@ -187,10 +194,15 @@ class Fire {
             for (const doc of querySnapshot.docs){
                 if (doc.exists){
                     const user = doc.data() || {}
+                    const avatar_uri = await this.getAvatarUri(user.avatarUri.storageLocation)
                     const userWithKey = {
+                        ...user,
                         key: doc.id,
                         userId: doc.id,
-                        ...user
+                        avatarUri:{
+                            ...user.avatarUri,
+                            uri: avatar_uri
+                        }
                     }
                     userList.push(userWithKey)
                 }
@@ -544,6 +556,7 @@ class Fire {
     updateUserInformation = async(currentData, avatar) => {
         console.log(currentData, avatar)
         const avatStorageUri = !(avatar === null) ? await this.uploadAvatarAsync(avatar.uri) : null
+        
         const uploadedAvatar = !(avatar === null) ? {
             uri: avatStorageUri.url,
             storageLocation: avatStorageUri.storageLocation
@@ -559,6 +572,8 @@ class Fire {
         .catch(() => {console.log('rejected')})
         
         return updateUserdata
+
+        
         
     }
 
@@ -675,22 +690,44 @@ class Fire {
             closed: false,
             moderator: false
         }
-
         this.usersCollection.doc(this.uid).set(signUpUserInfo)
         .catch((error) => {console.log(error.message)})
+        await this.requestEmailVerification()
     }
 
     getUserData = async(userId) => {
         const ref = this.usersCollection.doc(userId)
         const userData = await ref.get().catch(error => console.log(error))
+        const avatar_uri = await this.getAvatarUri(userData.data().avatarUri.storageLocation)
+        // console.log(avatar_uri)
+        // console.log(userData.data())
         const returnUserData = {
             ...userData.data(),
-            userId: userData.id
+            userId: userData.id,
+            avatarUri: {
+                uri: avatar_uri,
+                storageLocation: userData.data().avatarUri.storageLocation
+            }
         }
 
         return returnUserData
     }
 
+
+    // const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
+    // //
+    // const hostAvatarUri = await this.getAvatarUri(uploadEventInfo.hostAvatar)
+    // //
+    // const updateEventInfo = [{
+    //     ...uploadEventInfo,
+    //     key: createdEvent.id,
+    //     eventId: createdEvent.id,
+    //     hostAvatar:{
+    //         uri: hostAvatarUri
+    //     }
+
+    // }]
+    // return updateEventInfo
 
     //Helpers
 

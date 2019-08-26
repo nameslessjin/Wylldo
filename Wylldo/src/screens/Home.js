@@ -166,7 +166,7 @@ class Home extends React.Component{
                 .catch(error => {console.log(error)})
             },
             error => console.log(error.message),
-            {enableHighAccuracy: false, timeout: 60000, maximumAge: 1000}
+            {enableHighAccuracy: false, timeout: 60000, maximumAge: 2000}
         )
     }
 
@@ -380,7 +380,6 @@ class Home extends React.Component{
             key={data.key}
             onPress={() => {this.getPressedEvent(data.key)} }
             >       
-                
             <CustomMarker icon={data.tag} hostAvatar={data.hostAvatar} likes={data.likes} />
         </Marker>
         )

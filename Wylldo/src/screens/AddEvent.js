@@ -203,6 +203,7 @@ class addEvent extends React.Component{
                         inviteCount={(inviteCount) => this.setState({inviteCount: inviteCount})}
                         viewType={(viewType) => this.setState({viewType: viewType})}
                     />
+                    
                 </ScrollView>
             </TouchableWithoutFeedback>
 
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     ImgView:{
         height: '40%',
         width: "100%",
+        maxHeight: height * 0.52,
         backgroundColor: "white",
         borderBottomWidth: 0.5,
         borderColor: "#DDDED1",

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Navigation} from 'react-native-navigation'
-import UnivProfile from '../Components/UniProfile'
+import UniProfile from '../Components/UniProfile'
 import {connect} from 'react-redux'
 
 class MainProfile extends React.Component{
@@ -54,7 +54,7 @@ class MainProfile extends React.Component{
     render(){
 
         return(
-            (this.tabbed) ? <UnivProfile {...this.props.currentUser} componentId={this.props.componentId} /> : null
+            (this.tabbed) ? <UniProfile {...this.props.currentUser} componentId={this.props.componentId} /> : null
         )
     }
 }

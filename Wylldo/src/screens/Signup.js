@@ -69,14 +69,14 @@ export default class SignIn extends React.Component{
             if (checkUsername){
                 this.setState({errorMessage: 'username already exists'})
             } else {
-                const signUptResult = await Fire.signUpUser(email, password)
+                const signUptResult = await Fire.signUpUser(email.trim(), password)
                 if(Fire.uid){
-                    await Fire.createUserInFireStore(name, email)
+                    await Fire.createUserInFireStore(name, email.trim())
                     Navigation.push(componentId, {
                         component:{
                             name: 'LogIn',
                             passProps: {
-                                email: email,
+                                email: email.trim(),
                                 password: password
                             }
                         }

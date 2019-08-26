@@ -103,6 +103,7 @@ export default class Header extends React.Component{
     onUserPressed = async() => {
         const {componentId, hostUserId} = this.props
         const userData = await Fire.getUserData(hostUserId)
+        // console.log(userData)
         Navigation.push(componentId, {
             component:{
                 name: 'OtherProfile',
