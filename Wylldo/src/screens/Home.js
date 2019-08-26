@@ -33,7 +33,11 @@ class Home extends React.Component{
                 },
                 visible: false,
                 height: 0
-            }
+            },
+            // bottomTabs:{
+            //     visible: false,
+            //     drawBehind: true
+            // }
         }
     }
 
@@ -350,6 +354,7 @@ class Home extends React.Component{
         ))
         if (!isSameLocation){
             onPress()
+            return
         }
 
         if (Platform.OS=='ios'){
@@ -410,10 +415,12 @@ class Home extends React.Component{
             popUp = <View></View>
         }
 
+        const loadingIndicator = (loading && initialLoad) ? <ActivityIndicator size={"large"} style={{zIndex: 1}}/> : null
+
 
         return(
             <View style={[styles.container]}>
-                {(loading && initialLoad) ? <ActivityIndicator size={"large"} style={{zIndex: 1}}/> : null}
+                {loadingIndicator}
                 <ClusteredMapView
                     style={styles.mapStyle}
                     minZoom = {1}
@@ -433,18 +440,12 @@ class Home extends React.Component{
                     renderMarker={this.renderMarker}
                     renderCluster={this.renderCluster} />
                 {popUp}
-                {
-                    (Platform.OS == 'ios') ? (
-                        <View style={{bottom: '38%' , width: '100%'}}>
-                            <GooglePlaceAutoComplete
-                                returnDetails={locationDetails => this.setState({locationDetails: locationDetails})}
-                                location={this.state.userLocation}
-                            />
-                        </View>
-                    ) : (
-                        null
-                    )
-                }
+                <View style={styles.searchBarContainer}>
+                    <GooglePlaceAutoComplete
+                        returnDetails={locationDetails => this.setState({locationDetails: locationDetails})}
+                        location={this.state.userLocation}
+                    />
+                </View>
 
             </View>
         )
@@ -464,7 +465,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        position: (Platform.OS=='ios') ? 'absolute' : 'relative'
+        position: (Platform.OS=='ios') ? 'absolute' : 'relative',
+        // position: 'absolute',
+        zIndex: 0
         
     },
     clusterContainer:{
@@ -488,6 +491,11 @@ const styles = StyleSheet.create({
         maxHeight: 150,
         backgroundColor: 'white',
         paddingHorizontal: 2
+    },
+    searchBarContainer:{
+        bottom: (Platform.OS=='ios') ? '37%' : '88.5%' ,
+        width: '100%',
+        position: (Platform.OS=='ios') ? 'relative' : 'absolute'
     }
 })
 
