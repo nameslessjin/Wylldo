@@ -67,7 +67,7 @@ export default class TimeNLocation extends React.Component {
         const {location} = this.props
         const locationIcon = <Icon name='md-pin' size={0.031 * height} />
         let locationBtn = null
-        if (this.props.coords.latitude){
+        if (this.props.coords){
             locationBtn = (<TouchableOpacity onPress={() => this.onLocationBtnPressed()}>
                             <Text  style={{fontSize: 15, fontWeight: 'bold', color: '#FE4C4C'}}>{locationIcon}</Text> 
                           </TouchableOpacity>)
@@ -76,7 +76,7 @@ export default class TimeNLocation extends React.Component {
             locationBtn = (<Text style={{fontSize: 15, fontWeight: 'bold', color: '#7f8c8d'}}>{locationIcon}</Text>)
         }
 
-        const timeLocationFormat = (
+        const timeLocationFormat = (location) ? (
             <View style={styles.container}>
                 <View style={styles.locationContainer}>
                     <Text adjustsFontSizeToFit style={styles.timeText}>{ ((location.name) ? location.name + ', ' : '') + location.short_address}</Text>
@@ -84,7 +84,7 @@ export default class TimeNLocation extends React.Component {
                 </View>
                 <Text adjustsFontSizeToFit style={styles.timeText}>{this.timeFormat()}</Text>
             </View>
-        )
+        ) : null
 
         const timeFormat = (
             <View style={styles.timeFormatContainer}>

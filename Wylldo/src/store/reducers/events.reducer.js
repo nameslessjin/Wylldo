@@ -23,6 +23,7 @@ export default reducer = (state = initialState, action) => {
 
         //add newly added event on the top of retrieved events to avoid refresh (maybe should be replaced with listener)
         case POST_EVENT:
+            const location = action.EventInfo[0].location
             const mapEventData = [{
                 tag: action.EventInfo[0].tag,
                 hostAvatar: action.EventInfo[0].hostAvatar,
@@ -33,7 +34,7 @@ export default reducer = (state = initialState, action) => {
                 coords: action.EventInfo[0].geoCoordinates,
                 key: action.EventInfo[0].key,
                 createdTime: action.EventInfo[0].timestamp,
-                location: action.EventInfo[0].location.coords,
+                location: (action.EventInfo[0].location) ? action.EventInfo[0].location.coords : null,
                 eventTag: action.EventInfo[0].eventTag
             }]
             const updateEvents = action.EventInfo.concat(state.Events)
@@ -42,7 +43,7 @@ export default reducer = (state = initialState, action) => {
             return{
                 ...state,
                 Events: updateEvents,
-                mapEvents: updateMapEvents, 
+                mapEvents: (location) ? updateMapEvents : state.mapEvents, 
                 mapEventIdList: updateMapEventIdList 
             }
         

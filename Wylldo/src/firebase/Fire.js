@@ -321,8 +321,9 @@ class Fire {
             likes: 0,
             commentNum: 0,
             timestamp: Date.now(),
-            geoCoordinates: (EventInfo.coords.latitude) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
-            geoHash: (EventInfo.coords.latitude) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null
+            geoCoordinates: (EventInfo.coords) ? new firebase.firestore.GeoPoint(EventInfo.coords.latitude, EventInfo.coords.longitude) : null,
+            geoHash: (EventInfo.coords) ? geohash.encode(EventInfo.coords.latitude, EventInfo.coords.longitude, precision=10) : null,
+            
         }
         const createdEvent = await this.eventsCollection.add(uploadEventInfo).catch(error => console.log(error))
         //

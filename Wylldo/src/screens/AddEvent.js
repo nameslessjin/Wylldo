@@ -93,9 +93,9 @@ class addEvent extends React.Component{
                     hostUsername: username,
                     host_display_name: display_name,
                     hostAvatar: avatarUri.storageLocation,
-                    host_follower_list: follower_list,
+                    // host_follower_list: follower_list,
                     hostUserId: Fire.uid,
-                    coords: location.coords,
+                    coords: (location) ? location.coords : null,
                     location: location,
                     eventTag: eventTag,
                 }
@@ -129,6 +129,7 @@ class addEvent extends React.Component{
     }
 
     createEvent = async (eventInfo, image, resizedImage) => {
+        // console.log(eventInfo)
         const eventData = await Fire.addEvent(eventInfo, image, resizedImage)
         return eventData
     }
@@ -136,13 +137,16 @@ class addEvent extends React.Component{
     setLocation = () => {
         const {pinLocation, searchLocation} = this.props
         let location = pinLocation
-        if (searchLocation){
-            if (pinLocation.coords.latitude == searchLocation.coords.latitude
-                && pinLocation.coords.longitude == searchLocation.coords.longitude){
-                location = searchLocation
+        if (pinLocation){
+            if (searchLocation){
+                if (pinLocation.coords.latitude == searchLocation.coords.latitude
+                    && pinLocation.coords.longitude == searchLocation.coords.longitude){
+                    location = searchLocation
+                }
             }
+            return location
         }
-        return location
+
     }
 
     onFocus = () => {

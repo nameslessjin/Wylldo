@@ -33,7 +33,7 @@ export default class GooglePlaceAutoComplete extends React.Component{
                                 <TextInput 
                                     adjustsFontSizeToFit
                                     style={styles.textInput}
-                                    placeholder="Search a place or press the map"
+                                    placeholder="Search a place and press the map"
                                     onChangeText={handleTextChange}
                                     value={inputValue}
                                 />
