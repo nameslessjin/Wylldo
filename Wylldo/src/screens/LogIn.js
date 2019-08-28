@@ -95,7 +95,7 @@ export default class SignIn extends React.Component{
                         <TextInput 
                             style={styles.inputStyle} 
                             textContentType={"emailAddress"} 
-                            placeholder={'Emaill'} 
+                            placeholder={'Email'} 
                             autoCapitalize='none'
                             maxLength={30}
                             onChangeText={email => this.setState({email})}></TextInput>

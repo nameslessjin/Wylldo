@@ -28,22 +28,18 @@ class JoinBtn extends React.Component{
         }
     }
 
-    componentWillMount(){
-        
-    }
-
     checkUserOnEvent = () => {
-        if (this.state.joinedNum == this.props.inviteCount){
-            this.setState({joinBtn: 'FULL'})
-        }
 
         if (this.props.join_userIDs.find(userId => userId === Fire.uid)){
             this.setState({joinBtn: 'VIEW'})
+        } else if (this.state.joinedNum == this.props.inviteCount) {
+            this.setState({joinBtn: 'FULL'})
         } else {
             this.setState({joinBtn: 'JOIN'})
         }
         
         if (this.props.hostUserId === Fire.uid){
+
             this.setState({joinBtn: 'VIEW'})
         }
     }
@@ -59,6 +55,7 @@ class JoinBtn extends React.Component{
                     else if (joinedResult.joinNum <= this.props.inviteCount){
                         this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'VIEW', join_userIDs: joinedResult.joinUserIds})
                     } else {
+                        alert('This event is full')
                         this.setState({joinedNum: joinedResult.joinNum, joinBtn: 'FULL', join_userIDs: joinedResult.joinUserIds})
                     }
                 })

@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TextInput, Platform, Keyboard, TouchableWithoutFeedback, Dimensions, ScrollView} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Platform, PermissionsAndroid, Keyboard, TouchableWithoutFeedback, Dimensions, ScrollView} from 'react-native'
 import ImagePicker from '../Components/ImagePicker'
 import {Navigation} from 'react-native-navigation'
 import PickTag from '../Components/PickTag'
@@ -137,15 +137,19 @@ class addEvent extends React.Component{
     setLocation = () => {
         const {pinLocation, searchLocation} = this.props
         let location = pinLocation
-        if (pinLocation){
+        // console.log(pinLocation)
+        // console.log(searchLocation)
+        if (location){
             if (searchLocation){
                 if (pinLocation.coords.latitude == searchLocation.coords.latitude
                     && pinLocation.coords.longitude == searchLocation.coords.longitude){
                     location = searchLocation
                 }
             }
-            return location
+        } else if (searchLocation){
+            location = searchLocation
         }
+        return location
 
     }
 
@@ -160,6 +164,7 @@ class addEvent extends React.Component{
     render(){
         const {Focus, inputHeight, image} = this.state
         const {searchLocation, pinLocation} = this.props
+
         let imageViewHeight = null
         if (image){
             imageViewHeight = image.height/image.width* width

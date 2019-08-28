@@ -213,7 +213,7 @@ class Home extends React.Component{
     onMapReady = () =>{
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
             title: "Location Accessing Permission",
-            message: "App needs access to your location to find local events"
+            message: "Wylldo needs access to your location to find local events"
         })
             .then(granted => {
                 this.setState({paddingTop: 0})
@@ -466,9 +466,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1,
         position: (Platform.OS=='ios') ? 'absolute' : 'relative',
-        // position: 'absolute',
         zIndex: 0
-        
     },
     clusterContainer:{
         flexDirection: 'row',
@@ -483,7 +481,9 @@ const styles = StyleSheet.create({
     tagPair:{
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginRight: 2,
+        marginLeft: 2
     },
     splitContainer:{
         minWidth: 60,

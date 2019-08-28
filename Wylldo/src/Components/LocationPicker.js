@@ -15,6 +15,8 @@ export default class LocationPicker extends React.Component{
                     location =  searchLocation.name + ', ' + searchLocation.short_address
                 }
             }
+        } else if (searchLocation){
+            location =  searchLocation.name + ', ' + searchLocation.short_address
         } else {
             location = 'No location'
         }
