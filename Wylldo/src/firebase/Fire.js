@@ -106,14 +106,20 @@ class Fire {
     }
 
     onReport = async(reportInfo) => {
-        const {event_id, comment_id, user_id, email, username} = reportInfo
+        const {event_id, comment_id, user_id, email, username, 
+            host_username, event_description, comment_description, comment_username} = reportInfo
+        // console.log(reportInfo)
         let ref = this.db.collection('report')
         let uploadReport = {
-            event_id: event_id,
-            comment_id: comment_id,
-            reporter_id: user_id,
-            reporter_email: email,
-            reporter_username: username,
+            event_id: event_id || '',
+            comment_id: comment_id || '',
+            reporter_id: user_id || '',
+            reporter_email: email || '',
+            reporter_username: username || '',
+            host_username: host_username || '',
+            event_description: event_description || '',
+            comment_description: comment_description || '',
+            comment_username: comment_username || '',
             create_time: firebase.firestore.FieldValue.serverTimestamp()
         }
         const createReport = await ref.add(uploadReport).catch(error => console.log(error))

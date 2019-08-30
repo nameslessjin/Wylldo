@@ -51,9 +51,9 @@ class EventOption extends React.Component{
     }
 
     onReportPressed = async() => {
-        let {eventId, commentId, host_username} = this.props
+        let {eventId, commentId, host_username, comment, comment_username, comment_user_id, event_description,} = this.props
         const {userId, username, email} = this.props.currentUser
-        console.log(this.props)
+        // console.log(this.props)
         let reportInfo = null
         if (eventId){
             commentId = null
@@ -66,7 +66,11 @@ class EventOption extends React.Component{
             user_id: userId,
             username: username,
             email: email,
-            host_username: host_username
+            host_username: host_username,
+            event_description: event_description,
+            comment_description: comment,
+            comment_username: comment_username,
+            comment_user_id: comment_user_id
 
         }
         const reportId = await Fire.onReport(reportInfo)

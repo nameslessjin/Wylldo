@@ -107,7 +107,7 @@ export default class CommentDisplay extends React.Component{
     }
 
     render(){
-        const {comment, user_id, username, user_avatar, commentId} = this.props
+        const {comment, user_id, username, user_avatar, commentId, host_username, event_description} = this.props
         let optionButton = null
         if (commentId != 'description-for-this-wylldo') {
             optionButton = (
@@ -140,6 +140,11 @@ export default class CommentDisplay extends React.Component{
                         hostUserId= {this.props.user_id}
                         componentId = {this.props.componentId}
                         commentId = {commentId}
+                        comment = {comment}
+                        comment_username = {username}
+                        comment_user_id = {user_id}
+                        host_username = {host_username}
+                        event_description = {event_description}
                         onBackdropPress={() => this.hideEventOption()}
                     />
                 </View>

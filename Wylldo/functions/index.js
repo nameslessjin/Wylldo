@@ -20,16 +20,20 @@ exports.onReport = functions.firestore
     .document('report/{report_id}')
     .onCreate((snap, context) => {
         
-        const {event_id, comment_id, reporter_email, reporter_username} = snap.data()
+        const {event_id, comment_id, reporter_email, reporter_username, host_username, event_description, comment_description, comment_username} = snap.data()
 
         const emailOption = {
             from: 'wylldo.app@gmail.com',
             to: 'wylldo.feedback@gmail.com',
             subject: 'Report',
             html: ('<p>' + 'event_id: ' + event_id + '<br>' + 
-                    'comment_id: ' + comment_id + '<br>'
-                     + 'reporter_email: ' + reporter_email + '<br>'  +
-                     'reporter_username: ' + reporter_username +
+                    'host_username: ' + host_username + '<br>' +
+                    'event_description: ' + event_description + '<br>' +
+                    'comment_id: ' + comment_id + '<br>' + 
+                    'comment_username: ' + comment_username + '<br>' +
+                    'comment_description: ' + comment_description + '<br>' + 
+                    'reporter_email: ' + reporter_email + '<br>'  +
+                    'reporter_username: ' + reporter_username +
                     '</p>')
         }
 

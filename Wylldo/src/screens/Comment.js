@@ -79,7 +79,7 @@ class Comment extends React.Component{
 
     render(){
         LayoutAnimation.easeInEaseOut()
-        const {eventId, hostUserId} = this.props
+        const {eventId, hostUserId, hostUsername, description} = this.props
         const {username, avatarUri} = this.props.currentUser
         return(
             <View style={styles.container}>
@@ -87,6 +87,8 @@ class Comment extends React.Component{
                     <ListComment
                         componentId = {this.props.componentId}
                         comments = {this.props.comment}
+                        host_username = {hostUsername}
+                        event_description = {description}
                         refreshControl = {
                             <RefreshControl
                                 refreshing = {this.state.refreshing}
