@@ -106,7 +106,7 @@ export default class GuestSeeting extends React.Component{
                         underlayColor={"#ebebeb"}
                         onPress={this.onInviteConfirmPressed}
                     >
-                        <Text adjustsFontSizeToFit style={styles.confirmTextStyle}>Confirm</Text>
+                        <Text style={styles.confirmTextStyle}>Confirm</Text>
                     </TouchableOpacity>
                 </Modal>
 
@@ -139,7 +139,7 @@ export default class GuestSeeting extends React.Component{
                         underlayColor={"#ebebeb"}
                         onPress={this.onViewConfirmPressed}
                     >
-                        <Text adjustsFontSizeToFit style={styles.confirmTextStyle}>Confirm</Text>
+                        <Text  style={styles.confirmTextStyle}>Confirm</Text>
                     </TouchableOpacity>
                 </Modal> */}
             </View>

@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Jellee-Roman'
     },
     signUpdisplay:{
-        backgroundColor: '#e74c3c',
+        backgroundColor: '#FE4C4C',
         width: '90%',
         height: '6%',
         justifyContent: 'center',

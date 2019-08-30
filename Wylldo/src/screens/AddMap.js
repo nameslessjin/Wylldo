@@ -202,7 +202,7 @@ export default class AddMap extends React.Component{
         const {eventLocation, locationDetails, userLocation} = this.state
         let marker = null
         if(eventLocation){
-            marker= <Marker pinColor="#e74c3c" coordinate={eventLocation} ></Marker>
+            marker= <Marker pinColor="#FE4C4C" coordinate={eventLocation} ></Marker>
         }
 
         let searchLocationMarker = null
@@ -218,7 +218,7 @@ export default class AddMap extends React.Component{
 
             const markerColor= (eventLocation) ? (Math.floor(eventLocation.latitude * 10000)==Math.floor(locationCoordinate.latitude * 10000)
                     && Math.floor(eventLocation.longitude * 10000)==Math.floor(locationCoordinate.longitude * 10000)) 
-                            ? '#e74c3c' : "#DDDED1" 
+                            ? '#FE4C4C' : "#DDDED1" 
                             : "#DDDED1"
          
             searchLocationMarker = (

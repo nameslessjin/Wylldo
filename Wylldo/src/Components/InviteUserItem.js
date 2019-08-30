@@ -25,7 +25,7 @@ export default class InviteUserItem extends React.Component{
         const {press} = this.state
         return(
             <TouchableWithoutFeedback onPress={this._onUserPress}>
-                <View style={[styles.container, (press) ? {backgroundColor: '#e74c3c'} : null ]}>
+                <View style={[styles.container, (press) ? {backgroundColor: '#FE4C4C'} : null ]}>
                     <Image source={avatarUri} style={styles.imageStyle} />
                     <Text adjustsFontSizeToFit style={styles.usernameStyle} >{username}</Text>
                 </View>

@@ -14,7 +14,7 @@ export default class EventCallOutItem extends React.Component{
         const {icon, hostAvatar, likes, id} = this.props
         return (
             <View 
-                style={[styles.container, likes >= 10 ? {backgroundColor: '#e74c3c'} : null]}
+                style={[styles.container, likes >= 10 ? {backgroundColor: '#FE4C4C'} : null]}
                 >
                 {/* <View style={styles.imgStyle}>
                     <ImageBackground

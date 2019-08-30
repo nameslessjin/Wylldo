@@ -145,7 +145,11 @@ export default class DatePicker extends React.Component{
         if (hours > 12){
             hours = hours - 12
             AM = "PM"
+        } else if (hours == 12){
+            AM = "PM"
         }
+
+
         const startTimeString = hours + ":" + minutes + AM
         const monthDate = day + " " + month + " " + date 
         this.setState({startTimeString: startTimeString, startTime: chosenDate, monthDate: monthDate})

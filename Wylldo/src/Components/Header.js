@@ -115,6 +115,7 @@ export default class Header extends React.Component{
     }
 
     render(){
+        console.log(this.props)
         let createdTime = 'Now'
         if (this.differenceOnTime(this.props.timestamp)){
             createdTime = this.differenceOnTime(this.props.timestamp)
@@ -166,6 +167,7 @@ export default class Header extends React.Component{
                     hostUserId= {this.props.hostUserId}
                     componentId = {this.props.componentId}
                     eventId = {this.props.eventId}
+                    host_username = {this.props.hostUsername}
                     onBackdropPress={() => this.hideEventOption()}
                     />
 
