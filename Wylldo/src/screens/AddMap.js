@@ -7,7 +7,6 @@ import GooglePlaceAutoComplete from '../Components/GoogleAutocomplete'
 import {IOS_GOOGLE_PLACE_API_KEY, ANDROID_GOOGLE_PLACE_API_KEY} from '../key'
 
 const GOOGLE_API='https://maps.googleapis.com/maps/api/geocode/json'
-
 const INIT_REGION = {
     latitude: 40.798699,
     longitude: -77.859954,
@@ -56,6 +55,8 @@ export default class AddMap extends React.Component{
     constructor(props){
         super(props);
         Navigation.events().bindComponent(this);
+
+
         this.state={
             userLocation:{
                 ...this.props.userLocation,
@@ -66,7 +67,6 @@ export default class AddMap extends React.Component{
             locationDetails: null,
         }
     }
-
 
     componentDidUpdate(prevPros, prevState){
         const {locationDetails} = this.state
@@ -240,14 +240,18 @@ export default class AddMap extends React.Component{
             // }
 
         }
-
+        let region = INIT_REGION
+        if (userLocation.longitude) {
+            region = userLocation
+        }
+ 
         return(
             <View style={styles.container} >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <MapView
                         showsUserLocation={true}
                         showsMyLocationButton={true}
-                        initialRegion={(userLocation) ? userLocation : INIT_REGION}
+                        initialRegion={region}
                         provider={PROVIDER_GOOGLE}
                         customMapStyle={mapStyle}
                         style={styles.Map}

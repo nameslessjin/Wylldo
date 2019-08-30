@@ -25,7 +25,6 @@ export default class PickImage extends React.Component{
 
     pickImageHandler = () => {
         Keyboard.dismiss()
-        this.requestLibraryPermission()
         ImagePicker.showImagePicker({title:"Pick a photo", maxWidth: 800, maxHeight: 800}, res => {
             if (res.didCancel){
                 console.log("Image cancelled")
