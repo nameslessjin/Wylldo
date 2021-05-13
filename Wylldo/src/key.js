@@ -1,2 +1,2 @@
-export const IOS_GOOGLE_PLACE_API_KEY = 'AIzaSyAMEvJNncm-PBBTNMI-eIDNWrweKrzxD4w'
-export const ANDROID_GOOGLE_PLACE_API_KEY = 'AIzaSyDgeYeOZLf7ivRrHnyAqIhthVY7YYFKJuU'
+export const IOS_GOOGLE_PLACE_API_KEY = ''
+export const ANDROID_GOOGLE_PLACE_API_KEY = ''
