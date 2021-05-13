@@ -673,7 +673,7 @@ class Fire {
 
     createUserInFireStore = async (name, email) => {
 
-        const defaultAvatarUri = 'https://firebasestorage.googleapis.com/v0/b/wylldo-b5c47.appspot.com/o/defaultImgs%2FdefaultAvatar.jpg?alt=media&token=4a49bd80-9d7a-4293-a719-de0211cb4a96'
+        const defaultAvatarUri = 'https://firebasestorage.googleapis.com/v0/b/wylldo-b5c47.appspot.com/o/defaultImgs%2FdefaultAvatar.jpg?alt=media&'
         const defaultAvatarLocation = 'defaultImgs/defaultAvatar.jpg'
         const uploadedAvatar = {
             uri: defaultAvatarUri,
